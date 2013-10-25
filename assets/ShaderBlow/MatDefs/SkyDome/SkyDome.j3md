@@ -1,0 +1,53 @@
+MaterialDef SkyDome {
+
+MaterialParameters {
+Color FogColor
+Color FogNightColor
+
+Texture2D FogAlphaMap
+Texture2D SkyNightMap
+Color ColorDay
+Color ColorNight
+
+Float Alpha : 1.0
+
+Boolean VertexColor
+Boolean SeperateTexCoord
+
+Texture2D MoonMap
+Vector2 MoonDirection
+Vector2 MoonSpeed
+
+Texture2D CloudMap1
+Float CloudsAlpha
+
+Color CloudColorRamp1
+Float CloudDirection1
+Float CloudSpeed1
+
+Color CloudColorRamp2
+Float CloudDirection2
+Float CloudSpeed2
+}
+
+Technique {
+VertexShader GLSL100:   ShaderBlow/Shaders/SkyDome/SkyDome.vert
+FragmentShader GLSL100: ShaderBlow/Shaders/SkyDome/SkyDome.frag
+
+WorldParameters {
+WorldViewProjectionMatrix
+Time
+}
+
+Defines {
+SEPERATE_TEXCOORD : SeperateTexCoord
+HAS_VERTEXCOLOR : VertexColor
+HAS_GLOWMAP : GlowMap
+HAS_CLOUDS1 : CloudSpeed1
+HAS_CLOUDS2 : CloudSpeed2
+HAS_COLORRAMP1 : CloudColorRamp1
+HAS_COLORRAMP2 : CloudColorRamp2
+HAS_MOON : MoonMap
+}
+}
+}

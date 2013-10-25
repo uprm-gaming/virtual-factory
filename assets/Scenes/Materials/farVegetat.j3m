@@ -1,0 +1,13 @@
+Material My Material : Common/MatDefs/Light/Lighting.j3md {
+     MaterialParameters {
+        DiffuseMap : Repeat Scenes/Textures/horirgb.jpg
+        UseAlpha : true
+        HighQuality : false
+        HardwareShadows : false
+        AlphaMap : Repeat Scenes/Textures/horiaph.jpg
+     }
+    AdditionalRenderState {
+      Blend Alpha
+      FaceCull Off
+    }
+}

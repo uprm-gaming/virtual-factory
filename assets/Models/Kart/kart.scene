@@ -1,0 +1,24 @@
+<scene exported_by="David" formatVersion="1.0.1" previous_export_time="1332987257.601" export_time="1336393516.94" >
+	<nodes >
+		<node name="Kart01" uuid="833410b24f7fdf798dfdc55a86e8e302" >
+			<position y="9.769400" x="-0.040070" z="-0.173368" />
+			<rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+			<scale y="0.423997" x="1.035034" z="0.997862" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+			<entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.03999999910593033" damping_rot="0.10000000149011612" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="Kart01.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="Kart01" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+		</node>
+	</nodes>
+	<externals >
+		<item type="material" >
+			<file name="C:\Users\David\Documents\jMonkeyEngine\Gaming\assets\Models\Kart\kart.material" />
+		</item>
+	</externals>
+	<environment >
+		<colourBackground r="0.05087608844041824" b="0.05087608844041824" g="0.05087608844041824" />
+		<colourAmbient r="0.0" b="0.0" g="0.0" />
+		<colourDiffuse r="0.05087608844041824" b="0.05087608844041824" g="0.05087608844041824" />
+	</environment>
+</scene>

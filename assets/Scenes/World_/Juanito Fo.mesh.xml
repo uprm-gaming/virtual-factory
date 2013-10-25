@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mesh>
+    <sharedgeometry vertexcount="9">
+        <vertexbuffer texture_coords="0" positions="true" colours_diffuse="False" normals="true">
+            <vertex>
+                <position y="30.315563" x="-70.589073" z="72.403564"/>
+                <normal y="1.000000" x="0.000000" z="0.000000"/>
+            </vertex>
+            <vertex>
+                <position y="30.315563" x="-76.589073" z="72.403572"/>
+                <normal y="1.000000" x="0.000000" z="0.000000"/>
+            </vertex>
+            <vertex>
+                <position y="30.315563" x="-74.831703" z="76.646210"/>
+                <normal y="1.000000" x="0.000000" z="0.000000"/>
+            </vertex>
+            <vertex>
+                <position y="30.315563" x="-70.589066" z="78.403564"/>
+                <normal y="1.000000" x="0.000000" z="0.000000"/>
+            </vertex>
+            <vertex>
+                <position y="30.315563" x="-66.346428" z="76.646194"/>
+                <normal y="1.000000" x="0.000000" z="-0.000000"/>
+            </vertex>
+            <vertex>
+                <position y="30.315563" x="-64.589073" z="72.403557"/>
+                <normal y="1.000000" x="0.000000" z="-0.000000"/>
+            </vertex>
+            <vertex>
+                <position y="30.315563" x="-66.346443" z="68.160919"/>
+                <normal y="1.000000" x="0.000000" z="-0.000000"/>
+            </vertex>
+            <vertex>
+                <position y="30.315563" x="-70.589081" z="66.403564"/>
+                <normal y="1.000000" x="0.000000" z="-0.000000"/>
+            </vertex>
+            <vertex>
+                <position y="30.315563" x="-74.831718" z="68.160934"/>
+                <normal y="1.000000" x="-0.000000" z="-0.000000"/>
+            </vertex>
+        </vertexbuffer>
+    </sharedgeometry>
+    <submeshes>
+        <submesh usesharedvertices="true" material="_missing_material_" use32bitindexes="False">
+            <faces count="8">
+                <face v1="0" v2="1" v3="2"/>
+                <face v1="0" v2="2" v3="3"/>
+                <face v1="0" v2="3" v3="4"/>
+                <face v1="0" v2="4" v3="5"/>
+                <face v1="0" v2="5" v3="6"/>
+                <face v1="0" v2="6" v3="7"/>
+                <face v1="0" v2="7" v3="8"/>
+                <face v1="0" v2="8" v3="1"/>
+            </faces>
+        </submesh>
+    </submeshes>
+    <submeshnames>
+        <submesh index="0" name="_missing_material_">
+        </submesh>
+    </submeshnames>
+</mesh>

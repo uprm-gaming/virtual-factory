@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mesh>
+    <sharedgeometry vertexcount="6">
+        <vertexbuffer texture_coords="1" positions="true" colours_diffuse="False" normals="true">
+            <vertex>
+                <position y="-0.000008" x="-28.702942" z="28.702805"/>
+                <normal y="1.000000" x="-0.000000" z="-0.000000"/>
+                <texcoord u="0.000500" v="0.999500"/>
+            </vertex>
+            <vertex>
+                <position y="-0.000008" x="28.702759" z="28.702789"/>
+                <normal y="1.000000" x="-0.000000" z="-0.000000"/>
+                <texcoord u="0.999500" v="0.999500"/>
+            </vertex>
+            <vertex>
+                <position y="-0.000015" x="28.702759" z="-28.702805"/>
+                <normal y="1.000000" x="-0.000000" z="-0.000000"/>
+                <texcoord u="0.999500" v="0.000500"/>
+            </vertex>
+            <vertex>
+                <position y="-0.000008" x="-28.702942" z="28.702805"/>
+                <normal y="1.000000" x="-0.000000" z="-0.000000"/>
+                <texcoord u="0.000500" v="0.999500"/>
+            </vertex>
+            <vertex>
+                <position y="-0.000015" x="28.702759" z="-28.702805"/>
+                <normal y="1.000000" x="-0.000000" z="-0.000000"/>
+                <texcoord u="0.999500" v="0.000500"/>
+            </vertex>
+            <vertex>
+                <position y="-0.000015" x="-28.702942" z="-28.702805"/>
+                <normal y="1.000000" x="-0.000000" z="-0.000000"/>
+                <texcoord u="0.000500" v="0.000500"/>
+            </vertex>
+        </vertexbuffer>
+    </sharedgeometry>
+    <submeshes>
+        <submesh usesharedvertices="true" material="Steering Wheel" use32bitindexes="False">
+            <faces count="2">
+                <face v1="0" v2="1" v3="2"/>
+                <face v1="3" v2="4" v3="5"/>
+            </faces>
+        </submesh>
+    </submeshes>
+    <submeshnames>
+        <submesh index="0" name="Steering Wheel">
+        </submesh>
+    </submeshnames>
+</mesh>

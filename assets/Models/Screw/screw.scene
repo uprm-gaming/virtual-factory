@@ -1,0 +1,90 @@
+<scene exported_by="David" formatVersion="1.0.1" previous_export_time="1332987257.601" export_time="1336425696.257" >
+	<nodes >
+		<node name="$AMBIENT$" uuid="d4a1c26316290844828326d3b1168ae8" >
+			<position y="0.000000" x="0.000000" z="-0.000000" />
+			<rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+		</node>
+		<node name="Light02" uuid="cb40da9022fbe7b303b5a6dc6f4dd6b3" >
+			<position y="0.000000" x="0.000000" z="-0.000000" />
+			<rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+		</node>
+		<node name="Lamp.001" uuid="a7f4b64198d8136bd78b35225d93387b" >
+			<position y="0.000000" x="0.000000" z="-0.000000" />
+			<rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+			<light type="point" name="Lamp.001" powerScale="1.0" >
+				<position y="0.000000" x="0.000000" z="-0.000000" />
+				<lightAttenuation range="5000" quadratic="0.0" constant="1.0" linear="0.04" />
+				<colourDiffuse r="1.0" b="1.0" g="1.0" />
+				<colourSpecular r="1.0" b="1.0" g="1.0" />
+			</light>
+		</node>
+		<node name="Schraube" uuid="a620e733b89a6863224f5d3795fac568" >
+			<position y="243.653534" x="0.000007" z="-0.000007" />
+			<rotation qy="-0.500000" qx="0.500000" qz="0.500000" qw="0.500000" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+			<entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.03999999910593033" damping_rot="0.10000000149011612" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="Schraube.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="Schraube" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+		</node>
+		<node name="Light01" uuid="cf6b9aea1f61cda41d760a564bf8a0d7" >
+			<position y="0.000000" x="0.000000" z="-0.000000" />
+			<rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+		</node>
+		<node name="Lamp" uuid="e3c001ff3d2c862ed0f00bd3e340f037" >
+			<position y="0.000000" x="0.000000" z="-0.000000" />
+			<rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+			<light type="point" name="Lamp" powerScale="1.0" >
+				<position y="0.000000" x="0.000000" z="-0.000000" />
+				<lightAttenuation range="5000" quadratic="0.0" constant="1.0" linear="0.04" />
+				<colourDiffuse r="1.0" b="1.0" g="1.0" />
+				<colourSpecular r="1.0" b="1.0" g="1.0" />
+			</light>
+		</node>
+		<node name="Camera01" uuid="d1162f7985f30b94138bb32c04e751ae" >
+			<position y="0.000000" x="0.000000" z="-0.000000" />
+			<rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+		</node>
+	</nodes>
+	<externals >
+		<item type="material" >
+			<file name="C:\Users\David\Desktop\more blender\m_screw\screw.material" />
+		</item>
+	</externals>
+	<environment >
+		<colourBackground r="0.05087608844041824" b="0.05087608844041824" g="0.05087608844041824" />
+		<colourAmbient r="0.0" b="0.0" g="0.0" />
+		<colourDiffuse r="0.05087608844041824" b="0.05087608844041824" g="0.05087608844041824" />
+	</environment>
+</scene>

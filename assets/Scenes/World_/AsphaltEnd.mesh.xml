@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mesh>
+    <sharedgeometry vertexcount="12">
+        <vertexbuffer texture_coords="1" positions="true" colours_diffuse="False" normals="true">
+            <vertex>
+                <position y="-54.134212" x="-29.962387" z="61.301094"/>
+                <normal y="0.997209" x="0.059131" z="-0.045585"/>
+                <texcoord u="-0.005059" v="0.656312"/>
+            </vertex>
+            <vertex>
+                <position y="-54.977165" x="-18.627800" z="57.563629"/>
+                <normal y="0.997209" x="0.059131" z="-0.045585"/>
+                <texcoord u="0.111251" v="0.997343"/>
+            </vertex>
+            <vertex>
+                <position y="-56.104759" x="-18.627827" z="32.896461"/>
+                <normal y="0.997209" x="0.059131" z="-0.045585"/>
+                <texcoord u="0.855924" v="0.989768"/>
+            </vertex>
+            <vertex>
+                <position y="-56.104759" x="-18.627827" z="32.896461"/>
+                <normal y="0.997865" x="0.034465" z="-0.055473"/>
+                <texcoord u="0.855924" v="0.989768"/>
+            </vertex>
+            <vertex>
+                <position y="-55.921371" x="-29.962444" z="29.153072"/>
+                <normal y="0.997865" x="0.034465" z="-0.055473"/>
+                <texcoord u="0.965452" v="0.646438"/>
+            </vertex>
+            <vertex>
+                <position y="-54.134212" x="-29.962387" z="61.301094"/>
+                <normal y="0.997865" x="0.034465" z="-0.055473"/>
+                <texcoord u="-0.005059" v="0.656312"/>
+            </vertex>
+            <vertex>
+                <position y="-54.977165" x="-18.627800" z="57.563629"/>
+                <normal y="0.996205" x="0.050777" z="-0.070694"/>
+                <texcoord u="0.111251" v="0.997343"/>
+            </vertex>
+            <vertex>
+                <position y="-54.134212" x="-29.962387" z="61.301094"/>
+                <normal y="0.996205" x="0.050777" z="-0.070694"/>
+                <texcoord u="-0.005059" v="0.656312"/>
+            </vertex>
+            <vertex>
+                <position y="-54.711945" x="-18.627796" z="61.301075"/>
+                <normal y="0.996205" x="0.050777" z="-0.070694"/>
+                <texcoord u="-0.001578" v="0.998491"/>
+            </vertex>
+            <vertex>
+                <position y="-56.227863" x="-18.627827" z="29.153332"/>
+                <normal y="0.999095" x="0.027017" z="-0.032858"/>
+                <texcoord u="0.968925" v="0.988619"/>
+            </vertex>
+            <vertex>
+                <position y="-55.921371" x="-29.962444" z="29.153072"/>
+                <normal y="0.999095" x="0.027017" z="-0.032858"/>
+                <texcoord u="0.965452" v="0.646438"/>
+            </vertex>
+            <vertex>
+                <position y="-56.104759" x="-18.627827" z="32.896461"/>
+                <normal y="0.999095" x="0.027017" z="-0.032858"/>
+                <texcoord u="0.855924" v="0.989768"/>
+            </vertex>
+        </vertexbuffer>
+    </sharedgeometry>
+    <submeshes>
+        <submesh usesharedvertices="true" material="End of paved roa" use32bitindexes="False">
+            <faces count="4">
+                <face v1="0" v2="1" v3="2"/>
+                <face v1="3" v2="4" v3="5"/>
+                <face v1="6" v2="7" v3="8"/>
+                <face v1="9" v2="10" v3="11"/>
+            </faces>
+        </submesh>
+    </submeshes>
+    <submeshnames>
+        <submesh index="0" name="End of paved roa">
+        </submesh>
+    </submeshnames>
+</mesh>

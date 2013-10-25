@@ -1,0 +1,100 @@
+<scene exported_by="David" formatVersion="1.0.1" previous_export_time="1336425696.257" export_time="1336425744.385" >
+	<nodes >
+		<node name="$AMBIENT$" uuid="f3683cfa891912678a6a3088372317a7" >
+			<position y="0.000000" x="0.000000" z="-0.000000" />
+			<rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+		</node>
+		<node name="Kopf" uuid="25113eb581e81a528a1e399a8f8dd419" >
+			<position y="-0.000004" x="73.648262" z="-0.000002" />
+			<rotation qy="-0.000000" qx="0.707107" qz="-0.707107" qw="0.000000" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+			<entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.03999999910593033" damping_rot="0.10000000149011612" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="Kopf.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="Kopf" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+			<node name="Gewinde" uuid="170b5c3d004fdac467b05cb16f5f4ab4" >
+				<position y="-0.000003" x="-0.000004" z="35.587391" />
+				<rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+				<scale y="1.000000" x="1.000000" z="1.000000" />
+				<game >
+					<sensors />
+					<actuators />
+				</game>
+				<entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.03999999910593033" damping_rot="0.10000000149011612" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="Gewinde.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="Gewinde" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+			</node>
+		</node>
+		<node name="Light02" uuid="285e639d34258f8a3f8d9af0cac2dac2" >
+			<position y="0.000000" x="0.000000" z="-0.000000" />
+			<rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+		</node>
+		<node name="Lamp.001" uuid="77f793641cfe65aa03032affdf63b3a9" >
+			<position y="0.000000" x="0.000000" z="-0.000000" />
+			<rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+			<light type="point" name="Lamp.001" powerScale="1.0" >
+				<position y="0.000000" x="0.000000" z="-0.000000" />
+				<lightAttenuation range="5000" quadratic="0.0" constant="1.0" linear="0.04" />
+				<colourDiffuse r="1.0" b="1.0" g="1.0" />
+				<colourSpecular r="1.0" b="1.0" g="1.0" />
+			</light>
+		</node>
+		<node name="Light01" uuid="71357d039e2c5d82d3975f590db40804" >
+			<position y="0.000000" x="0.000000" z="-0.000000" />
+			<rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+		</node>
+		<node name="Lamp" uuid="20a89e007ab8a0c73d6ba18ee4390aeb" >
+			<position y="0.000000" x="0.000000" z="-0.000000" />
+			<rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+			<light type="point" name="Lamp" powerScale="1.0" >
+				<position y="0.000000" x="0.000000" z="-0.000000" />
+				<lightAttenuation range="5000" quadratic="0.0" constant="1.0" linear="0.04" />
+				<colourDiffuse r="1.0" b="1.0" g="1.0" />
+				<colourSpecular r="1.0" b="1.0" g="1.0" />
+			</light>
+		</node>
+		<node name="Camera01" uuid="b8706e542fb1a20a0fe6e7c3716a3a2d" >
+			<position y="0.000000" x="0.000000" z="-0.000000" />
+			<rotation qy="0.000000" qx="0.000000" qz="-0.000000" qw="1.000000" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+		</node>
+	</nodes>
+	<externals >
+		<item type="material" >
+			<file name="C:\Users\David\Desktop\more blender\m_screw2\screw2.material" />
+		</item>
+	</externals>
+	<environment >
+		<colourBackground r="0.05087608844041824" b="0.05087608844041824" g="0.05087608844041824" />
+		<colourAmbient r="0.0" b="0.0" g="0.0" />
+		<colourDiffuse r="0.05087608844041824" b="0.05087608844041824" g="0.05087608844041824" />
+	</environment>
+</scene>

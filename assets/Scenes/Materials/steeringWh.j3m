@@ -1,0 +1,10 @@
+Material My Material : Common/MatDefs/Light/Lighting.j3md {
+     MaterialParameters {
+        DiffuseMap : Repeat Scenes/Textures/stwhrgb.jpg
+        AlphaMap : Repeat Scenes/Textures/stwhaph.jpg
+        UseAlpha : true
+     }
+    AdditionalRenderState {
+        Blend Alpha
+    }
+}

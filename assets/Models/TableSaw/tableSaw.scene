@@ -1,0 +1,24 @@
+<scene exported_by="David" formatVersion="1.0.1" previous_export_time="1332987257.601" export_time="1336397246.695" >
+	<nodes >
+		<node name="Table saw" uuid="d8afe10b5934e65ba9cbd60ff3f9ffd9" >
+			<position y="0.863700" x="16.084997" z="-72.742836" />
+			<rotation qy="0.707107" qx="0.000000" qz="-0.000000" qw="0.707107" />
+			<scale y="1.000000" x="1.000000" z="1.000000" />
+			<game >
+				<sensors />
+				<actuators />
+			</game>
+			<entity anisotropic_friction="False" lock_trans_y="False" damping_trans="0.03999999910593033" damping_rot="0.10000000149011612" inertia_tensor="0.4000000059604645" actor="False" velocity_min="0.0" lock_trans_z="False" physics_type="STATIC" lock_trans_x="False" meshFile="Table saw.001.mesh" friction_y="1.0" friction_x="1.0" friction_z="1.0" velocity_max="0.0" ghost="False" name="Table saw.001" mass_radius="1.0" mass="1.0" lock_rot_x="False" lock_rot_y="False" lock_rot_z="False" />
+		</node>
+	</nodes>
+	<externals >
+		<item type="material" >
+			<file name="C:\Users\David\Desktop\GameININ\table saw\tableSaw.material" />
+		</item>
+	</externals>
+	<environment >
+		<colourBackground r="0.05087608844041824" b="0.05087608844041824" g="0.05087608844041824" />
+		<colourAmbient r="0.0" b="0.0" g="0.0" />
+		<colourDiffuse r="0.05087608844041824" b="0.05087608844041824" g="0.05087608844041824" />
+	</environment>
+</scene>

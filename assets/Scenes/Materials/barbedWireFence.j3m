@@ -1,0 +1,16 @@
+Material My Material : Common/MatDefs/Light/Lighting.j3md {
+     MaterialParameters {
+        DiffuseMap : Repeat Scenes/Textures/bbwrrgb.jpg
+        AlphaMap : Repeat Scenes/Textures/bbwraph.jpg
+        UseAlpha : true
+        AlphaDiscardThreshold : 0.0
+        HighQuality : false
+     }
+    AdditionalRenderState {
+      Blend Alpha
+      AlphaTestFalloff 0.0
+      DepthWrite Off
+      Wireframe Off
+        FaceCull Off
+    }
+}

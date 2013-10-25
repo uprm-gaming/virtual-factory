@@ -1,0 +1,7 @@
+Material My Material : Common/MatDefs/Light/Lighting.j3md {
+     MaterialParameters {
+        DiffuseMap : Repeat Scenes/Textures/bx03rgb.jpg
+     }
+    AdditionalRenderState {
+    }
+}
