@@ -1,4 +1,4 @@
-virtual-factory
+Virtual Factory 2.0
 ===============
 
-Virtual Factory 2.0
+NSF-funded serious game.
