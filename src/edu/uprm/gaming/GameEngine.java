@@ -483,6 +483,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                              assetManager.loadTexture("Textures/Skybox/skyTop.jpg"), 
                              assetManager.loadTexture("Textures/Skybox/skyDown.jpg"));
         rootNode.attachChild(sky);
+        System.out.println("Added.");
     }
     
     private void createSkyDome() {
