@@ -35,16 +35,11 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Ray;
-import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.CartoonEdgeFilter;
-import com.jme3.post.filters.LightScatteringFilter;
-import com.jme3.post.filters.CrossHatchFilter;
-import com.jme3.post.filters.DepthOfFieldFilter;
 import com.jme3.renderer.Camera;
-import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Geometry;
@@ -54,7 +49,6 @@ import com.jme3.scene.debug.Grid;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Sphere;
-import com.jme3.terrain.geomipmap.TerrainQuad;
 import com.jme3.texture.Texture;
 import com.jme3.util.SkyFactory;
 import de.lessvoid.nifty.Nifty;
@@ -150,7 +144,6 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
  * Game Engine 2.0
@@ -274,7 +267,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     private boolean isGameStarted = false;
     private AudioNode footstep;
     private AudioNode[] jumpSounds;
-    private CartoonEdgeFilter toon;
   
     @Override
     public void initialize(AppStateManager manager, Application application) {
@@ -306,6 +298,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         //createLight();
         setupFilter();
         initKeys();
+        initSoundEffects();
         
         //***********************************************
         gameData = GameData.getInstance();
@@ -557,9 +550,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         if (moveLeft) { walkDirection.addLocal(camLeft); }
         if (moveRight) { walkDirection.addLocal(camLeft.negate()); }
         
-        if (isGameStarted) {
+        if (executeGame) {
             player.setWalkDirection(walkDirection); // walk!
             app.getCamera().setLocation(player.getPhysicsLocation());
+            if (flyCam.isDragToRotate()) flyCam.setDragToRotate(false);
+            if (!inputManager.isCursorVisible()) inputManager.setCursorVisible(true);
         } 
     }
 
@@ -1241,21 +1236,10 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
 
     private void setupFilter() {
         FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
-        
-        toon = new CartoonEdgeFilter();
-        toon.setEdgeWidth(0.33999988f);
-        //toon.setDepthSensitivity(30);
-        fpp.addFilter(toon);
-        
-        CrossHatchFilter crossHatch = new CrossHatchFilter();
-        crossHatch.setLineThickness(0.5f);
-        //fpp.addFilter(crossHatch);
-        
-        DepthOfFieldFilter dofFilter = new DepthOfFieldFilter();
-        dofFilter.setFocusDistance(0);
-        dofFilter.setFocusRange(50);
-        dofFilter.setBlurScale(0.5f);
-        fpp.addFilter(dofFilter);
+
+        CartoonEdgeFilter toonFilter = new CartoonEdgeFilter();
+        toonFilter.setEdgeWidth(0.33999988f);
+        fpp.addFilter(toonFilter);
         
         viewPort.addProcessor(fpp);
     }
@@ -1268,57 +1252,36 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         footstep = new AudioNode(assetManager, "Sounds/footstep.ogg", false);
         footstep.setPositional(false);
         footstep.setLooping(true);
-        
-        /* Initialize the player's grunt sounds when jumping */
-        String filePath = "Sounds/Jump/jump";
-        jumpSounds = new AudioNode[5];
-        for (int i = 0; i < jumpSounds.length; i++) {
-            jumpSounds[i] = new AudioNode(assetManager, filePath + (i+1) + ".wav", false);
-        }
     }
 
     private void initKeys() {
-        inputManager.addMapping("MousePicking", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.deleteMapping("FLYCAM_ZoomIn");
         inputManager.deleteMapping("FLYCAM_ZoomOut");
-        inputManager.addMapping("Toggle Controls", new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addMapping("Picking", new KeyTrigger(KeyInput.KEY_LSHIFT));
-        inputManager.addMapping("Dashboard Control", new KeyTrigger(KeyInput.KEY_RSHIFT));
-        inputManager.addListener(actionListener, "MousePicking", "Picking", "Toggle Controls", "Dashboard Control");
-
-        String[] mappings = {"Toggle Cam", "Forward", "Backward", "Left",
-                             "Right", "Jump", "Increase Width", "Decrease Width",
-                             "Increase Intensity", "Decrease Intensity",
-                             "Increase Depth Sensitivity", "Decrease Depth Sensitivity",
-                             "Increase Depth Threshold", "Decrease Depth Threshold",
-                             "Increase Normal Sensitivity", "Decrease Normal Sensitivity",
-                             "Increase Normal Threshold", "Decrease Normal Threshold",
-                             "Edge Color"};
         
-        int[] triggers = {KeyInput.KEY_0, KeyInput.KEY_W, KeyInput.KEY_S, KeyInput.KEY_A, 
-                          KeyInput.KEY_D, KeyInput.KEY_SPACE, KeyInput.KEY_1, KeyInput.KEY_2,
-                          KeyInput.KEY_3, KeyInput.KEY_4, 
-                          KeyInput.KEY_NUMPAD3, KeyInput.KEY_NUMPAD4,
-                          KeyInput.KEY_NUMPAD5, KeyInput.KEY_NUMPAD6,
-                          KeyInput.KEY_NUMPAD7, KeyInput.KEY_NUMPAD8,
-                          KeyInput.KEY_5, KeyInput.KEY_6,
-                          KeyInput.KEY_C};
+        inputManager.addMapping("MousePicking", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        inputManager.addListener(actionListener, "MousePicking");
+
+        String[] mappings = {"Forward", "Backward", "Left",
+                             "Right", "Jump", "Picking",
+                             "Dashboard Control"};
+        
+        int[] triggers = {KeyInput.KEY_W, KeyInput.KEY_S, KeyInput.KEY_A, 
+                          KeyInput.KEY_D, KeyInput.KEY_SPACE, KeyInput.KEY_LSHIFT, 
+                          KeyInput.KEY_RSHIFT};
         
         for (int i = 0; i < mappings.length; i++) {
             inputManager.addMapping(mappings[i], new KeyTrigger(triggers[i]));
             inputManager.addListener(actionListener, mappings[i]);
         } 
-        
-        initSoundEffects();
     }
     
     private ActionListener actionListener = new ActionListener() {
         @Override
-        public void onAction(String name, boolean keyPressed, float tpf) {
-            
+        public void onAction(String name, boolean keyPressed, float tpf) {            
             if (!executeGame) {
                 return;
             }
+            
             switch (name) {
                 case "Forward":
                     forward = keyPressed;
@@ -1343,136 +1306,32 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                     if (keyPressed && !isPlayerDisabled) { footstep.stop(); footstep.play(); }
                     else { if (!forward && !backward && !left) { footstep.stop(); } }
                     break;
-                    
-                case "Jump":
-                    if (keyPressed) {
-                        player.jump();
-                        footstep.stop();
-                        jumpSounds[new Random().nextInt(5)].playInstance();
-                    }
+                
+                case "Picking": case "MousePicking":
+                    if (!keyPressed)
+                        handlePickedObject(name);
                     break;
-                    
-                case "Toggle Cam":
+                
+                case "Dashboard Control":
                     if (!keyPressed) {
-                        isGameStarted = !isGameStarted;
-                        flyCam.setDragToRotate(false);
-                        inputManager.setCursorVisible(true);
-                    }
-                    break;
-                    
-                case "Increase Width":
-                    if (!keyPressed) {
-                        toon.setEdgeWidth(toon.getEdgeWidth() + 0.02f);
-                        System.out.println("EdgeWidth = " + toon.getEdgeWidth());
-                    }
-                    break;
-                    
-                case "Decrease Width":
-                    if (!keyPressed) {
-                        toon.setEdgeWidth(toon.getEdgeWidth() - 0.02f);
-                        System.out.println("EdgeWidth = " + toon.getEdgeWidth());
-                    }
-                    break;
-                    
-                case "Increase Intensity":
-                    if (!keyPressed) {
-                        toon.setEdgeIntensity(toon.getEdgeIntensity() + 0.2f);
-                        System.out.println("EdgeIntensity = " + toon.getEdgeIntensity());
-                    }
-                    break;
-                    
-                case "Decrease Intensity":
-                    if (!keyPressed) {
-                        toon.setEdgeIntensity(toon.getEdgeIntensity() - 0.2f);
-                        System.out.println("EdgeIntensity = " + toon.getEdgeIntensity());
-                    }
-                    break;
-                    
-                case "Increase Depth Sensitivity":
-                    if (!keyPressed) {
-                        toon.setDepthSensitivity(toon.getDepthSensitivity() + 0.2f);
-                        System.out.println("DepthSensitivity = " + toon.getDepthSensitivity());
-                    }
-                    break;
-                    
-                case "Decrease Depth Sensitivity":
-                    if (!keyPressed) {
-                        toon.setDepthSensitivity(toon.getDepthSensitivity() - 0.2f);
-                        System.out.println("DepthSensitivity = " + toon.getDepthSensitivity());
-                    }
-                    break;
-                    
-                case "Increase Depth Threshold":
-                    if (!keyPressed) {
-                        toon.setDepthThreshold(toon.getDepthThreshold() + 0.2f);
-                        System.out.println("DepthThreshold = " + toon.getDepthThreshold());
-                    }
-                    break;
-                    
-                case "Decrease Depth Threshold":
-                    if (!keyPressed) {
-                        toon.setDepthThreshold(toon.getDepthThreshold() - 0.2f);
-                        System.out.println("DepthThreshold = " + toon.getDepthThreshold());
-                    }
-                    break;
-                    
-                case "Increase Normal Sensitivity":
-                    if (!keyPressed) {
-                        toon.setNormalSensitivity(toon.getNormalSensitivity() + 0.2f);
-                        System.out.println("NormalSensitivity = " + toon.getNormalSensitivity());
-                    }
-                    break;
-                    
-                case "Decrease Normal Sensitivity":
-                    if (!keyPressed) {
-                        toon.setNormalSensitivity(toon.getNormalSensitivity() - 0.2f);
-                        System.out.println("NormalSensitivity = " + toon.getNormalSensitivity());
-                    }
-                    break;
-                    
-                case "Increase Normal Threshold":
-                    if (!keyPressed) {
-                        toon.setNormalThreshold(toon.getNormalThreshold() + 0.2f);
-                        System.out.println("NormalThreshold = " + toon.getNormalThreshold());
-                    }
-                    break;
-                    
-                case "Decrease Normal Threshold":
-                    if (!keyPressed) {
-                        toon.setNormalThreshold(toon.getNormalThreshold() - 0.2f);
-                        System.out.println("NormalThreshold = " + toon.getNormalThreshold());
+                        showHideDashboard = true;
+                        manageDashboard();
+                        if (Params.DEBUG_ON)
+                            System.out.println("Dashboard Control Key Selected.");
                     }
                     break;
                     
                 default:
                     break;
             }
-            
-            /* Press Left-Shift to see an oblect's information */
-            if (name.equals("Picking") && !keyPressed) { //
-                objectPicked(name);
-            }
-            if (name.equals("MousePicking") && !keyPressed) { //
-                objectPicked(name);
-            }
-            if (name.equals("Dashboard Control") && !keyPressed) {
-                if (!executeGame) {
-                    return;
-                }
-                showHideDashboard = true;
-                manageDashboard();
-                if (Params.DEBUG_ON) {
-                    System.out.println("Dashboard Control Key Selected.");
-                }
-            }
         }
     };
     
-    private void objectPicked (String option) {
+    private void handlePickedObject(String pickingType) {
         getGeneralScreenController().hideCurrentControlsWindow();
         CollisionResults results = new CollisionResults();
         Ray ray;
-        if (option.equals("Picking")) { //Picking with the SHIFT Button
+        if (pickingType.equals("Picking")) { //Picking with the SHIFT Button
             ray = new Ray(cam.getLocation(), cam.getDirection());
         }
         else { //Picking with mouse
@@ -1480,7 +1339,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
             Vector3f direction = cam.getWorldCoordinates(inputManager.getCursorPosition(), 0.3f);
             direction.subtractLocal(origin).normalizeLocal();
             ray = new Ray(origin, direction);
-            
         }
         
         shootables.collideWith(ray, results);
@@ -1497,22 +1355,20 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                 return;
             }
             
-            String result = "";
+            String shootableObject;
             if (closest.getGeometry().getParent().getName().equals("Shootables")) {
-                result = closest.getGeometry().getName();
+                shootableObject = closest.getGeometry().getName();
             } else {
                 Node tempGeometry = closest.getGeometry().getParent();
                 while (!tempGeometry.getParent().getName().equals("Shootables")) {
                     tempGeometry = tempGeometry.getParent();
                 }
-                result = tempGeometry.getName();
+                shootableObject = tempGeometry.getName();
             }
             
-            loadWindowControl(result);
-            //SHOW WINDOW
-            System.out.println("######## SHOOT: " + result);
-        }
-        
+            loadWindowControl(shootableObject); //SHOW WINDOW
+            System.out.println("######## SHOOT: " + shootableObject);
+        }     
     }
 
     private void loadWindowControl(String winControl) {
