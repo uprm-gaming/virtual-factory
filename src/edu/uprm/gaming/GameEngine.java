@@ -356,6 +356,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         System.out.println("--------End-of-SimpleAppInit-------");
         if (Params.DEBUG_ON) {
             nifty.gotoScreen("initialMenu");
+            System.out.println("DEBUG MODE: Entered to initial menu successfully.");
         }
     }
 
