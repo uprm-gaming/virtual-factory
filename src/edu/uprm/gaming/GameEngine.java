@@ -1656,7 +1656,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                         });
                                         image(new ImageBuilder() {
                                             {
-                                                filename("Interface/virtual.png");
+                                                filename("Interface/virtual2.png");
                                                 onStartScreenEffect(new EffectBuilder("move") {
                                                     {
                                                         length(1000);
@@ -1671,7 +1671,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                         });
                                         image(new ImageBuilder() {
                                             {
-                                                filename("Interface/factory.png");
+                                                filename("Interface/factory2.png");
                                                 onStartScreenEffect(new EffectBuilder("move") {
                                                     {
                                                         length(1000);
