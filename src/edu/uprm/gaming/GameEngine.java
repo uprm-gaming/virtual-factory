@@ -238,7 +238,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     private boolean isDashboardVisible = false;
     private boolean showHideDashboard = false;
     private long currentDashboardTime;
-    private boolean isMouseToggled = false;
 
     public SimpleApplication app;
     private AppStateManager stateManager;
@@ -255,7 +254,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     private boolean backward = false;
     private boolean moveLeft = false;
     private boolean moveRight = false;
-    private boolean isPlayerDisabled = false;
     
     private float playerSpeed = 1.3f;
     
@@ -263,10 +261,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     private Vector3f camLeft;
     
     private Vector3f walkDirection = new Vector3f(0, 0, 0);
-    
-    private boolean isGameStarted = false;
+
     private AudioNode footstep;
-    private AudioNode[] jumpSounds;
   
     @Override
     public void initialize(AppStateManager manager, Application application) {
@@ -467,16 +463,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     /**
      * Creates the beautiful sky for the game.
      */
-    private void createSkyBox() {
-        Spatial sky = SkyFactory.createSky(assetManager, 
-                             assetManager.loadTexture("Textures/Skybox/skyLeft.jpg"), 
-                             assetManager.loadTexture("Textures/Skybox/skyRight.jpg"), 
-                             assetManager.loadTexture("Textures/Skybox/skyFront.jpg"), 
-                             assetManager.loadTexture("Textures/Skybox/skyBack.jpg"), 
-                             assetManager.loadTexture("Textures/Skybox/skyTop.jpg"), 
-                             assetManager.loadTexture("Textures/Skybox/skyDown.jpg"));
-    }
-    
     private void createSkyDome() {
         SkyDomeControl skyDome = new SkyDomeControl(assetManager, app.getCamera(),
                 "ShaderBlow/Models/SkyDome/SkyDome.j3o",
@@ -484,51 +470,36 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                 "ShaderBlow/Textures/SkyDome/Moon_L.png",
                 "ShaderBlow/Textures/SkyDome/Clouds_L.png",
                 "ShaderBlow/Textures/SkyDome/Fog_Alpha.png");
+        
         Node sky = new Node();
         sky.setQueueBucket(RenderQueue.Bucket.Sky);
         sky.addControl(skyDome);
         sky.setCullHint(Spatial.CullHint.Never);
 
-// Either add a reference to the control for the existing JME fog filter or use the one I posted…
-// But… REMEMBER!  If you use JME’s… the sky dome will have fog rendered over it.
-// Sorta pointless at that point
-//        FogFilter fog = new FogFilter(ColorRGBA.Blue, 0.5f, 10f);
-//        skyDome.setFogFilter(fog, viewPort);
-
-// Set some fog colors… or not (defaults are cool)
-        skyDome.setFogColor(ColorRGBA.Pink);
-        //skyDome.setFogColor(new ColorRGBA(255f, 128f, 131f, 1f));
-       
-        skyDome.setFogNightColor(new ColorRGBA(0.5f, 0.5f, 1f, 1f));
+        // Set some fog colors… or not (defaults are cool)
+        skyDome.setFogColor(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));
         skyDome.setDaySkyColor(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));
 
-// Enable the control to modify the fog filter
+        // Enable the control to modify the fog filter
         skyDome.setControlFog(true);
 
-// Add the directional light you use for sun… or not
-        
+        // Add the directional light you use for sun… or not
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-0.8f, -0.6f, -0.08f).normalizeLocal());
         sun.setColor(new ColorRGBA(1, 1, 1, 1));
         rootNode.addLight(sun);
         skyDome.setSun(sun);
-        
-        /*
-        AmbientLight al = new AmbientLight();
-        al.setColor(new ColorRGBA(0.7f, 0.7f, 1f, 1.0f));
-        rootNode.addLight(al);*/
 
-// Set some sunlight day/night colors… or not
+        // Set some sunlight day/night colors… or not
         skyDome.setSunDayLight(new ColorRGBA(1, 1, 1, 1));
         skyDome.setSunNightLight(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));
 
-// Enable the control to modify your sunlight
+        // Enable the control to modify your sunlight
         skyDome.setControlSun(true);
 
-// Enable the control
+        // Enable the control
         skyDome.setEnabled(true);
 
-// Add the skydome to the root… or where ever
         rootNode.attachChild(sky);
         skyDome.cycleNightToDay();
         skyDome.setDayNightTransitionSpeed(1.2f);
@@ -1285,25 +1256,25 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
             switch (name) {
                 case "Forward":
                     forward = keyPressed;
-                    if (keyPressed && !isPlayerDisabled) { footstep.stop(); footstep.play(); }
+                    if (keyPressed) { footstep.play(); }
                     else { if (!backward && !left && !right) { footstep.stop();  } }
                     break;
                     
                 case "Backward":
                     backward = keyPressed;
-                    if (keyPressed && !isPlayerDisabled) { footstep.stop(); footstep.play(); }
+                    if (keyPressed) { footstep.play(); }
                     else { if (!forward && !left && !right) { footstep.stop(); } }
                     break;
                     
                 case "Left":
                     moveLeft = keyPressed;
-                    if (keyPressed && !isPlayerDisabled) { footstep.stop(); footstep.play(); }
+                    if (keyPressed) { footstep.play(); }
                     else { if (!forward && !backward && !right) { footstep.stop(); } }
                     break;
                     
                 case "Right":
                     moveRight = keyPressed;
-                    if (keyPressed && !isPlayerDisabled) { footstep.stop(); footstep.play(); }
+                    if (keyPressed) { footstep.play(); }
                     else { if (!forward && !backward && !left) { footstep.stop(); } }
                     break;
                 
@@ -1366,7 +1337,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                 shootableObject = tempGeometry.getName();
             }
             
-            loadWindowControl(shootableObject); //SHOW WINDOW
+            loadWindowControl(shootableObject);
             System.out.println("######## SHOOT: " + shootableObject);
         }     
     }
