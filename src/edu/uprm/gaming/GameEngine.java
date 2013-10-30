@@ -352,6 +352,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         System.out.println("--------End-of-SimpleAppInit-------");
         if (Params.DEBUG_ON) {
             nifty.gotoScreen("initialMenu");
+            System.out.println("DEBUG MODE: Entered to initial menu successfully.");
         }
     }
 
@@ -1548,9 +1549,12 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                         });
                         onActiveEffect(new EffectBuilder("gradient") {
                             {
-                                effectValue("offset", "0%", "color", "#66666fff");
-                                effectValue("offset", "85%", "color", "#000f");
-                                effectValue("offset", "100%", "color", "#44444fff");
+                                effectValue("offset", "0%", "color", "#c6c6c6");
+                                effectValue("offset", "85%", "color", "#c6c6c6");
+                                effectValue("offset", "100%", "color", "#c6c6c6");
+//                                effectValue("offset", "0%", "color", "#66666fff");
+//                                effectValue("offset", "85%", "color", "#000f");
+//                                effectValue("offset", "100%", "color", "#44444fff");
                             }
                         });
                         panel(new PanelBuilder() {
@@ -1558,40 +1562,40 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                 alignCenter();
                                 valignCenter();
                                 childLayoutHorizontal();
-                                width("856px");
-                                panel(new PanelBuilder() {
-                                    {
-                                        width("300px");
-                                        height("256px");
-                                        childLayoutCenter();
-                                        text(new TextBuilder() {
-                                            {
-                                                text("GAMING");
-                                                style("base-font");
-                                                alignCenter();
-                                                valignCenter();
-                                                onStartScreenEffect(new EffectBuilder("fade") {
-                                                    {
-                                                        length(1000);
-                                                        effectValue("time", "1700", "value", "0.0");
-                                                        effectValue("time", "2000", "value", "1.0");
-                                                        effectValue("time", "2600", "value", "1.0");
-                                                        effectValue("time", "3200", "value", "0.0");
-                                                        post(false);
-                                                        neverStopRendering(true);
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
+                                //width("856px");
+//                                panel(new PanelBuilder() {
+//                                    {
+//                                        width("300px");
+//                                        height("256px");
+//                                        childLayoutCenter();
+//                                        text(new TextBuilder() {
+//                                            {
+//                                                text("Virtual");
+//                                                style("base-font");
+//                                                alignCenter();
+//                                                valignCenter();
+//                                                onStartScreenEffect(new EffectBuilder("fade") {
+//                                                    {
+//                                                        length(1000);
+//                                                        effectValue("time", "1700", "value", "0.0");
+//                                                        effectValue("time", "2000", "value", "1.0");
+//                                                        effectValue("time", "2600", "value", "1.0");
+//                                                        effectValue("time", "3200", "value", "0.0");
+//                                                        post(false);
+//                                                        neverStopRendering(true);
+//                                                    }
+//                                                });
+//                                            }
+//                                        });
+//                                    }
+//                                });
                                 panel(new PanelBuilder() {
                                     {
                                         alignCenter();
                                         valignCenter();
                                         childLayoutOverlay();
-                                        width("256px");
-                                        height("256px");
+                                        width("800px");
+                                        height("200px");
                                         onStartScreenEffect(new EffectBuilder("shake") {
                                             {
                                                 length(250);
@@ -1604,7 +1608,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                         onStartScreenEffect(new EffectBuilder("imageSize") {
                                             {
                                                 length(600);
-                                                startDelay(3000);
+                                                startDelay(4500);
                                                 effectParameter("startSize", "1.0");
                                                 effectParameter("endSize", "2.0");
                                                 inherit();
@@ -1614,7 +1618,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                         onStartScreenEffect(new EffectBuilder("fade") {
                                             {
                                                 length(600);
-                                                startDelay(3000);
+                                                startDelay(4500);
                                                 effectParameter("start", "#f");
                                                 effectParameter("end", "#0");
                                                 inherit();
@@ -1623,13 +1627,13 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                         });
                                         image(new ImageBuilder() {
                                             {
-                                                filename("Interface/yin.png");
+                                                filename("Interface/virtual2.png");
                                                 onStartScreenEffect(new EffectBuilder("move") {
                                                     {
                                                         length(1000);
                                                         startDelay(300);
                                                         timeType("exp");
-                                                        effectParameter("factor", "6.f");
+                                                        effectParameter("factor", "1.f");
                                                         effectParameter("mode", "in");
                                                         effectParameter("direction", "left");
                                                     }
@@ -1638,13 +1642,13 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                         });
                                         image(new ImageBuilder() {
                                             {
-                                                filename("Interface/yang.png");
+                                                filename("Interface/factory2.png");
                                                 onStartScreenEffect(new EffectBuilder("move") {
                                                     {
                                                         length(1000);
                                                         startDelay(300);
                                                         timeType("exp");
-                                                        effectParameter("factor", "6.f");
+                                                        effectParameter("factor", "1.f");
                                                         effectParameter("mode", "in");
                                                         effectParameter("direction", "right");
                                                     }
@@ -1653,43 +1657,44 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                         });
                                     }
                                 });
-                                panel(new PanelBuilder() {
-                                    {
-                                        width("300px");
-                                        height("256px");
-                                        childLayoutCenter();
-                                        text(new TextBuilder() {
-                                            {
-                                                text("More Gaming");
-                                                style("base-font");
-                                                alignCenter();
-                                                valignCenter();
-                                                onStartScreenEffect(new EffectBuilder("fade") {
-                                                    {
-                                                        length(1000);
-                                                        effectValue("time", "1700", "value", "0.0");
-                                                        effectValue("time", "2000", "value", "1.0");
-                                                        effectValue("time", "2600", "value", "1.0");
-                                                        effectValue("time", "3200", "value", "0.0");
-                                                        post(false);
-                                                        neverStopRendering(true);
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                });
+//                                panel(new PanelBuilder() {
+//                                    {
+//                                        width("300px");
+//                                        height("256px");
+//                                        childLayoutCenter();
+//                                        text(new TextBuilder() {
+//                                            {
+//                                                text("Factory 2.0");
+//                                                style("base-font");
+//                                                alignCenter();
+//                                                valignCenter();
+//                                                onStartScreenEffect(new EffectBuilder("fade") {
+//                                                    {
+//                                                        length(1000);
+//                                                        effectValue("time", "1700", "value", "0.0");
+//                                                        effectValue("time", "2000", "value", "1.0");
+//                                                        effectValue("time", "2600", "value", "1.0");
+//                                                        effectValue("time", "3200", "value", "0.0");
+//                                                        post(false);
+//                                                        neverStopRendering(true);
+//                                                    }
+//                                                });
+//                                            }
+//                                        });
+//                                    }
+//                                });
                             }
                         });
                     }
                 });
                 layer(new LayerBuilder() {
                     {
-                        backgroundColor("#ddff");
+//                        backgroundColor("#ddff");
+                        backgroundColor("#f");
                         onStartScreenEffect(new EffectBuilder("fade") {
                             {
                                 length(1000);
-                                startDelay(3000);
+                                startDelay(4500);
                                 effectParameter("start", "#0");
                                 effectParameter("end", "#f");
                             }
