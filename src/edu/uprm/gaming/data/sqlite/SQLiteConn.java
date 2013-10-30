@@ -31,7 +31,7 @@ public class SQLiteConn {
         try
         {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:resources/gaming.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:gaming.db");
 //            System.out.println(System.getProperty("user.home"));
 //            System.out.println("SQLite - Database connection established");
         }
