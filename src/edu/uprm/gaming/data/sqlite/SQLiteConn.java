@@ -4,8 +4,10 @@
  */
 package edu.uprm.gaming.data.sqlite;
 import edu.uprm.gaming.utils.Params;
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 /**
  *
  * @author David
@@ -29,7 +31,8 @@ public class SQLiteConn {
         try
         {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:gaming.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:resources/gaming.db");
+//            System.out.println(System.getProperty("user.home"));
 //            System.out.println("SQLite - Database connection established");
         }
         catch (Exception e)
