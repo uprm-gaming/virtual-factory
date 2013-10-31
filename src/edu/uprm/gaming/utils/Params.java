@@ -10,7 +10,7 @@ package edu.uprm.gaming.utils;
  */
 public class Params {
     
-    public static final boolean DEBUG_ON = true;
+    public static final boolean DEBUG_ON = false;
 
     
     public static int maxTime = 60;
