@@ -1,7 +1,6 @@
 package edu.uprm.gaming;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.audio.AudioNode;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.niftygui.NiftyJmeDisplay;
@@ -13,7 +12,6 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
 
 public class NarratorTester extends SimpleApplication {
     private Nifty nifty;
-    private AudioNode scream;
     
     public static void main(String[] args) {
         NarratorTester app = new NarratorTester();
@@ -34,10 +32,6 @@ public class NarratorTester extends SimpleApplication {
         nifty = niftyDisplay.getNifty();
         nifty.fromXml("Interface/Narrator/screen.xml", "start");
         guiViewPort.addProcessor(niftyDisplay);
-        
-        scream = new AudioNode(assetManager, "Sounds/girly_scream.wav", false);
-        scream.setPositional(false);
-        scream.setLooping(true);
     }
     
     private void createBox() {
@@ -58,7 +52,6 @@ public class NarratorTester extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         if (cam.getLocation().getZ() < 5) {
-            scream.playInstance();
             getElement("narrator_text").getRenderer(TextRenderer.class).setText("EY EY EY! Dame espacio personal...");
             isAwayAgain = true;
         } 
