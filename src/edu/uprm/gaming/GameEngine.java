@@ -1300,11 +1300,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     };
     
     private void handlePickedObject(String pickingType) {
-        getGeneralScreenController().hideCurrentControlsWindow();
         CollisionResults results = new CollisionResults();
         Ray ray;
         if (pickingType.equals("Picking")) { //Picking with the SHIFT Button
             ray = new Ray(cam.getLocation(), cam.getDirection());
+            getGeneralScreenController().hideCurrentControlsWindow();
         }
         else { //Picking with mouse
             Vector3f origin    = cam.getWorldCoordinates(inputManager.getCursorPosition(), 0.0f);
@@ -1714,6 +1714,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                 layer(new LayerBuilder("layer") {
                     {
                         backgroundImage("Interface/background-new.png");
+//                        backgroundImage("Interface/panelBack.png");
+//                        backgroundColor("#c6c6c6");
                         childLayoutVertical();
                         panel(new PanelBuilder("dialogParent") {
                             {
