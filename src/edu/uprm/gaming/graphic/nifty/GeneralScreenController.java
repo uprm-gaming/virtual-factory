@@ -382,7 +382,7 @@ public class GeneralScreenController implements ScreenController, KeyInputHandle
             nifty.executeEndOfFrameElementActions();
         }else{//show
             new PanelBuilder("container_MGV"){{
-                backgroundImage("Interface/Principal/nifty-panel-simple.png");
+                backgroundImage("Interface/panel2.png");
                 childLayoutVertical();
                 panel(new PanelBuilder(){{
                     childLayoutHorizontal();
