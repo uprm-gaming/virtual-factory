@@ -11,6 +11,23 @@
     <description>Builds, tests, and runs the project BasicGameTemplate.</description>
     <import file="nbproject/build-impl.xml"/>
 
+    <property environment="env" />
+
+    <taskdef name="bundleapp"
+         classname="com.oracle.appbundler.AppBundlerTask"
+         classpath="appbundler-1.0.jar" />
+
+    <target name="bundle-GamingGit">
+        <bundleapp outputdirectory="dist"
+               name="Virtual Factory"
+               displayname="Virtual Factory"
+               identifier="edu.uprm.gaming.InputManager"
+               mainclassname="edu.uprm.gaming.InputManager">
+            <runtime dir="${env.JAVA_HOME}" />
+            <classpath file="dist/GamingGit.jar" />
+        </bundleapp>
+    </target>
+
     <!--
 
     There exist several targets which are by default empty and which can be 
