@@ -139,11 +139,6 @@ public class DataLoading extends Thread {
         ArrayList<E_Game> localGames = dGame.SQLite_SelectGames_ByType(GameType.CPU);
         pbc.setProgress(0.95f);
         Params.percentageQuote = 0.05f;
-        if (localGames.size() == 0) {
-            for (int i = 0; i < remoteGames.size(); i++) {
-                localGames.add(remoteGames.get(i));
-            }
-        }
         for (int i = 0; i < remoteGames.size(); i++) {
             if (remoteGames.get(i).getDateTime() > localGames.get(i).getDateTime()) {//update Local Database
                 dGame.SQLite_Update(remoteGames.get(i));
