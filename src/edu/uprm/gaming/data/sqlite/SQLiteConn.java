@@ -4,10 +4,8 @@
  */
 package edu.uprm.gaming.data.sqlite;
 import edu.uprm.gaming.utils.Params;
-import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 /**
  *
  * @author David
@@ -27,13 +25,24 @@ public class SQLiteConn {
     }
     
     private void OpenConnection(){
+        String workingDir = "";
         conn = null;
         try
         {
+            if (Params.BUILD_FOR_MAC_APP) {
+                String val = System.getProperty("java.class.path");
+                System.out.println(val);
+                int index = val.indexOf(".app/Contents/Java");
+                for (int i = 0; i < index; i++)
+                    workingDir += val.charAt(i);
+                
+                workingDir += ".app/Contents/Resources/";
+                System.out.println("workinDir = " + workingDir);
+            }
+            
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:gaming.db");
-//            System.out.println(System.getProperty("user.home"));
-//            System.out.println("SQLite - Database connection established");
+            conn = DriverManager.getConnection("jdbc:sqlite:" + workingDir + "gaming.db");
+            System.out.println("SQLite - Database connection established");
         }
         catch (Exception e)
         {
@@ -41,16 +50,15 @@ public class SQLiteConn {
             Params.errorDatabaseMessage = "SQLite - Error: Cannot connect to database server.";
         }
     }
-
+    
     private void CloseConnection(){
         if (conn != null)
         {
             try
             {
                 conn.close();
-//                System.out.println("SQLite - Database connection terminated");
             }
-            catch (Exception e) 
+            catch (Exception e)
             {
                 System.err.println("SQLite - Error closing connection. " + e.getMessage());
             }
@@ -63,47 +71,47 @@ public class SQLiteConn {
         OpenConnection();
         if (conn == null) return result;
         try {
-                s = conn.createStatement();
-                s.execute(strSP.trim());
-                System.out.println("SQLite - " + strSP.trim());
-                s.close();
-                result = true;
+            s = conn.createStatement();
+            s.execute(strSP.trim());
+            System.out.println("SQLite - " + strSP.trim());
+            s.close();
+            result = true;
         } catch (SQLException e) {
             Params.errorDatabaseMessage = "SQLite - Error: Cannot connect to database server.";
             System.out.println("SQLite - ERROR: " + e.getMessage());
         }finally{
             CloseConnection();
-        }        
+        }
         return result;
     }
-
+    
     public ArrayList<ArrayList<Object>> ExecuteSP_Data(String strSP, int intNoCols){
         Statement s;
         OpenConnection();
         ArrayList<ArrayList<Object>> arrArray = new ArrayList<ArrayList<Object>>();
         if (conn == null) return arrArray;
         try {
-                s = conn.createStatement();
-                s.execute(strSP.trim());
-                System.out.println("SQLite - " + strSP.trim());
-                ResultSet rs = s.getResultSet();
-                ArrayList<Object> arrObj;
-                while (rs.next())
-                {
-                        arrObj = new ArrayList<Object>();
-                        for (int i=1; i<=intNoCols; i++){
-                                arrObj.add(rs.getObject(i));
-                        }
-                        arrArray.add(arrObj);
+            s = conn.createStatement();
+            s.execute(strSP.trim());
+            System.out.println("SQLite - " + strSP.trim());
+            ResultSet rs = s.getResultSet();
+            ArrayList<Object> arrObj;
+            while (rs.next())
+            {
+                arrObj = new ArrayList<Object>();
+                for (int i=1; i<=intNoCols; i++){
+                    arrObj.add(rs.getObject(i));
                 }
-                rs.close();
-                s.close();
+                arrArray.add(arrObj);
+            }
+            rs.close();
+            s.close();
         } catch (SQLException e) {
-                Params.errorDatabaseMessage = "SQLite - Error: Cannot connect to database server.";
-                System.out.println("SQLite - ERROR: " + e.getMessage());
+            Params.errorDatabaseMessage = "SQLite - Error: Cannot connect to database server.";
+            System.out.println("SQLite - ERROR: " + e.getMessage());
         } finally{
-            CloseConnection();    
-        }        
+            CloseConnection();
+        }
         return arrArray;
     }
 }
