@@ -1713,7 +1713,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                 inputMapping("de.lessvoid.nifty.input.mapping.DefaultInputMapping");
                 layer(new LayerBuilder("layer") {
                     {
-                        backgroundImage("Interface/background-new.png");
+                        //backgroundImage("Interface/background-new.png");
+                        backgroundColor("#c6c6c6");
                         childLayoutVertical();
                         panel(new PanelBuilder("dialogParent") {
                             {

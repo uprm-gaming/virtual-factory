@@ -27,22 +27,22 @@ public class InitialMenuDisplay {
             control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{
                 panel(builders.vspacer());
                 panel(builders.vspacer());
-                panel(new PanelBuilder() {{
-                  childLayoutHorizontal();
-                  image(new ImageBuilder("imageUPRMLogo"){{
-                        filename("Interface/Logo/ININ_logo2.png");
-                        width("150px"); height("150px");
-                  }});
-                  image(new ImageBuilder("imageFurnitureFactoryLogo"){{
-                        filename("Interface/Logo/furnitureFactory.png");
-                        width("300px"); height("150px");
-                  }});
-                  image(new ImageBuilder("imageNSFlogo"){{
-                        filename("Interface/Logo/NSF_logo2.png");
-                        width("150px"); height("150px");
-                  }});
-                }});
-                panel(builders.vspacer());
+//                panel(new PanelBuilder() {{
+//                  childLayoutHorizontal();
+//                  image(new ImageBuilder("imageUPRMLogo"){{
+//                        filename("Interface/Logo/ININ_logo2.png");
+//                        width("150px"); height("150px");
+//                  }});
+//                  image(new ImageBuilder("imageFurnitureFactoryLogo"){{
+//                        filename("Interface/Logo/furnitureFactory.png");
+//                        width("300px"); height("150px");
+//                  }});
+//                  image(new ImageBuilder("imageNSFlogo"){{
+//                        filename("Interface/Logo/NSF_logo2.png");
+//                        width("150px"); height("150px");
+//                  }});
+//                }});
+//                panel(builders.vspacer());
                 panel(builders.vspacer());
                 panel(new PanelBuilder() {{
                   childLayoutHorizontal();

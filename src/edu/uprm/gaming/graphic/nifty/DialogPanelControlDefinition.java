@@ -25,7 +25,7 @@ public class DialogPanelControlDefinition {
                         panel(new PanelBuilder("#effectPanel") {
                             {
                                 //style("nifty-panel");
-                                backgroundImage("Interface/panel2.png");
+//                                backgroundImage("Interface/play-icon.png");//panel2.png");
 
                                 childLayoutVertical();
                                 alignCenter();
