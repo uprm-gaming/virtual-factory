@@ -14,14 +14,14 @@ public class InputManager extends SimpleApplication {
         /* Configure settings */
         AppSettings settings = new AppSettings(true);
         try {
-            Class<InputManager> clazz = InputManager.class;
+            Class<InputManager> myClass = InputManager.class;
             settings.setIcons(new BufferedImage[]{
-                ImageIO.read(clazz.getResourceAsStream("/Textures/factory_16.png")),
-                ImageIO.read(clazz.getResourceAsStream("/Textures/factory_24.png")),
-                ImageIO.read(clazz.getResourceAsStream("/Textures/factory_32.png")),
-                ImageIO.read(clazz.getResourceAsStream("/Textures/factory_48.png")),
-                ImageIO.read(clazz.getResourceAsStream("/Textures/factory_64.png")),
-                ImageIO.read(clazz.getResourceAsStream("/Textures/factory_72.png"))
+                ImageIO.read(myClass.getResourceAsStream("/Textures/factory_16.png")),
+                ImageIO.read(myClass.getResourceAsStream("/Textures/factory_24.png")),
+                ImageIO.read(myClass.getResourceAsStream("/Textures/factory_32.png")),
+                ImageIO.read(myClass.getResourceAsStream("/Textures/factory_48.png")),
+                ImageIO.read(myClass.getResourceAsStream("/Textures/factory_64.png")),
+                ImageIO.read(myClass.getResourceAsStream("/Textures/factory_72.png"))
             });
         }
         catch (IOException e) {
