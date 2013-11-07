@@ -84,7 +84,7 @@ public class NewGame1MenuDisplay {
                 //visibleToMouse();
                 inputMapping("de.lessvoid.nifty.input.mapping.MenuInputMapping");
                 onHoverEffect(new HoverEffectBuilder("colorBar") {{
-                    effectParameter("color", "#006400");
+                    effectParameter("color", "#52ce21");
                     post(true);
                     inset("1px");
                     neverStopRendering(true);
@@ -93,21 +93,21 @@ public class NewGame1MenuDisplay {
                 onCustomEffect(new EffectBuilder("colorBar") {{
                     customKey("focus");
                     post(false);
-                    effectParameter("color", "#FFA200");//#f00f");
+                    effectParameter("color", "#52ce21");//#f00f");
                     neverStopRendering(true);
                     effectParameter("timeType", "infinite");
                 }});
                 onCustomEffect(new EffectBuilder("colorBar") {{
                     customKey("select");
                     post(false);
-                    effectParameter("color","#FFA200");// "#f00f");
+                    effectParameter("color","#2fddf1");// "#f00f");
                     neverStopRendering(true);
                     effectParameter("timeType", "infinite");
                 }});
                 onCustomEffect(new EffectBuilder("textColor") {{
                     customKey("select");
                     post(false);
-                    effectParameter("color","#FFA200");// "#000f");
+                    effectParameter("color","#353535");// "#000f");
                     neverStopRendering(true);
                     effectParameter("timeType", "infinite");
                 }});
@@ -182,7 +182,7 @@ public class NewGame1MenuDisplay {
                         text(" Game Best Score");
                         textHAlignCenter();
                         color(fntColor);
-                        width("120px");
+                        width("121px");
                     }});
                 }});
                 panel(new PanelBuilder() {{
