@@ -13,8 +13,6 @@ import de.lessvoid.nifty.builder.PanelBuilder;
  */
 public class DialogPanelControlDefinition {
   public static String NAME = "dialogPanel";
-  private static CommonBuilders builders = new CommonBuilders();
-
     public static void register(final Nifty nifty) {
         new ControlDefinitionBuilder(NAME) {
             {

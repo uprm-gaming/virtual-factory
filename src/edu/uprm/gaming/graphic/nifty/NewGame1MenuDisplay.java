@@ -107,7 +107,7 @@ public class NewGame1MenuDisplay {
                 onCustomEffect(new EffectBuilder("textColor") {{
                     customKey("select");
                     post(false);
-                    effectParameter("color","#000000");// "#000f");
+                    effectParameter("color","#FFA200");// "#000f");
                     neverStopRendering(true);
                     effectParameter("timeType", "infinite");
                 }});
@@ -138,26 +138,50 @@ public class NewGame1MenuDisplay {
                 }});
                 panel(builders.vspacer());
                 panel(new PanelBuilder() {{
+                    final String bColor = "#eeaa06";
+                    final String fntColor = "#2f2f2f";
+                    backgroundColor(bColor);
                     childLayoutHorizontal();
-                    control(new TextFieldBuilder("NoGame","  #") {{
+                    control(new LabelBuilder("NoGame"){{
+                        text(" # ");
+                        textHAlignCenter();
+                        color(fntColor);
                         width("25px");
                     }});
-                    control(new TextFieldBuilder("NameGame","  Name") {{
+                    control(new LabelBuilder("NameGame"){{
+                        text(" Name");
+                        textHAlignLeft();
+                        color(fntColor);
                         width("80px");
                     }});
-                    control(new TextFieldBuilder("LevelGame","  Category") {{
+                    control(new LabelBuilder("LevelGame"){{
+                        text("Category");
+                        textHAlignCenter();
+                        color(fntColor);
                         width("85px");
                     }});
-                    control(new TextFieldBuilder("StatusGame","  Status") {{
+                    control(new LabelBuilder("StatusGame"){{
+                        text("Status");
+                        textHAlignCenter();
+                        color(fntColor);
                         width("120px");
                     }});
-                    control(new TextFieldBuilder("AttempstNumber","# Attempts") {{
+                    control(new LabelBuilder("AttempstNumber"){{
+                        text("Attempts");
+                        textHAlignCenter();
+                        color(fntColor);
                         width("67px");
                     }});
-                    control(new TextFieldBuilder("YourBestScore"," Your Best Score") {{
+                    control(new LabelBuilder("YourBestScore"){{
+                        text("Your Best Score");
+                        textHAlignCenter();
+                        color(fntColor);
                         width("103px");
                     }});
-                    control(new TextFieldBuilder("GameBestScore"," Game Best Score") {{
+                    control(new LabelBuilder("GameBestScore"){{
+                        text(" Game Best Score");
+                        textHAlignCenter();
+                        color(fntColor);
                         width("120px");
                     }});
                 }});

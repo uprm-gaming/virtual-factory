@@ -36,7 +36,7 @@ public class InitialMenuDisplay {
                 panel(new PanelBuilder() {{
                   childLayoutHorizontal();
                   control(new LabelBuilder("email_IMD", "Email:"){{ textHAlignRight(); width("30%"); }}); panel(builders.hspacer("5px")); 
-                  control(new TextFieldBuilder("userTextField_IMD") {{ width("40%"); }});
+                  control(new TextFieldBuilder("userTextField_IMD") {{ width("40%");}});
                 }});
                 panel(builders.vspacer());
                 panel(new PanelBuilder() {{

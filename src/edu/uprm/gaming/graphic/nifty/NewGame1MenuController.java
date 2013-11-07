@@ -52,13 +52,6 @@ public class NewGame1MenuController implements Controller {
         this.nifty = nifty;
         this.screen = screen;
         this.gameEngine = ((MenuScreenController)screen.getScreenController()).getGameEngine();
-        ((TextField)screen.findNiftyControl("NoGame", TextField.class)).setEnabled(false);
-        ((TextField)screen.findNiftyControl("NameGame", TextField.class)).setEnabled(false);
-        ((TextField)screen.findNiftyControl("LevelGame", TextField.class)).setEnabled(false);
-        ((TextField)screen.findNiftyControl("StatusGame", TextField.class)).setEnabled(false);
-        ((TextField)screen.findNiftyControl("AttempstNumber", TextField.class)).setEnabled(false);
-        ((TextField)screen.findNiftyControl("YourBestScore", TextField.class)).setEnabled(false);
-        ((TextField)screen.findNiftyControl("GameBestScore", TextField.class)).setEnabled(false);
         warningPopUp = nifty.createPopup("warningNewGamePopup");
     }
     
@@ -97,9 +90,6 @@ public class NewGame1MenuController implements Controller {
             listBoxGames.addItem(new ListBoxMessages_NewGame1(nifty, String.valueOf(i+1), game.getGameName(), 
                     game.getGameCategory().toString(), game.getGameStatus().toString(), game.getYourBestScore(),
                     game.getGameBestScore(), game.getAttemptNumbers()));
-//            listBoxGames.addItem((i+1) +".  $" + game.getCurrentMoney() + "  -  " + game.getCurrentMonth() + "m "
-//                    + game.getCurrentDay() + "d " + game.getCurrentHour() + ":" + game.getCurrentMinute() + "  -  " + game.getDateTime()
-//                    + " - " + game.getGameCategory().toString());
         }
         if (listBoxGames.getItems().size() > 0) {
             listBoxGames.selectItemByIndex(0);
