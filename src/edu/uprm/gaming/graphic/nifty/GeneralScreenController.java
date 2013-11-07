@@ -870,17 +870,15 @@ public class GeneralScreenController implements ScreenController, KeyInputHandle
             pauseGame();
             ((MenuScreenController)nifty.getScreen("initialMenu").getScreenController()).setDefaultStart(false);
             nifty.gotoScreen("initialMenu");
-            (nifty.getScreen("initialMenu").findElementByName("dialogNewGameStage1Menu")).hide();
-            (nifty.getScreen("initialMenu").findElementByName("dialogInitialMenu")).hide();
+            nifty.getScreen("initialMenu").findElementByName("dialogMainMenu").hideWithoutEffect();
+            nifty.getScreen("initialMenu").findElementByName("dialogNewGameStage1Menu").hideWithoutEffect();
+            nifty.getScreen("initialMenu").findElementByName("dialogInitialMenu").hideWithoutEffect();
             Element nextElement = nifty.getScreen("initialMenu").findElementByName("dialogMainMenu");
             MainMenuController mainMenu = nextElement.getControl(MainMenuController.class);
             mainMenu.updateControls();
             nextElement.show();
-            nifty.getScreen("initialMenu").findElementByName("dialogNewGameStage1Menu").stopEffect(EffectEventId.onCustom);
-            nifty.getScreen("initialMenu").findElementByName("dialogInitialMenu").stopEffect(EffectEventId.onCustom);
-            nifty.getScreen("initialMenu").findElementByName("dialogMainMenu").startEffect(EffectEventId.onCustom, null, "selected");
             gameEngine.getGameData().updatePlayerLog();
-        }else
+        } else
         if (id.equals("buttonStaticOptionGameSetup")){
             //showGAMESETUP window
             if (isVisibleWindowGameSetup)

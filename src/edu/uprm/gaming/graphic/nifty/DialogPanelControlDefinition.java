@@ -2,6 +2,7 @@ package edu.uprm.gaming.graphic.nifty;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;
+import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 
 /**
@@ -22,20 +23,31 @@ public class DialogPanelControlDefinition {
                     {
                         visible(false);
                         childLayoutCenter();
+                        
                         panel(new PanelBuilder("#effectPanel") {
                             {
-                                //style("nifty-panel");
-//                                backgroundImage("Interface/play-icon.png");//panel2.png");
-
                                 childLayoutVertical();
+                                
                                 alignCenter();
-                                valignCenter();
+                                valignTop();
+                                marginTop("15%");
                                 width("50%");
                                 height("60%");
-                                padding("14px,20px,26px,19px");
-                                onShowEffect(builders.createMoveEffect("in", "left", 500));
-                                onHideEffect(builders.createMoveEffect("out", "right", 500));
-                                onHideEffect(builders.createFadeEffect());
+                                padding("5px,20px,26px,19px");
+                                onShowEffect(new EffectBuilder("fade") {
+                                    {
+                                        length(500);
+                                        effectParameter("start", "#0");
+                                        effectParameter("end", "#f");
+                                    }
+                                });
+                                onHideEffect(new EffectBuilder("fade") {
+                                    {
+                                        length(500);
+                                        effectParameter("start", "#f");
+                                        effectParameter("end", "#0");
+                                    }
+                                });
                             }
                         });
                     }

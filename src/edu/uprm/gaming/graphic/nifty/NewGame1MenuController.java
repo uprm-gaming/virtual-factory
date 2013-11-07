@@ -195,8 +195,7 @@ public class NewGame1MenuController implements Controller {
     private void playNewSelectedGame(){
         ((Label)screen.findNiftyControl("gameSelectedStatus", Label.class)).setText("");
         Element currentElement = screen.findElementByName("dialogNewGameStage1Menu");
-        currentElement.hide();
-        screen.findElementByName("dialogNewGameStage1Menu").stopEffect(EffectEventId.onCustom);
+        currentElement.hideWithoutEffect();
 //        if (nifty.getScreen("layerScreen").isRunning())
 //            nifty.update();
         

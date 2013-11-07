@@ -92,6 +92,12 @@ public class MainMenuController implements Controller {
         if (!gameEngine.isExecuteGame()) {
             screen.findElementByName("returnToGameButton_MMD").disable();
         }
+        
+        if (Params.BUILD_FOR_TESTING_SESSION) {
+                    screen.findElementByName("editProfileButton_MMD").disable();
+                    screen.findElementByName("creditsButton_MMD").disable();
+
+        }
     }
 
     @NiftyEventSubscriber(id="newGameButton_MMD")

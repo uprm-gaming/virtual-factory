@@ -13,6 +13,7 @@ import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
+import de.lessvoid.nifty.tools.Color;
 /**
  *
  * @author David
@@ -25,28 +26,10 @@ public class InitialMenuDisplay {
         new ControlDefinitionBuilder(NAME) {{
             controller(new InitialMenuController());
             control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{
-                panel(builders.vspacer());
-                panel(builders.vspacer());
-//                panel(new PanelBuilder() {{
-//                  childLayoutHorizontal();
-//                  image(new ImageBuilder("imageUPRMLogo"){{
-//                        filename("Interface/Logo/ININ_logo2.png");
-//                        width("150px"); height("150px");
-//                  }});
-//                  image(new ImageBuilder("imageFurnitureFactoryLogo"){{
-//                        filename("Interface/Logo/furnitureFactory.png");
-//                        width("300px"); height("150px");
-//                  }});
-//                  image(new ImageBuilder("imageNSFlogo"){{
-//                        filename("Interface/Logo/NSF_logo2.png");
-//                        width("150px"); height("150px");
-//                  }});
-//                }});
-//                panel(builders.vspacer());
-                panel(builders.vspacer());
+                panel(builders.vspacer("20%"));
                 panel(new PanelBuilder() {{
                   childLayoutHorizontal();
-                  control(new LabelBuilder("login", "Login"){{ alignCenter(); width("*"); }});
+                  control(new LabelBuilder("login", "Login"){{ alignCenter(); width("*");}});
                 }});
                 panel(builders.vspacer());
                 panel(builders.vspacer());
@@ -67,7 +50,9 @@ public class InitialMenuDisplay {
                   //panel(builders.hspacer("40%")); panel(builders.hspacer("5px"));
                   text(new TextBuilder("forgorPassword_IMD"){{   
                     text("Forgotten Password?");
-                    style("base-font-link"); textHAlignCenter(); 
+                    style("base-font-link"); 
+                    color("#eeaa06"); 
+                    textHAlignCenter(); 
                     set("action", "clickToForgotPassword()");
                  }});
                 }});

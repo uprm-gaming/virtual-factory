@@ -76,6 +76,7 @@ import de.lessvoid.nifty.controls.window.builder.WindowBuilder;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.screen.DefaultScreenController;
 import de.lessvoid.nifty.screen.Screen;
+import de.lessvoid.nifty.tools.Color;
 import edu.uprm.gaming.entity.E_Bucket;
 import edu.uprm.gaming.entity.E_Game;
 import edu.uprm.gaming.entity.E_Machine;
@@ -306,11 +307,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         niftyDisplay = new NiftyJmeDisplay(assetManager, inputManager, app.getAudioRenderer(), guiViewPort);
         nifty = niftyDisplay.getNifty();
         guiViewPort.addProcessor(niftyDisplay);
-        nifty.loadStyleFile("Interface/NiftyJars/nifty-style-black/nifty-default-styles.xml");//Interface/NiftyJars/nifty-style-black/
+        nifty.loadStyleFile("Interface/NiftyJars/nifty-style-black/nifty-default-styles.xml");
         nifty.loadControlFile("nifty-default-controls.xml");//Interface/NiftyJars/nifty-default-controls/
         nifty.registerSound("intro", "Interface/sound/19546__tobi123__Gong_mf2.wav");
         nifty.registerMusic("credits", "Interface/sound/Loveshadow_-_Almost_Given_Up.ogg");
-        //nifty.setDebugOptionPanelColors(true);
+//        nifty.setDebugOptionPanelColors(true);
         // register the dialog and credits controls
         registerStyles(nifty);
         registerCreditsPopup(nifty);
@@ -1713,8 +1714,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                 inputMapping("de.lessvoid.nifty.input.mapping.DefaultInputMapping");
                 layer(new LayerBuilder("layer") {
                     {
-                        //backgroundImage("Interface/background-new.png");
-                        backgroundColor("#c6c6c6");
+                        backgroundImage("Interface/intro2.png");
+//                        backgroundColor("#c6c6c6");
                         childLayoutVertical();
                         panel(new PanelBuilder("dialogParent") {
                             {
@@ -7079,6 +7080,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                 onHoverEffect(new HoverEffectBuilder("changeMouseCursor") {
                     {
                         effectParameter("id", "hand");
+                        color(Color.WHITE);
                     }
                 });
             }
