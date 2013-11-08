@@ -19,6 +19,7 @@ import de.lessvoid.xml.xpp3.Attributes;
 import edu.uprm.gaming.GameEngine;
 import edu.uprm.gaming.entity.E_Player;
 import edu.uprm.gaming.utils.Messages;
+import edu.uprm.gaming.utils.Params;
 import edu.uprm.gaming.utils.SendEmail;
 import java.util.Properties;
 /**
@@ -64,7 +65,12 @@ public class ForgotYourPasswordController implements Controller {
         ((TextField)screen.findNiftyControl("passRecovered_FYP", TextField.class)).setText("");
         ((TextField)screen.findNiftyControl("passRecovered_FYP", TextField.class)).setMaxLength(100);
         ((Label)screen.findNiftyControl("errorMessage_FYP", Label.class)).setText("");
-        ((Button)screen.findNiftyControl("sendEmail_FYP", Button.class)).enable();
+        if (!Params.BUILD_FOR_TESTING_SESSION) {
+            ((Button)screen.findNiftyControl("sendEmail_FYP", Button.class)).enable();
+        }
+        else {
+            ((Button)screen.findNiftyControl("sendEmail_FYP", Button.class)).disable();
+        }
     }
     
     @NiftyEventSubscriber(id="sendEmail_FYP")

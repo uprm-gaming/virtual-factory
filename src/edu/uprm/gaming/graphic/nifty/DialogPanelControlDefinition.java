@@ -4,6 +4,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;
 import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
+import java.awt.Color;
 
 /**
  * This registers a special Panel control with Nifty we later use as the parent control/panel
@@ -22,15 +23,15 @@ public class DialogPanelControlDefinition {
                         visible(false);
                         childLayoutCenter();
                         
+                        
                         panel(new PanelBuilder("#effectPanel") {
                             {
                                 childLayoutVertical();
-                                
                                 alignCenter();
                                 valignTop();
                                 marginTop("15%");
                                 width("50%");
-                                height("60%");
+                                height("50%");
                                 padding("5px,20px,26px,19px");
                                 onShowEffect(new EffectBuilder("fade") {
                                     {

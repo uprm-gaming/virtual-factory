@@ -232,7 +232,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     private Geometry showSpotObject;
     private GameSounds gameSounds;
     private ArrayList<Pair<GameSounds, Sounds>> arrGameSounds;
-    private int minDashboardPositionX = 1260;
     private int minDashboardPositionY = 30;
     private int dashboardWidth = 535;
     private int dashboardHeight = 430;
@@ -584,36 +583,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
 
     private void manageDashboard() {
         nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardControl.class).updateData();
-//        if (isDashboardVisible) {
-//            if (!isDashboardVisiblePosition()) {
-//                if (currentDashboardTime == 0) {
-//                    currentDashboardTime = System.currentTimeMillis() / 1000;
-//                }
-//                if ((System.currentTimeMillis() / 1000) - currentDashboardTime > Params.timeToHideDashboard) {
-//
-//                    nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").hide();
-//
-//                    currentDashboardTime = 0;
-//                    isDashboardVisible = false;
-//                }
-//            } else {
-//                currentDashboardTime = 0;
-//            }
-//        } else {
-//            if (isDashboardInvisiblePosition()) {
-//                if (currentDashboardTime == 0) {
-//                    currentDashboardTime = System.currentTimeMillis() / 1000;
-//                }
-//                if ((System.currentTimeMillis() / 1000) - currentDashboardTime > Params.timeToShowDashboard) {
-//             
-//                    nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").show();
-//
-//                    currentDashboardTime = 0;
-//                    isDashboardVisible = true;
-//                }
-//            } else {
-//                currentDashboardTime = 0;
-//            }
 
         if (showHideDashboard) {
             if (isDashboardVisible) {
@@ -628,27 +597,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         }
     }
 
-//    private boolean isDashboardVisiblePosition() {
-//        Vector2f mousePosition = inputManager.getCursorPosition();
-//        float mouseX = mousePosition.getX();
-//        float mouseY = getGuiViewPort().getCamera().getHeight() - mousePosition.getY();
-//        if ((minDashboardPositionX - dashboardWidth) <= mouseX && minDashboardPositionY <= mouseY && mouseY <= (minDashboardPositionY + dashboardHeight)) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
-//
-//    private boolean isDashboardInvisiblePosition() {
-//        Vector2f mousePosition = inputManager.getCursorPosition();
-//        float mouseX = mousePosition.getX();
-//        float mouseY = getGuiViewPort().getCamera().getHeight() - mousePosition.getY();
-//        if (minDashboardPositionX <= mouseX && minDashboardPositionY <= mouseY && mouseY <= (minDashboardPositionY + dashboardHeight)) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
     public GameSounds getGameSounds() {
         return gameSounds;
     }
@@ -6165,7 +6113,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                         valignCenter();
                         onStartScreenEffect(new EffectBuilder("move") {
                             {
-                                length(400);
+                                length(4000);
                                 inherit();
                                 effectParameter("mode", "in");
                                 effectParameter("direction", "top");
@@ -6185,13 +6133,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                 effectParameter("sound", "credits");
                             }
                         });
-//                        onActiveEffect(new EffectBuilder("gradient") {
-//                            {
-//                                effectValue("offset", "0%", "color", "#00bffecc");
-//                                effectValue("offset", "75%", "color", "#00213cff");
-//                                effectValue("offset", "100%", "color", "#880000cc");
-//                            }
-//                        });
                         onActiveEffect(new EffectBuilder("playSound") {
                             {
                                 effectParameter("sound", "credits");
@@ -6253,7 +6194,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                         width("240px");
                         height("200px");
                         alignCenter();
-                        valignCenter();
+                        valignTop();
+                        marginTop("25%");
                         onStartScreenEffect(new EffectBuilder("move") {
                             {
                                 length(400);
@@ -6276,13 +6218,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                 effectParameter("sound", "credits");
                             }
                         });
-//                        onActiveEffect(new EffectBuilder("gradient") {
-//                            {
-//                                effectValue("offset", "0%", "color", "#00bffecc");
-//                                effectValue("offset", "75%", "color", "#00213cff");
-//                                effectValue("offset", "100%", "color", "#880000cc");
-//                            }
-//                        });
                         onActiveEffect(new EffectBuilder("playSound") {
                             {
                                 effectParameter("sound", "credits");
