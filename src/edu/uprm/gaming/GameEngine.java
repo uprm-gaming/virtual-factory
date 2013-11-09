@@ -4790,7 +4790,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                                         backgroundImage(panelBackgroundImage);
                                                         panel(new PanelBuilder() {
                                                             {
-                                                                childLayoutVertical();
+                                                                 childLayoutVertical();
                                                                 panel(new PanelBuilder() {
                                                                     {
                                                                         childLayoutVertical();
@@ -7017,6 +7017,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                     {
                         effectParameter("id", "hand");
                         color(Color.WHITE);
+                    }
+                });
+                onHoverEffect(new HoverEffectBuilder("textColor") {
+                    {
+                        effectParameter("color", "#00d4ff");
                     }
                 });
             }

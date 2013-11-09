@@ -23,6 +23,7 @@ public class ForgotYourPasswordDisplay {
         new ControlDefinitionBuilder(NAME) {{
             controller(new ForgotYourPasswordController());
             control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{
+                panel(builders.vspacer("20%"));
                 panel(new PanelBuilder() {{
                   childLayoutVertical();
                   control(new LabelBuilder("forgotPasswordLabel", "Forgot your password"){{ alignCenter(); textHAlignCenter(); width("100%"); }});

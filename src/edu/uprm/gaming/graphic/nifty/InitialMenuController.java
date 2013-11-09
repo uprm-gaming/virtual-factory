@@ -101,7 +101,7 @@ public class InitialMenuController implements Controller {
         userTextField.setFocus();
         if (Params.DEBUG_ON) {
             onLoginButtonClicked("", null );
-         }
+        }
     }
 
     public void closePopupLoading(boolean isDataLoading) {

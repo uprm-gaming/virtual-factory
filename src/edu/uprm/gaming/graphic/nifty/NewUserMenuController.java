@@ -199,6 +199,10 @@ public class NewUserMenuController implements Controller {
         errorMessage.setText("");
         nameTextField.setFocus();
 //        nifty.resetMouseInputEvents();
+        if (Params.BUILD_FOR_TESTING_SESSION) {
+            ((Button)screen.findNiftyControl("createUserButton_NUMD", Button.class)).disable();
+        }
+
     }
     
     private void createPanelNewUser(){

@@ -84,7 +84,14 @@ public class NewGame1MenuDisplay {
                 //visibleToMouse();
                 inputMapping("de.lessvoid.nifty.input.mapping.MenuInputMapping");
                 onHoverEffect(new HoverEffectBuilder("colorBar") {{
-                    effectParameter("color", "#eeaa06");
+                    effectParameter("color", "#eeaa06"); //Anaranjado
+                    post(true);
+                    inset("1px");
+                    neverStopRendering(true);
+                    effectParameter("timeType", "infinite");
+                }});
+                onHoverEffect(new HoverEffectBuilder("textColor") {{
+                    effectParameter("color", "#353535");
                     post(true);
                     inset("1px");
                     neverStopRendering(true);
@@ -101,13 +108,6 @@ public class NewGame1MenuDisplay {
                     customKey("select");
                     post(false);
                     effectParameter("color","#20afc9");// "#f00f");
-                    neverStopRendering(true);
-                    effectParameter("timeType", "infinite");
-                }});
-                onCustomEffect(new EffectBuilder("textColor") {{
-                    customKey("hover");
-                    post(false);
-                    effectParameter("color","#353535");// "#000f");
                     neverStopRendering(true);
                     effectParameter("timeType", "infinite");
                 }});
@@ -202,6 +202,7 @@ public class NewGame1MenuDisplay {
                 panel(new PanelBuilder() {{
                     childLayoutHorizontal();
                     control(new ListBoxBuilder("listBox_NG1MD") {{
+                        this.style("nifty-listbox2");
                         displayItems(4);
                         selectionModeSingle();
                         hideHorizontalScrollbar();

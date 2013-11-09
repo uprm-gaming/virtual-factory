@@ -13,7 +13,6 @@ import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
-import de.lessvoid.nifty.tools.Color;
 /**
  *
  * @author David
@@ -47,11 +46,10 @@ public class InitialMenuDisplay {
                 panel(builders.vspacer());
                 panel(new PanelBuilder() {{
                   childLayoutVertical(); alignCenter();
-                  //panel(builders.hspacer("40%")); panel(builders.hspacer("5px"));
                   text(new TextBuilder("forgorPassword_IMD"){{   
                     text("Forgotten Password?");
                     style("base-font-link"); 
-                    color("#eeaa06"); 
+                    color("#eeaa06");
                     textHAlignCenter(); 
                     set("action", "clickToForgotPassword()");
                  }});
