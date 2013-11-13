@@ -31,6 +31,7 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
+import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
@@ -266,6 +267,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
 
     private AudioNode footstep;
     private boolean isDebugCamEnabled;
+    private Node shopFloorNode;
+    
+    private PointLight lamp;
   
     @Override
     public void initialize(AppStateManager manager, Application application) {
@@ -294,15 +298,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         stateManager.attach(bulletAppState);
         
-        createLight();
+        //createLight();
+        createLightBulb();
         
-        try {
-            setupFilter();
-        }
-        catch(UnsupportedOperationException e) {
-            // Leave toon filter disabled
-        }
-        
+        //setupFilter();
+
         initKeys();
         initSoundEffects();
         
@@ -469,51 +469,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
             }
         }
         createShowSpotObject();
-    }
-    
-    /**
-     * Creates the beautiful sky for the game.
-     */
-    private void createSkyDome() {
-        SkyDomeControl skyDome = new SkyDomeControl(assetManager, app.getCamera(),
-                "ShaderBlow/Models/SkyDome/SkyDome.j3o",
-                "ShaderBlow/Textures/SkyDome/SkyNight_L.png",
-                "ShaderBlow/Textures/SkyDome/Moon_L.png",
-                "ShaderBlow/Textures/SkyDome/Clouds_L.png",
-                "ShaderBlow/Textures/SkyDome/Fog_Alpha.png");
-        
-        Node sky = new Node();
-        sky.setQueueBucket(RenderQueue.Bucket.Sky);
-        sky.addControl(skyDome);
-        sky.setCullHint(Spatial.CullHint.Never);
-
-        // Set some fog colorsâ€¦ or not (defaults are cool)
-        skyDome.setFogColor(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));
-        skyDome.setDaySkyColor(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));
-
-        // Enable the control to modify the fog filter
-        skyDome.setControlFog(true);
-
-        // Add the directional light you use for sunâ€¦ or not
-        DirectionalLight sun = new DirectionalLight();
-        sun.setDirection(new Vector3f(-0.8f, -0.6f, -0.08f).normalizeLocal());
-        sun.setColor(new ColorRGBA(1, 1, 1, 1));
-        rootNode.addLight(sun);
-        skyDome.setSun(sun);
-
-        // Set some sunlight day/night colorsâ€¦ or not
-        skyDome.setSunDayLight(new ColorRGBA(1, 1, 1, 1));
-        skyDome.setSunNightLight(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));
-
-        // Enable the control to modify your sunlight
-        skyDome.setControlSun(true);
-
-        // Enable the control
-        skyDome.setEnabled(true);
-
-        rootNode.attachChild(sky);
-        skyDome.cycleNightToDay();
-        skyDome.setDayNightTransitionSpeed(1.2f);
     }
 
     @Override
@@ -786,6 +741,13 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
             g.setMaterial(newMat);
         }
     }
+    
+    private void createLightBulb() {
+        lamp = new PointLight();
+        lamp.setPosition(new Vector3f(0, 20, 0));
+        lamp.setColor(ColorRGBA.Pink);
+        rootNode.addLight(lamp);
+    }
 
     private void createShootable() {
         shootables = new Node("Shootables");
@@ -797,11 +759,34 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         al.setColor(ColorRGBA.White.mult(1.3f));
         rootNode.addLight(al);
         
-        
         DirectionalLight dl = new DirectionalLight();
         dl.setColor(ColorRGBA.White);
         dl.setDirection(new Vector3f(2.8f, -2.8f, -2.8f).normalizeLocal());
         rootNode.addLight(dl);
+        
+        DirectionalLight dlNew = new DirectionalLight();
+        dlNew.setColor(ColorRGBA.White);
+        dlNew.setDirection(new Vector3f(0f, 40f, 0));
+        rootNode.addLight(dlNew);
+        
+        DirectionalLight dlOpposite = new DirectionalLight();
+        dlOpposite.setColor(ColorRGBA.White);
+        dlOpposite.setDirection(new Vector3f(2.8f, -2.8f, 2.8f).normalizeLocal());
+        rootNode.addLight(dl);
+    }
+    
+    /*
+     * Temporary fix for beta testing session.
+     */
+    private void fixTextures() {
+        // Floor
+        shopFloorNode = (Node) world.getChild("ShopBuilding-Floor");
+        int x = 0;
+        Geometry shopFloor = (Geometry) shopFloorNode.getChild("Cube.0061");
+        shopFloor.getMesh().scaleTextureCoordinates(new Vector2f(++x,++x));
+        shopFloor.getMesh().scaleTextureCoordinates(new Vector2f(++x,++x));
+        
+        
     }
 
     private void createTerrain() {
@@ -812,9 +797,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         world = (Node) assetManager.loadModel("Models/World28/World28.j3o");
         world.setLocalScale(250.0f, 250.0f, 250.0f);
         world.setLocalTranslation(-9.0f, 0.0f, 82.0f);
-        Node shopFloorNode = (Node) world.getChild("ShopBuilding-Floor");
-        Geometry shopFloor = (Geometry) shopFloorNode.getChild("Cube.0061");
-        shopFloor.getMesh().scaleTextureCoordinates(new Vector2f(12,12));
+        //fixTextures();
         // ----------
         
         /* Factory's Collision Shape */
@@ -1129,13 +1112,19 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                              "Right", "Jump", "Picking",
                              "Dashboard Control",
                              "Scale Bigger", "Scale Smaller",
-                             "Activate Debug Cam"};
+                             "Activate Debug Cam", "Create Light",
+                             "Move Left", "Move Right",
+                             "Move Up", "Move Down",
+                             "Increase Radius", "Decrease Radius"};
         
         int[] triggers = {KeyInput.KEY_W, KeyInput.KEY_S, KeyInput.KEY_A, 
                           KeyInput.KEY_D, KeyInput.KEY_SPACE, KeyInput.KEY_LSHIFT, 
                           KeyInput.KEY_RSHIFT,
                           KeyInput.KEY_ADD, KeyInput.KEY_SUBTRACT,
-                          KeyInput.KEY_0};
+                          KeyInput.KEY_0, KeyInput.KEY_B,
+                          KeyInput.KEY_NUMPAD4, KeyInput.KEY_NUMPAD6,
+                          KeyInput.KEY_NUMPAD8, KeyInput.KEY_NUMPAD2,
+                          KeyInput.KEY_ADD, KeyInput.KEY_SUBTRACT};
         
         for (int i = 0; i < mappings.length; i++) {
             inputManager.addMapping(mappings[i], new KeyTrigger(triggers[i]));
@@ -1144,7 +1133,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     }
     
     private ActionListener actionListener = new ActionListener() {
-        int x = 1;
+        int x = 0;
         @Override
         public void onAction(String name, boolean keyPressed, float tpf) {            
             if (!executeGame) {
@@ -1192,9 +1181,15 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                 
                 case "Scale Bigger":
                     if (!keyPressed) {
-                        Node shopFloorNode = (Node) world.getChild("ShopBuilding-Floor");
-                        Geometry shopFloor = (Geometry) shopFloorNode.getChild("Cube.0061");
-                        shopFloor.getMesh().scaleTextureCoordinates(new Vector2f(x++,x++));
+                        /*Node shopCeilingNode = (Node) world.getChild("ShopBuildng-Ceiling");
+                        Geometry shopCeiling = (Geometry) shopCeilingNode.getChild("Cube.0291");
+                        shopCeiling.getMesh().scaleTextureCoordinates(new Vector2f(++x,++x));
+                        System.out.println("x = " + x);*/
+                        
+                        Node shopCeilingNode = (Node) world.getChild("ShopBuildng-Bricks");
+                        Geometry shopCeiling = (Geometry) shopCeilingNode.getChild("Cube.0271");
+                        shopCeiling.getMesh().scaleTextureCoordinates(new Vector2f(++x,++x));
+                        System.out.println("x = " + x);
                     }
                     break;
                 
@@ -1212,6 +1207,47 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                         isDebugCamEnabled = !isDebugCamEnabled;
                     }
                     break;
+                
+                case "Create Light":
+                    if (!keyPressed) {
+                        createLightBulb();
+                    }
+                    break;
+                
+                case "Move Left":
+                    if (!keyPressed) {
+                        lamp.setPosition(new Vector3f(lamp.getPosition().getX() + 0.2f, 0, 0));
+                    }
+                    break;
+                
+                case "Move Right":
+                    if (!keyPressed) {
+                        lamp.setPosition(new Vector3f(lamp.getPosition().getX() - 0.2f, 0, 0));
+                    }
+                    break;
+                    
+                case "Move Up":
+                    if (!keyPressed) {
+                        lamp.setPosition(new Vector3f(0, lamp.getPosition().getY() + 0.2f, 0));
+                    }
+                    break;
+                
+                case "Move Down":
+                    if (!keyPressed) {
+                        lamp.setPosition(new Vector3f(0, lamp.getPosition().getY() - 0.2f, 0));
+                    }
+                    break;
+                
+                case "Increase Radius":
+                    if (!keyPressed) {
+                        lamp.setRadius(lamp.getRadius() + 0.2f);
+                    }
+                    break;
+                
+                case "Decrease Radius":
+                    if (!keyPressed) {
+                        lamp.setRadius(lamp.getRadius() - 0.2f);
+                    }
                     
                 default:
                     break;
