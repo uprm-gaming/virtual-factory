@@ -35,6 +35,7 @@ import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
@@ -301,7 +302,12 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         //createLight();
         createLightBulb();
         
-        //setupFilter();
+        try {
+            setupFilter();
+        } catch(UnsupportedOperationException e) {
+            // leave toon filter disabled
+        }
+        
 
         initKeys();
         initSoundEffects();
@@ -725,7 +731,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
             
             /* We use a LightBlow material definition, particularly good for toon shaders */
             Material newMat = new Material(assetManager, "ShaderBlow/MatDefs/LightBlow.j3md");
-            newMat.setTexture("DiffuseMap", g.getMaterial().getTextureParam("DiffuseMap").getTextureValue());
+            //newMat.setTexture("DiffuseMap", g.getMaterial().getTextureParam("DiffuseMap").getTextureValue());
             newMat.setTexture("ColorRamp", assetManager.loadTexture("Textures/toon.png"));
             newMat.setBoolean("Toon", true);
             //newMat.setFloat("EdgeSize", 0.2f);
@@ -817,7 +823,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         player.setJumpSpeed(20);
         player.setFallSpeed(30);
         player.setGravity(30);
-        player.setPhysicsLocation(new Vector3f(22.10f, 12.47f, -38.73f));
+        player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
+        app.getCamera().setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
         player.setViewDirection(new Vector3f(0, 0, 1));
         bulletAppState.getPhysicsSpace().add(player);
         // ----------
@@ -1085,7 +1092,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
 
         CartoonEdgeFilter toonFilter = new CartoonEdgeFilter();
-        toonFilter.setEdgeWidth(0.33999988f);
+        //
+        toonFilter.setEdgeWidth(1.0f);
         fpp.addFilter(toonFilter);
         
         viewPort.addProcessor(fpp);
@@ -1112,10 +1120,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                              "Right", "Jump", "Picking",
                              "Dashboard Control",
                              "Scale Bigger", "Scale Smaller",
-                             "Activate Debug Cam", "Create Light",
-                             "Move Left", "Move Right",
-                             "Move Up", "Move Down",
-                             "Increase Radius", "Decrease Radius"};
+                             "Activate Debug Cam"};
         
         int[] triggers = {KeyInput.KEY_W, KeyInput.KEY_S, KeyInput.KEY_A, 
                           KeyInput.KEY_D, KeyInput.KEY_SPACE, KeyInput.KEY_LSHIFT, 
@@ -1124,7 +1129,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                           KeyInput.KEY_0, KeyInput.KEY_B,
                           KeyInput.KEY_NUMPAD4, KeyInput.KEY_NUMPAD6,
                           KeyInput.KEY_NUMPAD8, KeyInput.KEY_NUMPAD2,
-                          KeyInput.KEY_ADD, KeyInput.KEY_SUBTRACT};
+                          KeyInput.KEY_ADD, KeyInput.KEY_SUBTRACT,
+                          KeyInput.KEY_2, KeyInput.KEY_1};
         
         for (int i = 0; i < mappings.length; i++) {
             inputManager.addMapping(mappings[i], new KeyTrigger(triggers[i]));
@@ -1178,77 +1184,13 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                             System.out.println("Dashboard Control Key Selected.");
                     }
                     break;
-                
-                case "Scale Bigger":
-                    if (!keyPressed) {
-                        /*Node shopCeilingNode = (Node) world.getChild("ShopBuildng-Ceiling");
-                        Geometry shopCeiling = (Geometry) shopCeilingNode.getChild("Cube.0291");
-                        shopCeiling.getMesh().scaleTextureCoordinates(new Vector2f(++x,++x));
-                        System.out.println("x = " + x);*/
-                        
-                        Node shopCeilingNode = (Node) world.getChild("ShopBuildng-Bricks");
-                        Geometry shopCeiling = (Geometry) shopCeilingNode.getChild("Cube.0271");
-                        shopCeiling.getMesh().scaleTextureCoordinates(new Vector2f(++x,++x));
-                        System.out.println("x = " + x);
-                    }
-                    break;
-                
-                case "Scale Smaller":
-                    if (!keyPressed) {
-                        world.setLocalScale(world.getLocalScale().getX()-1.0f,
-                                            world.getLocalScale().getY()-1.0f,
-                                            world.getLocalScale().getZ()-1.0f);
-                        System.out.println("World is now at a scale of: " + world.getLocalScale());
-                    }
-                    break;
                     
                 case "Activate Debug Cam":
                     if (!keyPressed) {
                         isDebugCamEnabled = !isDebugCamEnabled;
                     }
                     break;
-                
-                case "Create Light":
-                    if (!keyPressed) {
-                        createLightBulb();
-                    }
-                    break;
-                
-                case "Move Left":
-                    if (!keyPressed) {
-                        lamp.setPosition(new Vector3f(lamp.getPosition().getX() + 0.2f, 0, 0));
-                    }
-                    break;
-                
-                case "Move Right":
-                    if (!keyPressed) {
-                        lamp.setPosition(new Vector3f(lamp.getPosition().getX() - 0.2f, 0, 0));
-                    }
-                    break;
-                    
-                case "Move Up":
-                    if (!keyPressed) {
-                        lamp.setPosition(new Vector3f(0, lamp.getPosition().getY() + 0.2f, 0));
-                    }
-                    break;
-                
-                case "Move Down":
-                    if (!keyPressed) {
-                        lamp.setPosition(new Vector3f(0, lamp.getPosition().getY() - 0.2f, 0));
-                    }
-                    break;
-                
-                case "Increase Radius":
-                    if (!keyPressed) {
-                        lamp.setRadius(lamp.getRadius() + 0.2f);
-                    }
-                    break;
-                
-                case "Decrease Radius":
-                    if (!keyPressed) {
-                        lamp.setRadius(lamp.getRadius() - 0.2f);
-                    }
-                    
+
                 default:
                     break;
             }
