@@ -35,6 +35,7 @@ import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Ray;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.post.FilterPostProcessor;
@@ -50,7 +51,6 @@ import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.texture.Texture;
-import com.jme3.util.SkyFactory;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;
@@ -140,7 +140,6 @@ import edu.uprm.gaming.utils.TypeElements;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -184,6 +183,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     private GeneralScreenController generalScreenController;
     private Spatial floor;
     private RigidBodyControl floorRigid;
+    private Node world;
+    private RigidBodyControl worldRigid;
     private RigidBodyControl bucketRigid;
     private Box bucketBox;
     private Material bucketMaterial;
@@ -224,7 +225,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     private Align supplier_value = Align.Left;
     private Align order_label = Align.Left;
     private Align order_value = Align.Left;
-    private static String panelBackgroundImage = "Interface/panelBack3.png";//Principal/nifty-panel-simple.png";
+    private static String panelBackgroundImage = "Interface/panel2.png";//Principal/nifty-panel-simple.png";
     private static String buttonBackgroundImage = "Textures/button-green.png";
     private static String popupBackgroundImage = "Interface/panelpopup2.png";//"Textures/background_gray.png";
     private ArrayList<JmeCursor> cursors;
@@ -232,6 +233,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     private Geometry showSpotObject;
     private GameSounds gameSounds;
     private ArrayList<Pair<GameSounds, Sounds>> arrGameSounds;
+    private int minDashboardPositionX = 1260;
     private int minDashboardPositionY = 30;
     private int dashboardWidth = 535;
     private int dashboardHeight = 430;
@@ -263,6 +265,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     private Vector3f walkDirection = new Vector3f(0, 0, 0);
 
     private AudioNode footstep;
+    private boolean isDebugCamEnabled;
   
     @Override
     public void initialize(AppStateManager manager, Application application) {
@@ -272,7 +275,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         inputManager = app.getInputManager();
         flyCam = app.getFlyByCamera();
         cam = app.getCamera();
-        
         viewPort = app.getViewPort();
         guiViewPort = app.getGuiViewPort();
         rootNode = app.getRootNode();
@@ -292,8 +294,15 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
         stateManager.attach(bulletAppState);
         
-        //createLight();
-        setupFilter();
+        createLight();
+        
+        try {
+            setupFilter();
+        }
+        catch(UnsupportedOperationException e) {
+            // Leave toon filter disabled
+        }
+        
         initKeys();
         initSoundEffects();
         
@@ -434,7 +443,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     private void LoadElementsToDisplay(GameType gameType) {
         createShootable();
         createTerrain();
-        createSkyDome();
+        //createSkyDome();
         //*******************        
         arrOperatorsWalksTo = new ArrayList<>();
         arrOperatorsMachinesMovingTo = new ArrayList<>();
@@ -478,21 +487,21 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         sky.addControl(skyDome);
         sky.setCullHint(Spatial.CullHint.Never);
 
-        // Set some fog colors… or not (defaults are cool)
+        // Set some fog colorsâ€¦ or not (defaults are cool)
         skyDome.setFogColor(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));
         skyDome.setDaySkyColor(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));
 
         // Enable the control to modify the fog filter
         skyDome.setControlFog(true);
 
-        // Add the directional light you use for sun… or not
+        // Add the directional light you use for sunâ€¦ or not
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(new Vector3f(-0.8f, -0.6f, -0.08f).normalizeLocal());
         sun.setColor(new ColorRGBA(1, 1, 1, 1));
         rootNode.addLight(sun);
         skyDome.setSun(sun);
 
-        // Set some sunlight day/night colors… or not
+        // Set some sunlight day/night colorsâ€¦ or not
         skyDome.setSunDayLight(new ColorRGBA(1, 1, 1, 1));
         skyDome.setSunNightLight(new ColorRGBA(0.5f, 0.5f, 0.9f, 1f));
 
@@ -509,7 +518,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
 
     @Override
     public void update(float tpf) {
-        updatePlayerPosition();
+        if (!isDebugCamEnabled)
+            updatePlayerPosition();
         simpleUpdateLocal(); // Legacy code
     }
     
@@ -518,16 +528,27 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         camLeft = app.getCamera().getLeft().clone().multLocal(playerSpeed);
         
         walkDirection.set(0, 0, 0); // reset walkDirection vector
-        if (forward) { walkDirection.addLocal(camDir); }
-        if (backward) { walkDirection.addLocal(camDir.negate()); }
-        if (moveLeft) { walkDirection.addLocal(camLeft); }
-        if (moveRight) { walkDirection.addLocal(camLeft.negate()); }
+        if (forward)
+            walkDirection.addLocal(camDir);
         
+        if (backward)
+            walkDirection.addLocal(camDir.negate());
+        
+        if (moveLeft)
+            walkDirection.addLocal(camLeft);
+        
+        if (moveRight)
+            walkDirection.addLocal(camLeft.negate());
+
         if (executeGame) {
             player.setWalkDirection(walkDirection); // walk!
             app.getCamera().setLocation(player.getPhysicsLocation());
-            if (flyCam.isDragToRotate()) flyCam.setDragToRotate(false);
-            if (!inputManager.isCursorVisible()) inputManager.setCursorVisible(true);
+            
+            if (flyCam.isDragToRotate()) 
+                flyCam.setDragToRotate(false);
+            
+            if (!inputManager.isCursorVisible()) 
+                inputManager.setCursorVisible(true);
         } 
     }
 
@@ -583,6 +604,36 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
 
     private void manageDashboard() {
         nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardControl.class).updateData();
+//        if (isDashboardVisible) {
+//            if (!isDashboardVisiblePosition()) {
+//                if (currentDashboardTime == 0) {
+//                    currentDashboardTime = System.currentTimeMillis() / 1000;
+//                }
+//                if ((System.currentTimeMillis() / 1000) - currentDashboardTime > Params.timeToHideDashboard) {
+//
+//                    nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").hide();
+//
+//                    currentDashboardTime = 0;
+//                    isDashboardVisible = false;
+//                }
+//            } else {
+//                currentDashboardTime = 0;
+//            }
+//        } else {
+//            if (isDashboardInvisiblePosition()) {
+//                if (currentDashboardTime == 0) {
+//                    currentDashboardTime = System.currentTimeMillis() / 1000;
+//                }
+//                if ((System.currentTimeMillis() / 1000) - currentDashboardTime > Params.timeToShowDashboard) {
+//             
+//                    nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").show();
+//
+//                    currentDashboardTime = 0;
+//                    isDashboardVisible = true;
+//                }
+//            } else {
+//                currentDashboardTime = 0;
+//            }
 
         if (showHideDashboard) {
             if (isDashboardVisible) {
@@ -597,6 +648,27 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         }
     }
 
+//    private boolean isDashboardVisiblePosition() {
+//        Vector2f mousePosition = inputManager.getCursorPosition();
+//        float mouseX = mousePosition.getX();
+//        float mouseY = getGuiViewPort().getCamera().getHeight() - mousePosition.getY();
+//        if ((minDashboardPositionX - dashboardWidth) <= mouseX && minDashboardPositionY <= mouseY && mouseY <= (minDashboardPositionY + dashboardHeight)) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
+//
+//    private boolean isDashboardInvisiblePosition() {
+//        Vector2f mousePosition = inputManager.getCursorPosition();
+//        float mouseX = mousePosition.getX();
+//        float mouseY = getGuiViewPort().getCamera().getHeight() - mousePosition.getY();
+//        if (minDashboardPositionX <= mouseX && minDashboardPositionY <= mouseY && mouseY <= (minDashboardPositionY + dashboardHeight)) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
     public GameSounds getGameSounds() {
         return gameSounds;
     }
@@ -724,167 +796,37 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         AmbientLight al = new AmbientLight();
         al.setColor(ColorRGBA.White.mult(1.3f));
         rootNode.addLight(al);
-
+        
+        
         DirectionalLight dl = new DirectionalLight();
         dl.setColor(ColorRGBA.White);
         dl.setDirection(new Vector3f(2.8f, -2.8f, -2.8f).normalizeLocal());
         rootNode.addLight(dl);
     }
 
-    private void setMaterials() {
-        String pathFileMaterial = "Scenes/Materials/";
-        //String pathFileTexture = "Scenes/Textures/";
-        ((Node) floor).getChild("Asphalt").setMaterial(assetManager.loadMaterial(pathFileMaterial + "asphalt.j3m"));
-        ((Node) floor).getChild("AsphaltEnd").setMaterial(assetManager.loadMaterial(pathFileMaterial + "asphaltEnd.j3m"));
-        ((Node) floor).getChild("BackWheels").setMaterial(assetManager.loadMaterial(pathFileMaterial + "backWheels.j3m"));
-        ((Node) floor).getChild("BarbedWire").setMaterial(assetManager.loadMaterial(pathFileMaterial + "barbedWireFence.j3m"));
-        ((Node) floor).getChild("BathDor").setMaterial(assetManager.loadMaterial(pathFileMaterial + "bathDor.j3m"));
-        ((Node) floor).getChild("board01").setMaterial(assetManager.loadMaterial(pathFileMaterial + "board01.j3m"));
-        ((Node) floor).getChild("board02").setMaterial(assetManager.loadMaterial(pathFileMaterial + "board02.j3m"));
-        ((Node) floor).getChild("board03").setMaterial(assetManager.loadMaterial(pathFileMaterial + "board03.j3m"));
-        ((Node) floor).getChild("board04").setMaterial(assetManager.loadMaterial(pathFileMaterial + "board04.j3m"));
-        ((Node) floor).getChild("board05").setMaterial(assetManager.loadMaterial(pathFileMaterial + "board05.j3m"));
-        ((Node) floor).getChild("Body").setMaterial(assetManager.loadMaterial(pathFileMaterial + "body.j3m"));
-        ((Node) floor).getChild("Box001").setMaterial(assetManager.loadMaterial(pathFileMaterial + "box001.j3m"));
-        ((Node) floor).getChild("Box002").setMaterial(assetManager.loadMaterial(pathFileMaterial + "box002.j3m"));
-        ((Node) floor).getChild("Box003").setMaterial(assetManager.loadMaterial(pathFileMaterial + "box003.j3m"));
-        ((Node) floor).getChild("Box004").setMaterial(assetManager.loadMaterial(pathFileMaterial + "box004.j3m"));
-        ((Node) floor).getChild("Box005").setMaterial(assetManager.loadMaterial(pathFileMaterial + "box005.j3m"));
-        ((Node) floor).getChild("CabinetL10").setMaterial(assetManager.loadMaterial(pathFileMaterial + "cabinetLeg01.j3m"));
-        ((Node) floor).getChild("CabinetL11").setMaterial(assetManager.loadMaterial(pathFileMaterial + "cabinetLeg03.j3m"));
-        ((Node) floor).getChild("CabinetL12").setMaterial(assetManager.loadMaterial(pathFileMaterial + "cabinetLeg003.j3m"));
-        ((Node) floor).getChild("CabinetLe0").setMaterial(assetManager.loadMaterial(pathFileMaterial + "cabinetLeg004.j3m"));
-        ((Node) floor).getChild("CabinetLe1").setMaterial(assetManager.loadMaterial(pathFileMaterial + "cabinetLeg005.j3m"));
-        ((Node) floor).getChild("CabinetLe2").setMaterial(assetManager.loadMaterial(pathFileMaterial + "cabinetLeg006.j3m"));
-        ((Node) floor).getChild("CabinetLe3").setMaterial(assetManager.loadMaterial(pathFileMaterial + "cabinetLeg007.j3m"));
-        ((Node) floor).getChild("CabinetLe4").setMaterial(assetManager.loadMaterial(pathFileMaterial + "cabinetLeg008.j3m"));
-        ((Node) floor).getChild("CabinetLe5").setMaterial(assetManager.loadMaterial(pathFileMaterial + "cabinetLeg009.j3m"));
-        ((Node) floor).getChild("CabinetLe6").setMaterial(assetManager.loadMaterial(pathFileMaterial + "cabinetLeg010.j3m"));
-        ((Node) floor).getChild("CabinetLe7").setMaterial(assetManager.loadMaterial(pathFileMaterial + "cabinetLeg011.j3m"));
-        ((Node) floor).getChild("CabinetLe8").setMaterial(assetManager.loadMaterial(pathFileMaterial + "cabinetLegCut01.j3m"));
-        ((Node) floor).getChild("CabinetLe9").setMaterial(assetManager.loadMaterial(pathFileMaterial + "cabinetLegCut02.j3m"));
-        ((Node) floor).getChild("CabinetLeg").setMaterial(assetManager.loadMaterial(pathFileMaterial + "cabinetLegCut02.j3m"));
-        ((Node) floor).getChild("CloseVege0").setMaterial(assetManager.loadMaterial(pathFileMaterial + "closeVege0.j3m"));
-        
-        /* Remove trees */
-        // -----------
-        for (int i = 0; i < 8; i++) {
-            ((Node) floor).getChild("CloseVege" + i).removeFromParent();
-        }
-        ((Node) floor).getChild("CloseVeget").removeFromParent();
-        ((Node) floor).getChild("FarVegetat").removeFromParent();
-        // -----------
-        
-        ((Node) floor).getChild("Colm01").setMaterial(assetManager.loadMaterial(pathFileMaterial + "colm01.j3m"));
-        ((Node) floor).getChild("Colm02").setMaterial(assetManager.loadMaterial(pathFileMaterial + "colm02.j3m"));
-        ((Node) floor).getChild("Compresor").setMaterial(assetManager.loadMaterial(pathFileMaterial + "compresor.j3m"));
-        ((Node) floor).getChild("CompWheels").setMaterial(assetManager.loadMaterial(pathFileMaterial + "compWheels.j3m"));
-        ((Node) floor).getChild("Contact ce").setMaterial(assetManager.loadMaterial(pathFileMaterial + "contactCE.j3m"));
-        ((Node) floor).getChild("Distributi").setMaterial(assetManager.loadMaterial(pathFileMaterial + "distributi.j3m"));
-        ((Node) floor).getChild("FLCenterWh").setMaterial(assetManager.loadMaterial(pathFileMaterial + "flCenterWh.j3m"));
-        ((Node) floor).getChild("FLHandle").setMaterial(assetManager.loadMaterial(pathFileMaterial + "flHandle.j3m"));
-        ((Node) floor).getChild("FLLeftWhee").setMaterial(assetManager.loadMaterial(pathFileMaterial + "flLeftWhee.j3m"));
-        ((Node) floor).getChild("FLRightWhe").setMaterial(assetManager.loadMaterial(pathFileMaterial + "flRightWhe.j3m"));
-        ((Node) floor).getChild("FLMainFram").setMaterial(assetManager.loadMaterial(pathFileMaterial + "flMainFram.j3m"));
-        ((Node) floor).getChild("FordBody").setMaterial(assetManager.loadMaterial(pathFileMaterial + "fordBody.j3m"));
-        ((Node) floor).getChild("FrontWheel").setMaterial(assetManager.loadMaterial(pathFileMaterial + "frontWheel.j3m"));
-        ((Node) floor).getChild("Ground Edg").setMaterial(assetManager.loadMaterial(pathFileMaterial + "asphaltEnd.j3m"));
-        ((Node) floor).getChild("House 1").setMaterial(assetManager.loadMaterial(pathFileMaterial + "house1.j3m"));
-        ((Node) floor).getChild("House 2").setMaterial(assetManager.loadMaterial(pathFileMaterial + "house2.j3m"));
-        ((Node) floor).getChild("House 3").setMaterial(assetManager.loadMaterial(pathFileMaterial + "house3.j3m"));
-        ((Node) floor).getChild("Kart01").setMaterial(assetManager.loadMaterial(pathFileMaterial + "kart01.j3m"));
-        ((Node) floor).getChild("Juanito").setMaterial(assetManager.loadMaterial(pathFileMaterial + "juanito.j3m"));
-        ((Node) floor).getChild("Lake").setMaterial(assetManager.loadMaterial(pathFileMaterial + "lake.j3m"));
-        ((Node) floor).getChild("LakeEdge").setMaterial(assetManager.loadMaterial(pathFileMaterial + "lakeEdge.j3m"));
-        ((Node) floor).getChild("LegBoard00").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard00.j3m"));
-        ((Node) floor).getChild("LegBoard01").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard01.j3m"));
-        ((Node) floor).getChild("LegBoard02").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard02.j3m"));
-        ((Node) floor).getChild("LegBoard03").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard03.j3m"));
-        ((Node) floor).getChild("LegBoard04").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard04.j3m"));
-        ((Node) floor).getChild("LegBoard05").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard05.j3m"));
-        ((Node) floor).getChild("LegBoard06").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard06.j3m"));
-        ((Node) floor).getChild("LegBoard07").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard07.j3m"));
-        ((Node) floor).getChild("LegBoard08").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard08.j3m"));
-        ((Node) floor).getChild("LegBoard09").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard09.j3m"));
-        ((Node) floor).getChild("LegBoard10").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard10.j3m"));
-        ((Node) floor).getChild("LegBoard11").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard11.j3m"));
-        ((Node) floor).getChild("LegBoard12").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard12.j3m"));
-        ((Node) floor).getChild("LegBoard13").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard13.j3m"));
-        ((Node) floor).getChild("LegBoard14").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard14.j3m"));
-        ((Node) floor).getChild("LegBoard15").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard15.j3m"));
-        ((Node) floor).getChild("LegBoard16").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard16.j3m"));
-        ((Node) floor).getChild("LegBoard17").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard17.j3m"));
-        ((Node) floor).getChild("LegBoard18").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard18.j3m"));
-        ((Node) floor).getChild("LegBoard19").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard19.j3m"));
-        ((Node) floor).getChild("LegBoard20").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard20.j3m"));
-        ((Node) floor).getChild("LegBoard21").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard21.j3m"));
-        ((Node) floor).getChild("LegBoard22").setMaterial(assetManager.loadMaterial(pathFileMaterial + "legBoard22.j3m"));
-        ((Node) floor).getChild("MesaHerram").setMaterial(assetManager.loadMaterial(pathFileMaterial + "mesaHerram.j3m"));
-        ((Node) floor).getChild("MetalBarr0").setMaterial(assetManager.loadMaterial(pathFileMaterial + "metalBarr0.j3m"));
-        ((Node) floor).getChild("MetalBarre").setMaterial(assetManager.loadMaterial(pathFileMaterial + "metalBarre.j3m"));
-        ((Node) floor).getChild("MitterSawB").setMaterial(assetManager.loadMaterial(pathFileMaterial + "mitterSawB.j3m"));
-        ((Node) floor).getChild("PaintBooth").setMaterial(assetManager.loadMaterial(pathFileMaterial + "paintBooth.j3m"));
-        ((Node) floor).getChild("PaintCan01").setMaterial(assetManager.loadMaterial(pathFileMaterial + "paintCan01.j3m"));
-        ((Node) floor).getChild("PaintCan02").setMaterial(assetManager.loadMaterial(pathFileMaterial + "paintCan02.j3m"));
-        ((Node) floor).getChild("PaintCan03").setMaterial(assetManager.loadMaterial(pathFileMaterial + "paintCan03.j3m"));
-        ((Node) floor).getChild("PaintCan04").setMaterial(assetManager.loadMaterial(pathFileMaterial + "paintCan04.j3m"));
-        ((Node) floor).getChild("PaintCan05").setMaterial(assetManager.loadMaterial(pathFileMaterial + "paintCan05.j3m"));
-        ((Node) floor).getChild("PaintCan06").setMaterial(assetManager.loadMaterial(pathFileMaterial + "paintCan06.j3m"));
-        ((Node) floor).getChild("PaintCan07").setMaterial(assetManager.loadMaterial(pathFileMaterial + "paintCan07.j3m"));
-        ((Node) floor).getChild("PaintCan08").setMaterial(assetManager.loadMaterial(pathFileMaterial + "paintCan08.j3m"));
-        ((Node) floor).getChild("PaintCan09").setMaterial(assetManager.loadMaterial(pathFileMaterial + "paintCan09.j3m"));
-        ((Node) floor).getChild("PaintCan10").setMaterial(assetManager.loadMaterial(pathFileMaterial + "paintCan10.j3m"));
-        ((Node) floor).getChild("PaintThinn").setMaterial(assetManager.loadMaterial(pathFileMaterial + "paintThinn.j3m"));
-        ((Node) floor).getChild("Playwood01").setMaterial(assetManager.loadMaterial(pathFileMaterial + "playWood01.j3m"));
-        ((Node) floor).getChild("Playwood02").setMaterial(assetManager.loadMaterial(pathFileMaterial + "playWood02.j3m"));
-        ((Node) floor).getChild("Playwood04").setMaterial(assetManager.loadMaterial(pathFileMaterial + "playWood04.j3m"));
-        ((Node) floor).getChild("Playwood05").setMaterial(assetManager.loadMaterial(pathFileMaterial + "playWood05.j3m"));
-        ((Node) floor).getChild("RackPanele").setMaterial(assetManager.loadMaterial(pathFileMaterial + "rackPanele.j3m"));
-        ((Node) floor).getChild("River").setMaterial(assetManager.loadMaterial(pathFileMaterial + "river.j3m"));
-        ((Node) floor).getChild("RiverEdge").setMaterial(assetManager.loadMaterial(pathFileMaterial + "riverEdge.j3m"));
-        ((Node) floor).getChild("RoadBridge").setMaterial(assetManager.loadMaterial(pathFileMaterial + "roadBridge.j3m"));
-        ((Node) floor).getChild("RoadEdge").setMaterial(assetManager.loadMaterial(pathFileMaterial + "roadEdge.j3m"));
-        ((Node) floor).getChild("shop01").setMaterial(assetManager.loadMaterial(pathFileMaterial + "shop01.j3m"));
-        ((Node) floor).getChild("sink").setMaterial(assetManager.loadMaterial(pathFileMaterial + "sink.j3m"));
-        
-        ((Node) floor).getChild("Sky").removeFromParent(); // remove sky created in Blender
-        //viewPort.setBackgroundColor(ColorRGBA.Cyan); // temporary fix until we make a good skybox
-        
-        ((Node) floor).getChild("SteeringWh").setMaterial(assetManager.loadMaterial(pathFileMaterial + "steeringWh.j3m"));
-        ((Node) floor).getChild("Supplier 1").setMaterial(assetManager.loadMaterial(pathFileMaterial + "supplier1.j3m"));
-        ((Node) floor).getChild("Supplier 2").setMaterial(assetManager.loadMaterial(pathFileMaterial + "supplier2.j3m"));
-        ((Node) floor).getChild("Table saw").setMaterial(assetManager.loadMaterial(pathFileMaterial + "tableSaw.j3m"));
-        ((Node) floor).getChild("Table01").setMaterial(assetManager.loadMaterial(pathFileMaterial + "table01.j3m"));
-        ((Node) floor).getChild("Tabliller0").setMaterial(assetManager.loadMaterial(pathFileMaterial + "tabliller0.j3m"));
-        ((Node) floor).getChild("Tablillero").setMaterial(assetManager.loadMaterial(pathFileMaterial + "tablillero.j3m"));
-        ((Node) floor).getChild("Toilet").setMaterial(assetManager.loadMaterial(pathFileMaterial + "toilet.j3m"));
-        ((Node) floor).getChild("TrashCan01").setMaterial(assetManager.loadMaterial(pathFileMaterial + "trashCan01.j3m"));
-        Material grassMaterial = new Material(assetManager, "Common/MatDefs/Terrain/TerrainLighting.j3md");
-        grassMaterial.setBoolean("useTriPlanarMapping", false);
-        grassMaterial.setFloat("Shininess", 0.0f);
-        Texture grass = assetManager.loadTexture("Scenes/Textures/grs1rgb_3.jpg");
-        grass.setWrap(Texture.WrapMode.Repeat);
-        grassMaterial.setTexture("DiffuseMap", grass);
-        ((Node) floor).getChild("Grass").setMaterial(grassMaterial);
-    }
-
     private void createTerrain() {
         E_Terrain tempTerrain = gameData.getMapTerrain();
 
-        //********************************************************************************
-        String pathFileWorld = "Scenes/World_/";
-        floor = (Node) assetManager.loadModel(pathFileWorld + "shop01.j3o");
-        setMaterials();
-        floor.setLocalScale(.2f);
-        //********************************************************************************
-
-        CollisionShape sceneShape = CollisionShapeFactory.createMeshShape((Node) floor);
-        floorRigid = new RigidBodyControl(sceneShape, 0);
-        floor.addControl(floorRigid);
-        rootNode.attachChild(floor);
-        bulletAppState.getPhysicsSpace().add(floorRigid);
+        /* Factory */
+        // ----------
+        world = (Node) assetManager.loadModel("Models/World28/World28.j3o");
+        world.setLocalScale(250.0f, 250.0f, 250.0f);
+        world.setLocalTranslation(-9.0f, 0.0f, 82.0f);
+        Node shopFloorNode = (Node) world.getChild("ShopBuilding-Floor");
+        Geometry shopFloor = (Geometry) shopFloorNode.getChild("Cube.0061");
+        shopFloor.getMesh().scaleTextureCoordinates(new Vector2f(12,12));
+        // ----------
         
-        /* First-person player */
+        /* Factory's Collision Shape */
+        // ----------
+        CollisionShape worldShape = CollisionShapeFactory.createMeshShape(world);
+        worldRigid = new RigidBodyControl(worldShape, 0);
+        world.addControl(worldRigid);
+        rootNode.attachChild(world);
+        bulletAppState.getPhysicsSpace().add(worldRigid);
+        // ----------
+
+        /* First-person Player */
         // ----------
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(0.4f, 24.5f, 1);
         // Use deprecated CharacterControl until BetterCharacterControl is updated
@@ -903,7 +845,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
             setTerrainMap(tempBlockedZone.getLocationX(), tempBlockedZone.getLocationZ(), tempBlockedZone.getWidth(), tempBlockedZone.getLength(), true);
         }
         
-        transformToCartoon(rootNode);
+        //transformToCartoon(rootNode);
     }
 
     private void createGrid(int iniX, int iniZ, int sizeW, int sizeL) {
@@ -1156,7 +1098,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         cam.setAxes(new Vector3f(-0.0024178028f, 0.0011213422f, 0.9999965f), new Vector3f(-0.96379673f, 0.26662517f, -0.00262928f), new Vector3f(-0.26662725f, -0.96379966f, 0.00043606758f));
     }
 
-    private void setupFilter() {
+    private void setupFilter() throws UnsupportedOperationException {
         FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
 
         CartoonEdgeFilter toonFilter = new CartoonEdgeFilter();
@@ -1185,11 +1127,15 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
 
         String[] mappings = {"Forward", "Backward", "Left",
                              "Right", "Jump", "Picking",
-                             "Dashboard Control"};
+                             "Dashboard Control",
+                             "Scale Bigger", "Scale Smaller",
+                             "Activate Debug Cam"};
         
         int[] triggers = {KeyInput.KEY_W, KeyInput.KEY_S, KeyInput.KEY_A, 
                           KeyInput.KEY_D, KeyInput.KEY_SPACE, KeyInput.KEY_LSHIFT, 
-                          KeyInput.KEY_RSHIFT};
+                          KeyInput.KEY_RSHIFT,
+                          KeyInput.KEY_ADD, KeyInput.KEY_SUBTRACT,
+                          KeyInput.KEY_0};
         
         for (int i = 0; i < mappings.length; i++) {
             inputManager.addMapping(mappings[i], new KeyTrigger(triggers[i]));
@@ -1198,6 +1144,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     }
     
     private ActionListener actionListener = new ActionListener() {
+        int x = 1;
         @Override
         public void onAction(String name, boolean keyPressed, float tpf) {            
             if (!executeGame) {
@@ -1207,25 +1154,25 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
             switch (name) {
                 case "Forward":
                     forward = keyPressed;
-                    if (keyPressed) { footstep.play(); }
+                    if (keyPressed && !isDebugCamEnabled) { footstep.play(); }
                     else { if (!backward && !left && !right) { footstep.stop();  } }
                     break;
                     
                 case "Backward":
                     backward = keyPressed;
-                    if (keyPressed) { footstep.play(); }
+                    if (keyPressed && !isDebugCamEnabled) { footstep.play(); }
                     else { if (!forward && !left && !right) { footstep.stop(); } }
                     break;
                     
                 case "Left":
                     moveLeft = keyPressed;
-                    if (keyPressed) { footstep.play(); }
+                    if (keyPressed && !isDebugCamEnabled) { footstep.play(); }
                     else { if (!forward && !backward && !right) { footstep.stop(); } }
                     break;
                     
                 case "Right":
                     moveRight = keyPressed;
-                    if (keyPressed) { footstep.play(); }
+                    if (keyPressed && !isDebugCamEnabled) { footstep.play(); }
                     else { if (!forward && !backward && !left) { footstep.stop(); } }
                     break;
                 
@@ -1240,6 +1187,29 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                         manageDashboard();
                         if (Params.DEBUG_ON)
                             System.out.println("Dashboard Control Key Selected.");
+                    }
+                    break;
+                
+                case "Scale Bigger":
+                    if (!keyPressed) {
+                        Node shopFloorNode = (Node) world.getChild("ShopBuilding-Floor");
+                        Geometry shopFloor = (Geometry) shopFloorNode.getChild("Cube.0061");
+                        shopFloor.getMesh().scaleTextureCoordinates(new Vector2f(x++,x++));
+                    }
+                    break;
+                
+                case "Scale Smaller":
+                    if (!keyPressed) {
+                        world.setLocalScale(world.getLocalScale().getX()-1.0f,
+                                            world.getLocalScale().getY()-1.0f,
+                                            world.getLocalScale().getZ()-1.0f);
+                        System.out.println("World is now at a scale of: " + world.getLocalScale());
+                    }
+                    break;
+                    
+                case "Activate Debug Cam":
+                    if (!keyPressed) {
+                        isDebugCamEnabled = !isDebugCamEnabled;
                     }
                     break;
                     
@@ -4790,7 +4760,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                                         backgroundImage(panelBackgroundImage);
                                                         panel(new PanelBuilder() {
                                                             {
-                                                                 childLayoutVertical();
+                                                                childLayoutVertical();
                                                                 panel(new PanelBuilder() {
                                                                     {
                                                                         childLayoutVertical();
@@ -6113,7 +6083,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                         valignCenter();
                         onStartScreenEffect(new EffectBuilder("move") {
                             {
-                                length(4000);
+                                length(400);
                                 inherit();
                                 effectParameter("mode", "in");
                                 effectParameter("direction", "top");
@@ -6133,6 +6103,13 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                 effectParameter("sound", "credits");
                             }
                         });
+//                        onActiveEffect(new EffectBuilder("gradient") {
+//                            {
+//                                effectValue("offset", "0%", "color", "#00bffecc");
+//                                effectValue("offset", "75%", "color", "#00213cff");
+//                                effectValue("offset", "100%", "color", "#880000cc");
+//                            }
+//                        });
                         onActiveEffect(new EffectBuilder("playSound") {
                             {
                                 effectParameter("sound", "credits");
@@ -6194,8 +6171,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                         width("240px");
                         height("200px");
                         alignCenter();
-                        valignTop();
-                        marginTop("25%");
+                        valignCenter();
                         onStartScreenEffect(new EffectBuilder("move") {
                             {
                                 length(400);
@@ -6218,6 +6194,13 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                 effectParameter("sound", "credits");
                             }
                         });
+//                        onActiveEffect(new EffectBuilder("gradient") {
+//                            {
+//                                effectValue("offset", "0%", "color", "#00bffecc");
+//                                effectValue("offset", "75%", "color", "#00213cff");
+//                                effectValue("offset", "100%", "color", "#880000cc");
+//                            }
+//                        });
                         onActiveEffect(new EffectBuilder("playSound") {
                             {
                                 effectParameter("sound", "credits");
@@ -7017,11 +7000,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                     {
                         effectParameter("id", "hand");
                         color(Color.WHITE);
-                    }
-                });
-                onHoverEffect(new HoverEffectBuilder("textColor") {
-                    {
-                        effectParameter("color", "#00d4ff");
                     }
                 });
             }
