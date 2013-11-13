@@ -227,7 +227,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     private Align supplier_value = Align.Left;
     private Align order_label = Align.Left;
     private Align order_value = Align.Left;
-    private static String panelBackgroundImage = "Interface/panel2.png";//Principal/nifty-panel-simple.png";
+    private static String panelBackgroundImage = "Interface/panelBack3.png";
     private static String buttonBackgroundImage = "Textures/button-green.png";
     private static String popupBackgroundImage = "Interface/panelpopup2.png";//"Textures/background_gray.png";
     private ArrayList<JmeCursor> cursors;
