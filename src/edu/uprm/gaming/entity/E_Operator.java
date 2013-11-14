@@ -101,6 +101,16 @@ public class E_Operator {
     private double normalParamUnload = 0.0;
     public boolean isLoadingInitialOperatorData = false;
     private Sphere sphereSpot;
+    
+    private static String[] operatorAssembler = new String[6];
+    private static int index1 = -1;
+    
+    private static String[] operatorCarrier = new String[8];
+    private static int index2 = -1;
+    
+    private static String[] operatorVersatile = new String[2];
+    private static int index3 = -1;
+
 
     public int getDefaultValue() {
         return defaultValue;
@@ -251,17 +261,23 @@ public class E_Operator {
         }
         if (isCarrier && isAssembler){
             category = OperatorCategory.Versatile;
-            modelCharacter.setMaterial(assetManager.loadMaterial("Models/Operator/operatorVersatile.j3m"));
+            index3++;
+            modelCharacter.setMaterial(assetManager.loadMaterial(operatorVersatile[index3]));
+            System.out.println("Entered first method. operatorCarrier[" + index3 + "] = " + operatorVersatile[index3]);
             salaryPerHour = salaryPerHourVersatile;
         }else
         if (isCarrier){
             category = OperatorCategory.Carrier;
-            modelCharacter.setMaterial(assetManager.loadMaterial("Models/Operator/operatorCarrier.j3m"));
+            index2++;
+            modelCharacter.setMaterial(assetManager.loadMaterial(operatorCarrier[index2]));
+            System.out.println("Entered first method. operatorCarrier[" + index2+ "] = " + operatorCarrier[index2]);
             salaryPerHour = salaryPerHourCarrier;
         }else
         if (isAssembler){
             category = OperatorCategory.Assembler;
-            modelCharacter.setMaterial(assetManager.loadMaterial("Models/Operator/operatorAssembler.j3m"));
+            index1++;
+            modelCharacter.setMaterial(assetManager.loadMaterial(operatorAssembler[index1]));
+            System.out.println("Entered first method. operatorAssembler[" + index1 + "] = " + operatorAssembler[index1]);
             salaryPerHour = salaryPerHourAssembler;
         }
     }
@@ -676,6 +692,18 @@ public class E_Operator {
     }
 
     public E_Operator() {
+        operatorAssembler[0] = "Models/Operator/operatorAssembler.j3m";
+        for (int i = 1; i < operatorAssembler.length; i++)
+            operatorAssembler[i] = "Models/Operator/operatorAssembler" + i + ".j3m";
+        
+        operatorCarrier[0] = "Models/Operator/operatorCarrier.j3m";
+        for (int i = 1; i < operatorCarrier.length; i++)
+            operatorCarrier[i] = "Models/Operator/operatorCarrier" + i + ".j3m";
+        
+        operatorVersatile[0] = "Models/Operator/operatorVersatile.j3m";
+        for (int i = 1; i < operatorVersatile.length; i++)
+            operatorVersatile[i] = "Models/Operator/operatorVersatile" + i + ".j3m";
+        
         isLoadingInitialOperatorData = true;
         sphereSpot = new Sphere(16, 16, (float)Params.standardPartWidthLength/2);
         arrActivitiesAssigned = new HashMap<Integer, E_Activity>();
@@ -779,7 +807,9 @@ public class E_Operator {
             categoryCarrier = getSkillSelected(Params.skillCarrier);
         if (category.equals(OperatorCategory.Assembler)){
             setSalaryPerHour(salaryPerHourAssembler);
-            modelCharacter.setMaterial(assetManager.loadMaterial("Models/Operator/operatorAssembler.j3m"));
+            index1 = (index1 + 1) % operatorAssembler.length;
+            modelCharacter.setMaterial(assetManager.loadMaterial(operatorAssembler[index1]));
+            System.out.println("Entered second method. operatorAssembler[" + index1 + "] = " + operatorAssembler[index1]);
             if (getSkillSelected(Params.skillAssembler) == null){
                 if (categoryAssembler != null)
                     arrSkills.add(categoryAssembler);
