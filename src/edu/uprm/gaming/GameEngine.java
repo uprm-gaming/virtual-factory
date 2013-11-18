@@ -90,6 +90,7 @@ import edu.uprm.gaming.graphic.DispOperatorMachineMovingTo;
 import edu.uprm.gaming.graphic.DispOperatorWalksTo;
 import edu.uprm.gaming.graphic.TerrainMap;
 import edu.uprm.gaming.graphic.nifty.CommonBuilders;
+import edu.uprm.gaming.graphic.nifty.ControlsDisplay;
 import edu.uprm.gaming.graphic.nifty.DialogPanelControlDefinition;
 import edu.uprm.gaming.graphic.nifty.ForgotYourPasswordDisplay;
 import edu.uprm.gaming.graphic.nifty.GeneralScreenController;
@@ -271,6 +272,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     private Node shopFloorNode;
     
     private PointLight lamp;
+    private PointLight lamp2, lamp3;
   
     @Override
     public void initialize(AppStateManager manager, Application application) {
@@ -302,11 +304,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         //createLight();
         createLightBulb();
         
-        try {
+        if (Params.renderer.equalsIgnoreCase(Params.supportedRender))
             setupFilter();
-        } catch(UnsupportedOperationException e) {
-            // leave toon filter disabled
-        }
         
 
         initKeys();
@@ -339,6 +338,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         InitialMenuDisplay.register(nifty);
         ForgotYourPasswordDisplay.register(nifty);
         MainMenuDisplay.register(nifty);
+        ControlsDisplay.register(nifty);
         NewUserMenuDisplay.register(nifty);
         NewGame1MenuDisplay.register(nifty);
         LoadGameMenuDisplay.register(nifty);
@@ -749,10 +749,20 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     }
     
     private void createLightBulb() {
-        lamp = new PointLight();
-        lamp.setPosition(new Vector3f(0, 20, 0));
-        lamp.setColor(ColorRGBA.Pink);
-        rootNode.addLight(lamp);
+        ColorRGBA color = ColorRGBA.White;
+        lamp2 = new PointLight();
+        lamp2.setPosition(new Vector3f(40, 200, 150));
+        lamp2.setColor(color);
+        lamp2.setRadius(lamp2.getRadius()/20);
+        rootNode.addLight(lamp2);
+        
+        lamp3 = new PointLight();
+        lamp3.setPosition(new Vector3f(43.50383f, 80.081642f, -310.90753f));
+        lamp3.setColor(color);
+        lamp3.setRadius(lamp2.getRadius());
+        rootNode.addLight(lamp3);
+
+    
     }
 
     private void createShootable() {
@@ -801,6 +811,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         /* Factory */
         // ----------
         world = (Node) assetManager.loadModel("Models/World28/World28.j3o");
+        world.getChild("Machine vibration Empty").removeFromParent();
         world.setLocalScale(250.0f, 250.0f, 250.0f);
         world.setLocalTranslation(-9.0f, 0.0f, 82.0f);
         //fixTextures();
@@ -1088,7 +1099,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         cam.setAxes(new Vector3f(-0.0024178028f, 0.0011213422f, 0.9999965f), new Vector3f(-0.96379673f, 0.26662517f, -0.00262928f), new Vector3f(-0.26662725f, -0.96379966f, 0.00043606758f));
     }
 
-    private void setupFilter() throws UnsupportedOperationException {
+    private void setupFilter() {
         FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
 
         CartoonEdgeFilter toonFilter = new CartoonEdgeFilter();
@@ -1188,6 +1199,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                 case "Activate Debug Cam":
                     if (!keyPressed) {
                         isDebugCamEnabled = !isDebugCamEnabled;
+                    }
+                    break;
+                case "Jump":
+                    if (!keyPressed) {
+                        player.jump();
                     }
                     break;
 
@@ -1611,8 +1627,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                 inputMapping("de.lessvoid.nifty.input.mapping.DefaultInputMapping");
                 layer(new LayerBuilder("layer") {
                     {
-                        backgroundImage("Interface/intro2.png");
-//                        backgroundColor("#c6c6c6");
+                        backgroundImage("Interface/intro3.png");
                         childLayoutVertical();
                         panel(new PanelBuilder("dialogParent") {
                             {
@@ -1628,6 +1643,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                 control(new ControlBuilder("dialogNewGameStage1Menu", NewGame1MenuDisplay.NAME));
                                 control(new ControlBuilder("dialogLoadGameMenu", LoadGameMenuDisplay.NAME));
                                 control(new ControlBuilder("dialogOptionsMenu", OptionsMenuDisplay.NAME));
+                                control(new ControlBuilder("dialogControlsMenu", ControlsDisplay.NAME));
                             }
                         });
                     }

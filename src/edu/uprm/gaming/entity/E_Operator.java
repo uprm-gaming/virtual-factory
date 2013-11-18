@@ -261,21 +261,21 @@ public class E_Operator {
         }
         if (isCarrier && isAssembler){
             category = OperatorCategory.Versatile;
-            index3++;
+            index3 = (index3 + 1)%operatorVersatile.length;
             modelCharacter.setMaterial(assetManager.loadMaterial(operatorVersatile[index3]));
             System.out.println("Entered first method. operatorCarrier[" + index3 + "] = " + operatorVersatile[index3]);
             salaryPerHour = salaryPerHourVersatile;
         }else
         if (isCarrier){
             category = OperatorCategory.Carrier;
-            index2++;
+            index2 = (index2 + 1)%operatorCarrier.length;
             modelCharacter.setMaterial(assetManager.loadMaterial(operatorCarrier[index2]));
             System.out.println("Entered first method. operatorCarrier[" + index2+ "] = " + operatorCarrier[index2]);
             salaryPerHour = salaryPerHourCarrier;
         }else
         if (isAssembler){
             category = OperatorCategory.Assembler;
-            index1++;
+            index1 = (index1  + 1)%operatorAssembler.length;
             modelCharacter.setMaterial(assetManager.loadMaterial(operatorAssembler[index1]));
             System.out.println("Entered first method. operatorAssembler[" + index1 + "] = " + operatorAssembler[index1]);
             salaryPerHour = salaryPerHourAssembler;

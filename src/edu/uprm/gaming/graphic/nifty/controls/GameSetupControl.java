@@ -6,6 +6,7 @@ package edu.uprm.gaming.graphic.nifty.controls;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.ButtonClickedEvent;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.ListBox;
@@ -30,6 +31,7 @@ import edu.uprm.gaming.utils.MessageType;
 import edu.uprm.gaming.utils.Messages;
 import edu.uprm.gaming.utils.ObjectState;
 import edu.uprm.gaming.utils.Pair;
+import edu.uprm.gaming.utils.Params;
 import edu.uprm.gaming.utils.Status;
 import java.util.ArrayList;
 import java.util.Map;
@@ -88,6 +90,7 @@ public class GameSetupControl implements Controller {
         isVisible = false;
         ((TextField)screen.findNiftyControl("setupSteps", TextField.class)).setEnabled(false);
         ((TextField)screen.findNiftyControl("setupStatus", TextField.class)).setEnabled(false);
+        
         imageSetupDone = nifty.createImage("Interface/Principal/done.png", false);
         imageSetupWait = nifty.createImage("Interface/Principal/wait_red.png", false);
     }

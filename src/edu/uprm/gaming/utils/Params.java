@@ -14,6 +14,9 @@ public class Params {
     public static final boolean BUILD_FOR_MAC_APP = false;
     public static final boolean BUILD_FOR_TESTING_SESSION = true;
     
+    public static String renderer = "";
+    public static final String supportedRender = "LWJGL-OpenGL2";
+    
     public static int maxTime = 60;
     public static int maxLoadQuantity = 100;
     public static int timeUnitsToRefresh = 2;
@@ -83,7 +86,15 @@ public class Params {
     public static String setupPurchase = "4. Setup reorder point and order quantity for each purchase";
     public static String setupOperators = "5. Assign workers for each activity";
     public static String setupPriority = "6. Setup execution priority for each activity";
-    
+    public static final String ControlsDescription = ""
+            + "A: move left\n\n"
+            + "D: move right\n\n"
+            + "W: move forward\n\n"
+            + "S: move backward\n\n"
+            + "Space Bar: jump\n\n"
+            + "Left/Right Arrow Keys: rotate camera\n\n"
+            + "Left-Shift:  select an object\n\n"
+            + "Right-Shift: open/close the dashboard\n\n";
     public static int stationList = -2;
     public static int machineList = -2;
     public static int equipmentList = -3;

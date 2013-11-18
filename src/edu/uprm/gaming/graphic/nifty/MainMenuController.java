@@ -32,6 +32,7 @@ public class MainMenuController implements Controller {
     private Screen screen;
     private Nifty nifty;
     private Button newGameButton;
+    private Button controlsButton;
 //    private Button loadGameButton;
 //    private Button saveGameButton;
     private Button optionsButton;
@@ -52,6 +53,7 @@ public class MainMenuController implements Controller {
         this.screen = screen;
         this.nifty = nifty;
         this.newGameButton = screen.findNiftyControl("newGameButton_MMD", Button.class);
+        this.controlsButton = screen.findNiftyControl("controlsButton_MMD", Button.class);
 //        this.saveGameButton = screen.findNiftyControl("saveGameButton_MMD", Button.class);
 //        this.loadGameButton = screen.findNiftyControl("loadGameButton_MMD", Button.class);
 //        this.optionsButton = screen.findNiftyControl("optionsButton_MMD", Button.class);
@@ -96,7 +98,6 @@ public class MainMenuController implements Controller {
         if (Params.BUILD_FOR_TESTING_SESSION) {
                     screen.findElementByName("editProfileButton_MMD").disable();
                     screen.findElementByName("creditsButton_MMD").disable();
-
         }
     }
 
@@ -110,6 +111,17 @@ public class MainMenuController implements Controller {
         loadGameMenu.updateControls_stage1();
         screen.findElementByName("dialogMainMenu").stopEffect(EffectEventId.onCustom);
         screen.findElementByName("dialogNewGameStage1Menu").startEffect(EffectEventId.onCustom, null, "selected");
+    }
+    
+    @NiftyEventSubscriber(id="controlsButton_MMD")
+    public void onControlsButtonClicked(final String id, final ButtonClickedEvent event) {
+        Element currentElement = screen.findElementByName("dialogMainMenu");
+        currentElement.hide();
+        Element nextElement = screen.findElementByName("dialogControlsMenu");
+        ControlsController controlsMenu = nextElement.getControl(ControlsController.class);
+        nextElement.show();
+        screen.findElementByName("dialogMainMenu").stopEffect(EffectEventId.onCustom);
+        screen.findElementByName("dialogControlsMenu").startEffect(EffectEventId.onCustom, null, "selected");
     }
     
 //    @NiftyEventSubscriber(id="saveGameButton_MMD")
