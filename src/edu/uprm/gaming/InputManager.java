@@ -31,7 +31,6 @@ public class InputManager extends SimpleApplication {
         settings.setResolution(1280, 720);
         settings.setTitle("Virtual Factory 2.0 (Alpha) - ININ-UPRM - NSF #0835990");// (" + Params.selectDatabase + ")");
         Params.renderer = settings.getRenderer();
-        System.out.println("\n\n\n" + Params.renderer + "\n\n\n");
         settings.setRenderer(AppSettings.LWJGL_OPENGL2);
         settings.setFullscreen(false);
 
@@ -51,5 +50,11 @@ public class InputManager extends SimpleApplication {
         setDisplayFps(false);
         setDisplayStatView(false);
         stateManager.attach(new GameEngine()); // start the game
+    }
+    
+    
+    @Override
+    public void destroy() {
+        System.exit(0);
     }
 }

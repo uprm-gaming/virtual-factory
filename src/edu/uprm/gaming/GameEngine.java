@@ -565,37 +565,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
 
     private void manageDashboard() {
         nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardControl.class).updateData();
-//        if (isDashboardVisible) {
-//            if (!isDashboardVisiblePosition()) {
-//                if (currentDashboardTime == 0) {
-//                    currentDashboardTime = System.currentTimeMillis() / 1000;
-//                }
-//                if ((System.currentTimeMillis() / 1000) - currentDashboardTime > Params.timeToHideDashboard) {
-//
-//                    nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").hide();
-//
-//                    currentDashboardTime = 0;
-//                    isDashboardVisible = false;
-//                }
-//            } else {
-//                currentDashboardTime = 0;
-//            }
-//        } else {
-//            if (isDashboardInvisiblePosition()) {
-//                if (currentDashboardTime == 0) {
-//                    currentDashboardTime = System.currentTimeMillis() / 1000;
-//                }
-//                if ((System.currentTimeMillis() / 1000) - currentDashboardTime > Params.timeToShowDashboard) {
-//             
-//                    nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").show();
-//
-//                    currentDashboardTime = 0;
-//                    isDashboardVisible = true;
-//                }
-//            } else {
-//                currentDashboardTime = 0;
-//            }
-
         if (showHideDashboard) {
             if (isDashboardVisible) {
                 nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").hide();
@@ -609,27 +578,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         }
     }
 
-//    private boolean isDashboardVisiblePosition() {
-//        Vector2f mousePosition = inputManager.getCursorPosition();
-//        float mouseX = mousePosition.getX();
-//        float mouseY = getGuiViewPort().getCamera().getHeight() - mousePosition.getY();
-//        if ((minDashboardPositionX - dashboardWidth) <= mouseX && minDashboardPositionY <= mouseY && mouseY <= (minDashboardPositionY + dashboardHeight)) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
-//
-//    private boolean isDashboardInvisiblePosition() {
-//        Vector2f mousePosition = inputManager.getCursorPosition();
-//        float mouseX = mousePosition.getX();
-//        float mouseY = getGuiViewPort().getCamera().getHeight() - mousePosition.getY();
-//        if (minDashboardPositionX <= mouseX && minDashboardPositionY <= mouseY && mouseY <= (minDashboardPositionY + dashboardHeight)) {
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
     public GameSounds getGameSounds() {
         return gameSounds;
     }
@@ -1211,8 +1159,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                     break;
             }
         }
+
     };
-    
+        
     private void handlePickedObject(String pickingType) {
         CollisionResults results = new CollisionResults();
         Ray ray;
