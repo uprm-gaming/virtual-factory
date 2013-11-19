@@ -27,14 +27,14 @@ public class GameSettings {
 
     private void loadIcons() {
         try {
-            Class<InputManager> myClass = InputManager.class;
+            Class<VirtualFactory> myClass = VirtualFactory.class;
             customAppSettings.setIcons(new BufferedImage[]{
-                ImageIO.read(myClass.getResourceAsStream("/Textures/factory_16.png")),
-                ImageIO.read(myClass.getResourceAsStream("/Textures/factory_24.png")),
-                ImageIO.read(myClass.getResourceAsStream("/Textures/factory_32.png")),
-                ImageIO.read(myClass.getResourceAsStream("/Textures/factory_48.png")),
-                ImageIO.read(myClass.getResourceAsStream("/Textures/factory_64.png")),
-                ImageIO.read(myClass.getResourceAsStream("/Textures/factory_72.png"))
+                ImageIO.read(myClass.getResourceAsStream("/Textures/icon_16.png")),
+                ImageIO.read(myClass.getResourceAsStream("/Textures/icon_24.png")),
+                ImageIO.read(myClass.getResourceAsStream("/Textures/icon_32.png")),
+                ImageIO.read(myClass.getResourceAsStream("/Textures/icon_48.png")),
+                ImageIO.read(myClass.getResourceAsStream("/Textures/icon_64.png")),
+                ImageIO.read(myClass.getResourceAsStream("/Textures/icon_72.png"))
             });
         }
         catch (IOException e) {

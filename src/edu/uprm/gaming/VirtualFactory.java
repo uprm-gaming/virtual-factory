@@ -5,9 +5,10 @@ import com.jme3.app.SimpleApplication;
 /**
  * Virtual Factory 2.0
  */
-public class InputManager extends SimpleApplication {
+public class VirtualFactory extends SimpleApplication {
+    
     public static void main(String[] args) {
-        InputManager app = new InputManager();
+        VirtualFactory app = new VirtualFactory();
         app.setSettings(GameSettings.generate());
         app.setShowSettings(false);
         app.setPauseOnLostFocus(false);
