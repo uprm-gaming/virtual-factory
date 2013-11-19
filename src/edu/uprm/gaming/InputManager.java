@@ -10,7 +10,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 
 /**
  * Virtual Factory 2.0
@@ -60,7 +59,6 @@ public class InputManager extends SimpleApplication {
         setDisplayFps(false);
         setDisplayStatView(false);
         stateManager.attach(new GameEngine()); // start the game
-        
     }
     
     @Override
@@ -70,33 +68,19 @@ public class InputManager extends SimpleApplication {
     
     //returns null if fullscreen is not available for the display
     private static DisplayMode getDisplayParams() {
-        
         GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         DisplayMode[] displayModes = device.getDisplayModes();
-        ArrayList<DisplayMode> tempModes = new ArrayList<DisplayMode>();
-        DisplayMode selectedMode = null;
+        ArrayList<DisplayMode> tempModes = new ArrayList<>();
+        DisplayMode selectedMode;
         
-        System.out.println("Fullscreen supported? " + device.isFullScreenSupported());
-        
-        String s = "";
         for (DisplayMode mode: displayModes) {
-            s += String.format("Resolution: (%d,%d), Bit Depth: (%d), Frequency: %d",
-                    mode.getWidth(), mode.getHeight(), mode.getBitDepth(), mode.getRefreshRate());
-            
-            if (mode.getRefreshRate() == DisplayMode.REFRESH_RATE_UNKNOWN)
-                s += "[Refresh Rate is UNKNOWN]\n";
-            else
-                s += "\n";
-            
-            
             if (!device.isFullScreenSupported())
                 return null;
             if (mode.getWidth() == 1280)
                 tempModes.add(mode);
-            
         }
         
-        if (tempModes.size() == 0)
+        if (tempModes.isEmpty())
             return null;
         else {
             selectedMode = tempModes.get(0);
@@ -109,9 +93,6 @@ public class InputManager extends SimpleApplication {
                     selectedMode = temp;
             }
         }
-        
-        
-//        JOptionPane.showMessageDialog(null, "Las resoluciones disponibles son:\n" + s );
         
         return selectedMode;
     }

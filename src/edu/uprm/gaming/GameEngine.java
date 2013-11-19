@@ -278,19 +278,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     @Override
     public void initialize(AppStateManager manager, Application application) {
         
-
-        int resWidth = application.getContext().getSettings().getWidth();
-        int resHeight = application.getContext().getSettings().getHeight();
-        int resFreq = application.getContext().getSettings().getFrequency();
-        int resFR = application.getContext().getSettings().getFrameRate();
-        int resBD = application.getContext().getSettings().getDepthBits();
-        int resBPP = application.getContext().getSettings().getBitsPerPixel();
-        
-        System.out.println(String.format(
-                "Res: (%d, %d) \nFreq: (%d) \nFrame Rate: (%d) \nBit Depth: (%d) \nBPP: (%d)", 
-                resWidth, resHeight, resFreq, resFR, resBD, resBPP));
-
-        Params.screenHeight = resHeight;
         app = (SimpleApplication) application;
         stateManager = manager;
         assetManager = app.getAssetManager();
@@ -300,6 +287,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         viewPort = app.getViewPort();
         guiViewPort = app.getGuiViewPort();
         rootNode = app.getRootNode();
+        Params.screenHeight = application.getContext().getSettings().getHeight();
         
         Logger.getLogger("com.jme3").setLevel(Level.WARNING);
         Logger.getLogger("de.lessvoid").setLevel(Level.WARNING);
