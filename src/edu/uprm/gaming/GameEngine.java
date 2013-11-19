@@ -29,6 +29,7 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseAxisTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -782,9 +783,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(0.4f, 24.5f, 1);
         // Use deprecated CharacterControl until BetterCharacterControl is updated
         player = new CharacterControl(capsuleShape, 0.05f);
-        player.setJumpSpeed(20);
-        player.setFallSpeed(30);
-        player.setGravity(30);
+        player.setJumpSpeed(45);
+        player.setFallSpeed(120);
+        player.setGravity(120);
         player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
         app.getCamera().setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
         player.setViewDirection(new Vector3f(0, 0, 1));
@@ -1074,7 +1075,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     private void initKeys() {
         inputManager.deleteMapping("FLYCAM_ZoomIn");
         inputManager.deleteMapping("FLYCAM_ZoomOut");
-        
+        inputManager.deleteTrigger("FLYCAM_Left", new MouseAxisTrigger(MouseInput.AXIS_X, true));
+        inputManager.deleteTrigger("FLYCAM_Right", new MouseAxisTrigger(MouseInput.AXIS_X, false));
+        inputManager.deleteTrigger("FLYCAM_Up", new MouseAxisTrigger(MouseInput.AXIS_Y, false));
+        inputManager.deleteTrigger("FLYCAM_Down", new MouseAxisTrigger(MouseInput.AXIS_Y, true));
+
         inputManager.addMapping("MousePicking", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addListener(actionListener, "MousePicking");
 
