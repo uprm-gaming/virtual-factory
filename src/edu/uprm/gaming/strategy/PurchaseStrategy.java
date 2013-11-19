@@ -4,7 +4,7 @@
  */
 package edu.uprm.gaming.strategy;
 
-import edu.uprm.gaming.GameData;
+import edu.uprm.gaming.data.GameData;
 import edu.uprm.gaming.GameEngine;
 import edu.uprm.gaming.entity.E_Bucket;
 import edu.uprm.gaming.entity.E_Catalog;

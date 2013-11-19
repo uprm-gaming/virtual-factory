@@ -17,7 +17,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
-import edu.uprm.gaming.GameData;
+import edu.uprm.gaming.data.GameData;
 import edu.uprm.gaming.GameEngine;
 import edu.uprm.gaming.utils.Params;
 import java.util.Properties;

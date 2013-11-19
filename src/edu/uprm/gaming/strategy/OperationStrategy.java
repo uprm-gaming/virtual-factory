@@ -5,7 +5,7 @@
 package edu.uprm.gaming.strategy;
 
 import com.jme3.math.Vector3f;
-import edu.uprm.gaming.GameData;
+import edu.uprm.gaming.data.GameData;
 import edu.uprm.gaming.GameEngine;
 import edu.uprm.gaming.entity.E_AssemblyDetails;
 import edu.uprm.gaming.entity.E_Bucket;
