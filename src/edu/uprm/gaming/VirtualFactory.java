@@ -16,9 +16,7 @@ public final class VirtualFactory extends SimpleApplication {
         app.start(); // calls simpleInitApp()
     }
     
-    private VirtualFactory() {
-        instance = null;
-    }
+    private VirtualFactory() {}
     
     public static VirtualFactory getInstance() {
         if (instance == null)
@@ -28,7 +26,7 @@ public final class VirtualFactory extends SimpleApplication {
     
     @Override
     public void simpleInitApp() {
-        // Turn off default HUD
+        // Turn off default jMonkey HUD
         // -----------
         setDisplayFps(false);
         setDisplayStatView(false);
