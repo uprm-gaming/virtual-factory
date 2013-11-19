@@ -5,7 +5,7 @@
 package edu.uprm.gaming.threads;
 
 import de.lessvoid.nifty.controls.Label;
-import edu.uprm.gaming.GameData;
+import edu.uprm.gaming.data.GameData;
 import edu.uprm.gaming.data.D_Game;
 import edu.uprm.gaming.data.D_Player;
 import edu.uprm.gaming.entity.E_Game;

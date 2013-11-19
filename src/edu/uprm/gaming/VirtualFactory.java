@@ -5,19 +5,27 @@ import com.jme3.app.SimpleApplication;
 /**
  * Virtual Factory 2.0
  */
-public class VirtualFactory extends SimpleApplication {
+public final class VirtualFactory extends SimpleApplication {
+    private static VirtualFactory instance;
     
     public static void main(String[] args) {
-        VirtualFactory app = new VirtualFactory();
-        app.setSettings(GameSettings.generate());
+        VirtualFactory app = VirtualFactory.getInstance();
+        app.setSettings(ScreenSettings.generate());
         app.setShowSettings(false);
         app.setPauseOnLostFocus(false);
-        app.start();  
+        app.start(); // calls simpleInitApp()
     }
     
-    /**
-     * Enables the game engine. Called automatically after app.start().
-     */
+    private VirtualFactory() {
+        instance = null;
+    }
+    
+    public static VirtualFactory getInstance() {
+        if (instance == null)
+            instance = new VirtualFactory();
+        return instance;
+    }
+    
     @Override
     public void simpleInitApp() {
         // Turn off default HUD

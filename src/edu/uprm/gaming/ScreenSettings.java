@@ -10,16 +10,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
-public class GameSettings {
-    private AppSettings customAppSettings;
+public class ScreenSettings {
+    private AppSettings customScreen;
     
     public static AppSettings generate() {
-        GameSettings s = new GameSettings();
+        ScreenSettings s = new ScreenSettings();
         return s.getAppSettings();
     }
     
-    private GameSettings() {
-        customAppSettings = new AppSettings(true);
+    private ScreenSettings() {
+        customScreen = new AppSettings(true);
         loadIcons();
         loadDefaultSettings();
         tryFullScreen();
@@ -28,7 +28,7 @@ public class GameSettings {
     private void loadIcons() {
         try {
             Class<VirtualFactory> myClass = VirtualFactory.class;
-            customAppSettings.setIcons(new BufferedImage[]{
+            customScreen.setIcons(new BufferedImage[]{
                 ImageIO.read(myClass.getResourceAsStream("/Textures/icon_16.png")),
                 ImageIO.read(myClass.getResourceAsStream("/Textures/icon_24.png")),
                 ImageIO.read(myClass.getResourceAsStream("/Textures/icon_32.png")),
@@ -43,17 +43,17 @@ public class GameSettings {
     }
     
     private void loadDefaultSettings() {
-        customAppSettings.setResolution(1280, 720);
-        customAppSettings.setTitle("Virtual Factory 2.0 (Alpha) - ININ-UPRM - NSF #0835990");// (" + Params.selectDatabase + ")");
-        Params.renderer = customAppSettings.getRenderer();
-        customAppSettings.setRenderer(AppSettings.LWJGL_OPENGL2);
-        customAppSettings.setSettingsDialogImage("Interface/icon.png");
+        Params.renderer = customScreen.getRenderer();
+        customScreen.setResolution(1280, 720);
+        customScreen.setTitle("Virtual Factory 2.0 (Alpha) - ININ-UPRM - NSF #0835990");
+        customScreen.setRenderer(AppSettings.LWJGL_OPENGL2);
+        customScreen.setSettingsDialogImage("Interface/icon.png");
     }
     
     private void tryFullScreen() {
         DisplayMode mode = getDisplayParams();
         if (mode != null)
-            setDisplaySettings(customAppSettings, mode);
+            setDisplaySettings(customScreen, mode);
     }
     
     //returns null if fullscreen is not available for the display
@@ -95,6 +95,6 @@ public class GameSettings {
     }
     
     public AppSettings getAppSettings() { 
-        return customAppSettings; 
+        return customScreen; 
     }
 }
