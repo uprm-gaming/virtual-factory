@@ -2034,6 +2034,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                 inputMapping("de.lessvoid.nifty.input.mapping.DefaultInputMapping");
                 layer(new LayerBuilder("layer") {
                     {
+                        
                         childLayoutVertical();
                         panel(new PanelBuilder() {
                             {
@@ -2041,7 +2042,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                 width("100%");
                                 alignCenter();
                                 childLayoutHorizontal();
-                                backgroundImage("Interface/panelBack3.png");//Principal/nifty-panel-simple.png");
+                                backgroundImage("Interface/panelBack3.png");
                                 control(new LabelBuilder("gameNamePrincipal", "  Game: ...") {
                                     {
                                         width("90px");
@@ -2543,6 +2544,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
 
                                         panel(new PanelBuilder("manageVolume_MGV") {
                                             {
+                                                
                                                 childLayoutAbsolute();
                                                 panel(new PanelBuilder("parent_MGV") {
                                                     {
