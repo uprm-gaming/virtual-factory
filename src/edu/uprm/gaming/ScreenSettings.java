@@ -65,9 +65,8 @@ public class ScreenSettings {
         customJmonkeyScreen.setRenderer(AppSettings.LWJGL_OPENGL2);
         customJmonkeyScreen.setSettingsDialogImage("Interface/icon.png");
         
-        if (isComputerCapableForFullscreen()) {
-            loadFullscreenSettings();
-        }   
+        if (isComputerCapableForFullscreen())
+            loadFullscreenSettings();  
         else
             loadDefaultScreenSettings();
     }
