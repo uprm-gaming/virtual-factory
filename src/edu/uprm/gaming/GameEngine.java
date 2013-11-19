@@ -147,6 +147,7 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  * Game Engine 2.0
@@ -276,6 +277,20 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
   
     @Override
     public void initialize(AppStateManager manager, Application application) {
+        
+
+        int resWidth = application.getContext().getSettings().getWidth();
+        int resHeight = application.getContext().getSettings().getHeight();
+        int resFreq = application.getContext().getSettings().getFrequency();
+        int resFR = application.getContext().getSettings().getFrameRate();
+        int resBD = application.getContext().getSettings().getDepthBits();
+        int resBPP = application.getContext().getSettings().getBitsPerPixel();
+        
+        System.out.println(String.format(
+                "Res: (%d, %d) \nFreq: (%d) \nFrame Rate: (%d) \nBit Depth: (%d) \nBPP: (%d)", 
+                resWidth, resHeight, resFreq, resFR, resBD, resBPP));
+
+        Params.screenHeight = resHeight;
         app = (SimpleApplication) application;
         stateManager = manager;
         assetManager = app.getAssetManager();
@@ -304,10 +319,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         //createLight();
         createLightBulb();
         
-        if (Params.renderer.equalsIgnoreCase(Params.supportedRender))
+        if (Params.renderer.equalsIgnoreCase(Params.supportedRenderer))
             setupFilter();
         
-
         initKeys();
         initSoundEffects();
         
@@ -3775,7 +3789,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                                         onHideEffect(common.createMoveEffect("out", "bottom", 600));
                                                         backgroundImage("Interface/panelBack3.png");
                                                         x("948px");
-                                                        y("700px");
+                                                        int h = Params.screenHeight - (720 - 700);
+                                                        y(Integer.toString(h) + "px");//"700px");
                                                         width("330px");
                                                         interactOnClick("ShowWindow()");
                                                     }
@@ -4130,7 +4145,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                                             }
                                                         });
                                                         x("948px");
-                                                        y("488px");
+                                                        int h = Params.screenHeight - (720 - 488);
+                                                        y(Integer.toString(h) + "px");//"488px");
                                                         visible(false);
                                                         width("330px");
                                                         height("230px");
@@ -4507,7 +4523,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
 //                                                        this.backgroundColor(de.lessvoid.nifty.tools.Color.BLACK);
                                                         backgroundImage("Interface/panelBack3.png");
                                                         x("2px");
-                                                        y("700px");
+                                                        int h = Params.screenHeight - (720 - 700);
+                                                        y(Integer.toString(h) + "px");//"700px");
                                                         width("330px");
                                                         interactOnClick("ShowWindow()");
 
@@ -4628,7 +4645,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                                             }
                                                         });
                                                         x("2px");
-                                                        y("488px");
+                                                        int h = Params.screenHeight - (720 - 488);
+                                                        y(Integer.toString(h) + "px");//"488px");
                                                         visible(false);
                                                         width("330px");
                                                         height("230px");
@@ -4940,7 +4958,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                                         //this.backgroundColor(de.lessvoid.nifty.tools.Color.BLACK);//.NONE);//
                                                         backgroundImage("Interface/panelBack3.png");
                                                         x("334px");
-                                                        y("700px");
+                                                        int h = Params.screenHeight - (720 - 700);
+                                                        y(Integer.toString(h) + "px");//"700px");
                                                         width("612px");
                                                         interactOnClick("HideWindow()");
                                                         
@@ -4990,7 +5009,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                                                             }
                                                         });
                                                         x("334px");
-                                                        y("488px");
+                                                        int h = Params.screenHeight - (720 - 488);
+                                                        y(Integer.toString(h) + "px");//"488px");
                                                         visible(false);
                                                         width("612px");
                                                         height("230px");
