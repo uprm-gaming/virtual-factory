@@ -448,7 +448,23 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         nifty.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallControl.class).HideWindow();
         nifty.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderControl.class).HideWindow();
         nifty.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogControl.class).showHide();
-         
+        
+        player.setJumpSpeed(45);
+        player.setFallSpeed(120);
+        player.setGravity(Params.playerGravity);
+        player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
+        app.getCamera().setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
+        player.setViewDirection(new Vector3f(0, 0, 1));
+        
+        if (topViewEnabled) {
+            topViewEnabled = false;
+            isDebugCamEnabled = !isDebugCamEnabled;
+            cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
+            flyCam.setMoveSpeed(100);
+            flyCam.setRotationSpeed(Params.flyCamRotationSpeed);
+        }
+        
+        
         Params.gameNarrator.talk("Press 'T' for a top view of the factory. This is a really long test just to see if the"
                 + " test wraps around and does not continue to the infinite and gets outside our screen."
                 + "Press 'T' for a top view of the factory. This is a really long test just to see if the"
@@ -533,12 +549,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     
     private void checkNarratorMessages(Vector3f newPosition) {
         
-        
         if (Params.oldPosition.getY() < Params.SECOND_FLOOR_Y_POS) {
             Params.topViewAvailable = false;
             if (newPosition.getY() > Params.SECOND_FLOOR_Y_POS) {
                 Params.topViewAvailable = true;
-                Params.gameNarrator.talk("Press 'T' for a top view of the factory.", 5);
+                Params.gameNarrator.talk("Second Floor.\nPress 'T' for a top view of the factory.", 5);
             }
             else {
                 Params.topViewAvailable = false;
@@ -1226,7 +1241,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
             Params.flyCamRotationSpeed = flyCam.getRotationSpeed();
             flyCam.setRotationSpeed(0);
         }
-        else if (Params.topViewAvailable && isDebugCamEnabled) {
+        else if (Params.topViewAvailable && topViewEnabled && isDebugCamEnabled) {
             topViewEnabled = false;
             isDebugCamEnabled = !isDebugCamEnabled;
             cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
