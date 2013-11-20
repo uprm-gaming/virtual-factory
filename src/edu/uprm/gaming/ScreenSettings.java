@@ -12,21 +12,29 @@ import javax.imageio.ImageIO;
 
 public class ScreenSettings {
     private GraphicsDevice computerScreen;
-    private AppSettings customJmonkeyScreen;
-    private DisplayMode selectedScreenMode;
+    private AppSettings gameScreen;
+    private DisplayMode chosenScreenMode;
 
     private ScreenSettings() {
-        loadComputerScreenMode();
-        loadJmonkeyScreen();
-        loadIcons();
+        loadGameScreen();
     }
     
     public static AppSettings generate() {
-        ScreenSettings virtualFactoryScreen = new ScreenSettings();
-        return virtualFactoryScreen.getJmonkeyScreen();
+        return new ScreenSettings().getLoadedGameScreen();
     }
     
-    private void loadComputerScreenMode() {
+    private void loadGameScreen() {
+        gameScreen = new AppSettings(true);
+        Params.renderer = gameScreen.getRenderer();
+        gameScreen.setTitle("Virtual Factory 2.0 (Alpha) - ININ-UPRM - NSF #0835990");
+        gameScreen.setRenderer(AppSettings.LWJGL_OPENGL2);
+        gameScreen.setSettingsDialogImage("Interface/icon.png");
+        
+        loadScreenMode();
+        loadIcons();
+    }
+    
+    private void loadScreenMode() {
         computerScreen = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         if (!computerScreen.isFullScreenSupported())
             return;
@@ -40,57 +48,48 @@ public class ScreenSettings {
         }
         
         if (!allowedScreenModes.isEmpty()) {
-            selectedScreenMode = allowedScreenModes.get(0);
+            chosenScreenMode = allowedScreenModes.get(0);
             if (allowedScreenModes.size() > 1) {
                 chooseBestScreenMode(allowedScreenModes);
             }
         }
+        
+        if (isComputerCapableForFullscreen())
+            makeItFullscreen();  
+        else
+            makeItStandardScreen();
     }
     
     private void chooseBestScreenMode(ArrayList<DisplayMode> allowedScreenModes) {
         for (int i = 0; i < allowedScreenModes.size() - 1; i++) {
             DisplayMode nextAvailableMode = allowedScreenModes.get(i+1);
-            boolean nextModeHasBetterHeight = Math.abs(selectedScreenMode.getHeight() - 720) 
+            boolean nextModeHasBetterHeight = Math.abs(chosenScreenMode.getHeight() - 720) 
                                               > Math.abs(nextAvailableMode.getHeight() - 720);
             if (nextModeHasBetterHeight)
-                selectedScreenMode = nextAvailableMode;
+                chosenScreenMode = nextAvailableMode;
         }
     }
     
-    private void loadJmonkeyScreen() {
-        customJmonkeyScreen = new AppSettings(true);
-        Params.renderer = customJmonkeyScreen.getRenderer();
-        
-        customJmonkeyScreen.setTitle("Virtual Factory 2.0 (Alpha) - ININ-UPRM - NSF #0835990");
-        customJmonkeyScreen.setRenderer(AppSettings.LWJGL_OPENGL2);
-        customJmonkeyScreen.setSettingsDialogImage("Interface/icon.png");
-        
-        if (isComputerCapableForFullscreen())
-            loadFullscreenSettings();  
-        else
-            loadDefaultScreenSettings();
-    }
-    
     private boolean isComputerCapableForFullscreen() {
-        return selectedScreenMode != null;
+        return chosenScreenMode != null;
     }
     
-    private void loadDefaultScreenSettings() {
-        customJmonkeyScreen.setFullscreen(false);
-        customJmonkeyScreen.setResolution(1280, 720);
+    private void makeItFullscreen() {
+        gameScreen.setFullscreen(true);
+        gameScreen.setWidth(chosenScreenMode.getWidth());
+        gameScreen.setHeight(chosenScreenMode.getHeight());
+        gameScreen.setFrequency(chosenScreenMode.getRefreshRate());
     }
-
-    private void loadFullscreenSettings() {
-        customJmonkeyScreen.setFullscreen(true);
-        customJmonkeyScreen.setWidth(selectedScreenMode.getWidth());
-        customJmonkeyScreen.setHeight(selectedScreenMode.getHeight());
-        customJmonkeyScreen.setFrequency(selectedScreenMode.getRefreshRate());
+    
+    private void makeItStandardScreen() {
+        gameScreen.setFullscreen(false);
+        gameScreen.setResolution(1280, 720);
     }
 
     private void loadIcons() {
         try {
             Class<VirtualFactory> myClass = VirtualFactory.class;
-            customJmonkeyScreen.setIcons(new BufferedImage[]{
+            gameScreen.setIcons(new BufferedImage[]{
                 ImageIO.read(myClass.getResourceAsStream("/Textures/icon_16.png")),
                 ImageIO.read(myClass.getResourceAsStream("/Textures/icon_24.png")),
                 ImageIO.read(myClass.getResourceAsStream("/Textures/icon_32.png")),
@@ -100,14 +99,14 @@ public class ScreenSettings {
             });
         }
         catch (NullPointerException e) {
-            throw new NullPointerException("customJmonkeyScreen was not initialized - " + e.getMessage());
+            throw new NullPointerException("gameScreen was not initialized - " + e.getMessage());
         }
         catch (IOException e) {
             System.out.println("Unable to load program icons - " + e.getMessage());
         }
     }
     
-    public AppSettings getJmonkeyScreen() { 
-        return customJmonkeyScreen; 
+    public AppSettings getLoadedGameScreen() { 
+        return gameScreen; 
     }
 }

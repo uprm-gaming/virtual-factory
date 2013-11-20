@@ -35,7 +35,6 @@ public final class VirtualFactory extends SimpleApplication {
         
         //Move this to a better location in the project
         Params.gameNarrator = edu.uprm.gaming.NarratorAppState.newInstance(assetManager, guiNode);
-        stateManager.attach(new GameEngine()); // start the game
-        
+        stateManager.attach(new GameEngine()); // start the game       
     }
 }
