@@ -1123,11 +1123,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                           KeyInput.KEY_D, KeyInput.KEY_SPACE, KeyInput.KEY_LSHIFT, 
                           KeyInput.KEY_RSHIFT, KeyInput.KEY_T,
                           KeyInput.KEY_ADD, KeyInput.KEY_SUBTRACT,
-                          KeyInput.KEY_0, KeyInput.KEY_B,
+                          KeyInput.KEY_0, KeyInput.KEY_H, KeyInput.KEY_B,
                           KeyInput.KEY_NUMPAD4, KeyInput.KEY_NUMPAD6,
                           KeyInput.KEY_NUMPAD8, KeyInput.KEY_NUMPAD2,
                           KeyInput.KEY_ADD, KeyInput.KEY_SUBTRACT,
-                          KeyInput.KEY_2, KeyInput.KEY_1, KeyInput.KEY_H};
+                          KeyInput.KEY_2, KeyInput.KEY_1};
         
         for (int i = 0; i < mappings.length; i++) {
             inputManager.addMapping(mappings[i], new KeyTrigger(triggers[i]));
@@ -1184,31 +1184,13 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                 case "debug":
                     if (!keyPressed) {
                         System.out.println("\n\nLa posicion deseada es estaaaaaaaa: " +  cam.getLocation()
-                                + "\nLa direccion deseada es: " + cam.getDirection());
+                                + "\nLa direccion deseada es: " + cam.getDirection() + "\nUp: " + cam.getUp()+ "\nLeft: " + cam.getLeft());
                     }
                     break;
                     
                 case "Top View":
                     if (!keyPressed){
-                        if (Params.topViewAvailable && !topViewEnabled) {
-                            isDebugCamEnabled = !isDebugCamEnabled;
-                            topViewEnabled = true;
-                            Params.camAxesLeft = cam.getLeft();
-                            Params.camAxesUp = cam.getUp();
-                            Params.camAxesDir = cam.getDirection();
-                            cam.setLocation(new Vector3f(163.46553f, 305.52246f, -125.38404f));
-                            cam.setAxes(new Vector3f(-0.0024178028f, 0.0011213422f, 0.9999965f), new Vector3f(-0.96379673f, 0.26662517f, -0.00262928f), new Vector3f(-0.26662725f, -0.96379966f, 0.00043606758f));
-                            flyCam.setMoveSpeed(0);
-                            Params.flyCamRotationSpeed = flyCam.getRotationSpeed();
-                            flyCam.setRotationSpeed(0);
-                        }
-                        else if (Params.topViewAvailable && isDebugCamEnabled) {
-                            topViewEnabled = false;
-                            isDebugCamEnabled = !isDebugCamEnabled;
-                            cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
-                            flyCam.setMoveSpeed(100);
-                            flyCam.setRotationSpeed(Params.flyCamRotationSpeed);
-                        }
+                        handleTopView();
                     }
                     break;
                     
@@ -1227,8 +1209,32 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                     break;
             }
         }
-
     };
+    
+    private void handleTopView() {
+        
+        if (Params.topViewAvailable && !topViewEnabled) {
+            isDebugCamEnabled = !isDebugCamEnabled;
+            topViewEnabled = true;
+            Params.camAxesLeft = cam.getLeft();
+            Params.camAxesUp = cam.getUp();
+            Params.camAxesDir = cam.getDirection();
+            cam.setLocation(new Vector3f(60.30007f, 346.47473f, -115.58435f));
+            cam.setAxes(new Vector3f(0.0043751f, 0.0011244118f, 0.9999898f), 
+                    new Vector3f(-0.99920726f, 0.03957534f, 0.004327148f), new Vector3f(-0.039570034f, -0.99921596f, 0.0012966394f));
+            flyCam.setMoveSpeed(0);
+            Params.flyCamRotationSpeed = flyCam.getRotationSpeed();
+            flyCam.setRotationSpeed(0);
+        }
+        else if (Params.topViewAvailable && isDebugCamEnabled) {
+            topViewEnabled = false;
+            isDebugCamEnabled = !isDebugCamEnabled;
+            cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
+            flyCam.setMoveSpeed(100);
+            flyCam.setRotationSpeed(Params.flyCamRotationSpeed);
+        }
+        
+    }
         
     private void handlePickedObject(String pickingType) {
         CollisionResults results = new CollisionResults();
