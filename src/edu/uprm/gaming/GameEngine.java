@@ -271,7 +271,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     private Vector3f walkDirection = new Vector3f(0, 0, 0);
 
     private AudioNode footstep;
-    private boolean isDebugCamEnabled;
+    private boolean isDebugCamEnabled = false;
+    private boolean topViewEnabled = false;
     private Node shopFloorNode;
     
     private PointLight lamp;
@@ -314,7 +315,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         
         initKeys();
         initSoundEffects();
-        
+        Params.tempTime = System.currentTimeMillis();
         //***********************************************
         gameData = GameData.getInstance();
         gameData.setGameEngine(this);
@@ -374,6 +375,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
             nifty.gotoScreen("initialMenu");
             System.out.println("DEBUG MODE: Entered to initial menu successfully.");
         }
+        stateManager.attach(Params.gameNarrator);
     }
 
     public void updateCursorIcon(int newCursorValue) {
@@ -506,17 +508,42 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
             walkDirection.addLocal(camLeft.negate());
 
         if (executeGame) {
+            
+            
             player.setWalkDirection(walkDirection); // walk!
             app.getCamera().setLocation(player.getPhysicsLocation());
+            
+            if ((Math.abs(System.currentTimeMillis() - Params.tempTime)/1000.00) > 0.5) {
+                Params.tempTime = System.currentTimeMillis();
+                Vector3f newPosition = app.getCamera().getLocation();
+                checkNarratorMessages(newPosition);
+            }
             
             if (flyCam.isDragToRotate()) 
                 flyCam.setDragToRotate(false);
             
             if (!inputManager.isCursorVisible()) 
                 inputManager.setCursorVisible(true);
-        } 
+            
+        }
     }
-
+    
+    private void checkNarratorMessages(Vector3f newPosition) {
+        
+        
+        if (Params.oldPosition.getY() < Params.SECOND_FLOOR_Y_POS) {
+            Params.topViewAvailable = false;
+            if (newPosition.getY() > Params.SECOND_FLOOR_Y_POS) {
+                Params.topViewAvailable = true;
+                Params.gameNarrator.talk("Press 'T' for a top view of the factory.", 5);
+            }
+            else {
+                Params.topViewAvailable = false;
+            }
+        }
+        Params.oldPosition.set(newPosition.getX(), newPosition.getY(), newPosition.getZ());
+    }
+    
     public void simpleUpdateLocal() {
         //Added by Chris
         if (!this.getGeneralScreenController().getPauseStatus() && gameSounds.machineSoundPlaying()) {
@@ -785,7 +812,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         player = new CharacterControl(capsuleShape, 0.05f);
         player.setJumpSpeed(45);
         player.setFallSpeed(120);
-        player.setGravity(120);
+        player.setGravity(Params.playerGravity);
         player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
         app.getCamera().setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
         player.setViewDirection(new Vector3f(0, 0, 1));
@@ -1085,19 +1112,19 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
 
         String[] mappings = {"Forward", "Backward", "Left",
                              "Right", "Jump", "Picking",
-                             "Dashboard Control",
+                             "Dashboard Control", "Top View",
                              "Scale Bigger", "Scale Smaller",
-                             "Activate Debug Cam"};
+                             "Activate Debug Cam", "debug"};
         
         int[] triggers = {KeyInput.KEY_W, KeyInput.KEY_S, KeyInput.KEY_A, 
                           KeyInput.KEY_D, KeyInput.KEY_SPACE, KeyInput.KEY_LSHIFT, 
-                          KeyInput.KEY_RSHIFT,
+                          KeyInput.KEY_RSHIFT, KeyInput.KEY_T,
                           KeyInput.KEY_ADD, KeyInput.KEY_SUBTRACT,
                           KeyInput.KEY_0, KeyInput.KEY_B,
                           KeyInput.KEY_NUMPAD4, KeyInput.KEY_NUMPAD6,
                           KeyInput.KEY_NUMPAD8, KeyInput.KEY_NUMPAD2,
                           KeyInput.KEY_ADD, KeyInput.KEY_SUBTRACT,
-                          KeyInput.KEY_2, KeyInput.KEY_1};
+                          KeyInput.KEY_2, KeyInput.KEY_1, KeyInput.KEY_H};
         
         for (int i = 0; i < mappings.length; i++) {
             inputManager.addMapping(mappings[i], new KeyTrigger(triggers[i]));
@@ -1149,6 +1176,36 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
                         manageDashboard();
                         if (Params.DEBUG_ON)
                             System.out.println("Dashboard Control Key Selected.");
+                    }
+                    break;
+                case "debug":
+                    if (!keyPressed) {
+                        System.out.println("\n\nLa posicion deseada es estaaaaaaaa: " +  cam.getLocation()
+                                + "\nLa direccion deseada es: " + cam.getDirection());
+                    }
+                    break;
+                    
+                case "Top View":
+                    if (!keyPressed){
+                        if (Params.topViewAvailable && !topViewEnabled) {
+                            isDebugCamEnabled = !isDebugCamEnabled;
+                            topViewEnabled = true;
+                            Params.camAxesLeft = cam.getLeft();
+                            Params.camAxesUp = cam.getUp();
+                            Params.camAxesDir = cam.getDirection();
+                            cam.setLocation(new Vector3f(163.46553f, 305.52246f, -125.38404f));
+                            cam.setAxes(new Vector3f(-0.0024178028f, 0.0011213422f, 0.9999965f), new Vector3f(-0.96379673f, 0.26662517f, -0.00262928f), new Vector3f(-0.26662725f, -0.96379966f, 0.00043606758f));
+                            flyCam.setMoveSpeed(0);
+                            Params.flyCamRotationSpeed = flyCam.getRotationSpeed();
+                            flyCam.setRotationSpeed(0);
+                        }
+                        else if (Params.topViewAvailable && isDebugCamEnabled) {
+                            topViewEnabled = false;
+                            isDebugCamEnabled = !isDebugCamEnabled;
+                            cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
+                            flyCam.setMoveSpeed(100);
+                            flyCam.setRotationSpeed(Params.flyCamRotationSpeed);
+                        }
                     }
                     break;
                     

@@ -4,6 +4,9 @@
  */
 package edu.uprm.gaming.utils;
 
+import com.jme3.math.Vector3f;
+import edu.uprm.gaming.NarratorAppState;
+
 /**
  *
  * @author David
@@ -18,6 +21,42 @@ public class Params {
     public static final String supportedRenderer = "LWJGL-OpenGL2";
     public static int screenHeight = 0;
     
+    public static final String ControlsDescription = ""
+            + "A: move left\n\n"
+            + "D: move right\n\n"
+            + "W: move forward\n\n"
+            + "S: move backward\n\n"
+            + "Space Bar: jump\n\n"
+            + "Left/Right Arrow Keys: rotate camera\n\n"
+            + "Left-Shift:  select an object\n\n"
+            + "Right-Shift: open/close the dashboard\n\n";
+    
+    //-------Narator state and specs---------
+    public static NarratorAppState gameNarrator = null;
+//    private static final String MAPPING_FIRST_MSG = "narrator first Message";
+//    private static final String MAPPING_SECOND_MSG = "narrator second Message";
+//    private static final String MAPPING_THIRD_MSG = "narrator third Message";
+//    
+//    private static final Trigger TRIGGER_FIRST_MSG = new KeyTrigger(KeyInput.KEY_1);
+//    private static final Trigger TRIGGER_SECOND_MSG = new KeyTrigger(KeyInput.KEY_2);
+//    private static final Trigger TRIGGER_THIRD_MSG = new KeyTrigger(KeyInput.KEY_3);
+    
+    public static final float SECOND_FLOOR_Y_POS = 57;
+    public static long tempTime = 0;
+    public static Vector3f oldPosition = new Vector3f(51.68367f, 59.064148f, -292.67755f);
+    
+    //-------End of Narator state and specs-----
+    
+    public static boolean topViewAvailable = true;
+    public static final float playerGravity = 120;
+    public static float flyCamRotationSpeed = 0;
+    public static Vector3f camAxesLeft = null;
+    public static Vector3f camAxesUp = null;
+    public static Vector3f camAxesDir = null;
+    
+    
+    
+    //-Virtual Factory 1.0 params
     public static int maxTime = 60;
     public static int maxLoadQuantity = 100;
     public static int timeUnitsToRefresh = 2;
@@ -87,15 +126,6 @@ public class Params {
     public static String setupPurchase = "4. Setup reorder point and order quantity for each purchase";
     public static String setupOperators = "5. Assign workers for each activity";
     public static String setupPriority = "6. Setup execution priority for each activity";
-    public static final String ControlsDescription = ""
-            + "A: move left\n\n"
-            + "D: move right\n\n"
-            + "W: move forward\n\n"
-            + "S: move backward\n\n"
-            + "Space Bar: jump\n\n"
-            + "Left/Right Arrow Keys: rotate camera\n\n"
-            + "Left-Shift:  select an object\n\n"
-            + "Right-Shift: open/close the dashboard\n\n";
     public static int stationList = -2;
     public static int machineList = -2;
     public static int equipmentList = -3;

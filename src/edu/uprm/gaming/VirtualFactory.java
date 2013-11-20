@@ -1,6 +1,7 @@
 package edu.uprm.gaming;
 
 import com.jme3.app.SimpleApplication;
+import edu.uprm.gaming.utils.Params;
 
 /**
  * Virtual Factory 2.0
@@ -31,6 +32,10 @@ public final class VirtualFactory extends SimpleApplication {
         setDisplayFps(false);
         setDisplayStatView(false);
         // -----------
+        
+        //Move this to a better location in the project
+        Params.gameNarrator = edu.uprm.gaming.NarratorAppState.newInstance(assetManager, guiNode);
         stateManager.attach(new GameEngine()); // start the game
+        
     }
 }
