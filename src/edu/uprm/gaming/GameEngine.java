@@ -1240,6 +1240,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
             flyCam.setMoveSpeed(0);
             Params.flyCamRotationSpeed = flyCam.getRotationSpeed();
             flyCam.setRotationSpeed(0);
+            world.getChild("Beams-Metal").setCullHint(Spatial.CullHint.Always);
         }
         else if (Params.topViewAvailable && topViewEnabled && isDebugCamEnabled) {
             topViewEnabled = false;
@@ -1247,6 +1248,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
             cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
             flyCam.setMoveSpeed(100);
             flyCam.setRotationSpeed(Params.flyCamRotationSpeed);
+            world.getChild("Beams-Metal").setCullHint(Spatial.CullHint.Never);
         }
         
     }
