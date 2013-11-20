@@ -375,6 +375,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
             nifty.gotoScreen("initialMenu");
             System.out.println("DEBUG MODE: Entered to initial menu successfully.");
         }
+        Params.gameNarrator = edu.uprm.gaming.narrator.NarratorAppState.newInstance(assetManager, app.getGuiNode());
         stateManager.attach(Params.gameNarrator);
     }
 

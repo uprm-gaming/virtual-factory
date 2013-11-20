@@ -1,4 +1,4 @@
-package edu.uprm.gaming;
+package edu.uprm.gaming.narrator;
 
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.asset.AssetManager;

@@ -5,7 +5,7 @@
 package edu.uprm.gaming.utils;
 
 import com.jme3.math.Vector3f;
-import edu.uprm.gaming.NarratorAppState;
+import edu.uprm.gaming.narrator.NarratorAppState;
 
 /**
  *
