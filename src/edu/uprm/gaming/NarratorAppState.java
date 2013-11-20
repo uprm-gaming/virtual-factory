@@ -6,6 +6,9 @@ import com.jme3.audio.AudioNode;
 import com.jme3.audio.AudioSource;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
+import com.jme3.font.LineWrapMode;
+import com.jme3.font.Rectangle;
+import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 
@@ -38,8 +41,14 @@ public class NarratorAppState extends AbstractAppState
     {
         BitmapFont narratorTextFont = assetManager.loadFont("Interface/ArialRoundedMTBold.fnt");
         narratorText = new BitmapText(narratorTextFont);
+        narratorText.setLineWrapMode(LineWrapMode.Word);
         narratorText.setSize(narratorTextFont.getCharSet().getRenderedSize());
-        narratorText.move(440, 80, 1);
+        
+        Rectangle r = new Rectangle(325,0, 1280 - 325*2, 200);
+        narratorText.setBox(r);
+        narratorText.setAlignment(BitmapFont.Align.Center);
+        narratorText.move(0, 200, 1);
+        
         guiNode.attachChild(narratorText);
     }
     

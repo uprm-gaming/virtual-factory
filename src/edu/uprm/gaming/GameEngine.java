@@ -445,11 +445,14 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         getGeneralScreenController().showHideDynamicButtons(0);
         getGeneralScreenController().showHideDynamicSubLevelButtons(0);
         
-        
         nifty.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallControl.class).HideWindow();
         nifty.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderControl.class).HideWindow();
         nifty.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogControl.class).showHide();
-          
+         
+        Params.gameNarrator.talk("Press 'T' for a top view of the factory. This is a really long test just to see if the"
+                + " test wraps around and does not continue to the infinite and gets outside our screen."
+                + "Press 'T' for a top view of the factory. This is a really long test just to see if the"
+                + " test wraps around and does not continue to the infinite and gets outside our screen.", 10);
     }
 
     private void LoadElementsToDisplay(GameType gameType) {
