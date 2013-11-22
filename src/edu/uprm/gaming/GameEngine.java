@@ -13,10 +13,13 @@ import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.PhysicsCollisionEvent;
 import com.jme3.bullet.collision.PhysicsCollisionListener;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.MeshCollisionShape;
+import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
+import com.jme3.bullet.control.GhostControl;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResult;
@@ -257,6 +260,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
     private ViewPort viewPort;
     private ViewPort guiViewPort;
     private CharacterControl player;
+    private GhostControl secondFloorSensor;
     
     private boolean forward = false;
     private boolean backward = false;
@@ -505,8 +509,15 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
 
     @Override
     public void update(float tpf) {
+        // TEST Second floor sensor
+        if (executeGame) {
+            if (secondFloorSensor.getOverlappingCount() > 1) // NOTE: getOverlappingCount() has a value of 1 by default
+                System.out.println("Character is on second floor.");
+        }
+        
         if (!isDebugCamEnabled)
             updatePlayerPosition();
+        
         simpleUpdateLocal(); // Legacy code
     }
     
@@ -788,20 +799,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         dlOpposite.setDirection(new Vector3f(2.8f, -2.8f, 2.8f).normalizeLocal());
         rootNode.addLight(dl);
     }
-    
-    /*
-     * Temporary fix for beta testing session.
-     */
-    private void fixTextures() {
-        // Floor
-        shopFloorNode = (Node) world.getChild("ShopBuilding-Floor");
-        int x = 0;
-        Geometry shopFloor = (Geometry) shopFloorNode.getChild("Cube.0061");
-        shopFloor.getMesh().scaleTextureCoordinates(new Vector2f(++x,++x));
-        shopFloor.getMesh().scaleTextureCoordinates(new Vector2f(++x,++x));
-        
-        
-    }
 
     private void createTerrain() {
         E_Terrain tempTerrain = gameData.getMapTerrain();
@@ -812,7 +809,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         world.getChild("Machine vibration Empty").removeFromParent();
         world.setLocalScale(250.0f, 250.0f, 250.0f);
         world.setLocalTranslation(-9.0f, 0.0f, 82.0f);
-        //fixTextures();
         // ----------
         
         /* Factory's Collision Shape */
@@ -822,6 +818,14 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         world.addControl(worldRigid);
         rootNode.attachChild(world);
         bulletAppState.getPhysicsSpace().add(worldRigid);
+        // ----------
+        
+        /* TEST: Adding a sensor to the second floor (see simpleUpdate() method to see it in action) */
+        // ----------
+        secondFloorSensor = new GhostControl(new BoxCollisionShape(new Vector3f(90, 5, 25)));
+        world.getChild("Mesani Floor").addControl(secondFloorSensor);
+        bulletAppState.getPhysicsSpace().add(secondFloorSensor);
+        bulletAppState.setDebugEnabled(true); // set to true so you can see the invisible physics engine
         // ----------
 
         /* First-person Player */
