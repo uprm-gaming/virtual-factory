@@ -1,7 +1,6 @@
 package edu.uprm.gaming;
 
 import com.jme3.app.SimpleApplication;
-import edu.uprm.gaming.utils.Params;
 
 /**
  * Virtual Factory 2.0
