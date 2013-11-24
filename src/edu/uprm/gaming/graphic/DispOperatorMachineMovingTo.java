@@ -95,6 +95,7 @@ public class DispOperatorMachineMovingTo {
             operator.getMotionControl().play();
             operator.setIsMoving(true);
             operator.getMotionPath().addListener(new MotionPathListener() {
+                @Override
                 public void onWayPointReach(MotionEvent motionControl, int wayPointIndex) {
                     operator.setPhysicsLocation(motionControl.getPath().getWayPoint(wayPointIndex));
 //                    operator.setCurrentPathStep(wayPointIndex);

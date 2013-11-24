@@ -1,16 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.uprm.gaming.graphic;
 
-//import edu.uprm.gaming.pathfinding.Mover;
 import edu.uprm.gaming.pathfinding.TileMap;
 import edu.uprm.gaming.utils.Params;
 
 /**
  *
- * @author David
+ * @author David Bengoa
  */
 public class TerrainMap implements TileMap {
     private int[][] tiles = new int[Params.terrainWidth][Params.terrainHeight];
@@ -34,6 +29,7 @@ public class TerrainMap implements TileMap {
         return visited[x][y];
     }
     
+    @Override
     public boolean blocked(int x, int y) {
         // if theres a unit at the location, then it's blocked
         if (getUnit(x, y) != 0) {
@@ -46,18 +42,22 @@ public class TerrainMap implements TileMap {
         return tiles[x][y];
     }
     
+    @Override
     public float getCost(int sx, int sy, int tx, int ty) {
         return costs[sx][sy];
     }
 
+    @Override
     public int getHeightInTiles() {
         return Params.terrainHeight;
     }
 
+    @Override
     public int getWidthInTiles() {
         return Params.terrainWidth;
     }
 
+    @Override
     public void pathFinderVisited(int x, int y) {
         visited[x][y] = true;
     }

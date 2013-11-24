@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.uprm.gaming.graphic;
 
 import com.jme3.cinematic.MotionPath;
@@ -21,7 +17,7 @@ import edu.uprm.gaming.utils.Status;
 
 /**
  *
- * @author David
+ * @author David Bengoa
  */
 public class DispOperatorWalksTo {
     private E_Operator operator;
@@ -112,6 +108,7 @@ public class DispOperatorWalksTo {
             operator.getMotionControl().play();
             operator.setIsMoving(true);
             operator.getMotionPath().addListener(new MotionPathListener() {
+                @Override
                 public void onWayPointReach(MotionEvent motionControl, int wayPointIndex) {
                     operator.setPhysicsLocation(motionControl.getPath().getWayPoint(wayPointIndex));
 //                    operator.setCurrentPathStep(wayPointIndex);
