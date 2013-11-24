@@ -15,7 +15,7 @@ import com.jme3.math.Vector3f;
  */
 public class Path {
 	/** The list of steps building up this path */
-	private ArrayList<Step> steps = new ArrayList<Step>();
+	private ArrayList<Step> steps = new ArrayList<>();
 	
 	/**
 	 * Create an empty path
@@ -101,7 +101,7 @@ public class Path {
 	
 	public List<Vector3f> getAsVec3fList()
 	{
-		List<Vector3f> list = new ArrayList<Vector3f>();
+		List<Vector3f> list = new ArrayList<>();
 		for(Step s : steps)
 		{
 			list.add(new Vector3f(s.x +0.5f, 0.0f, s.y+0.5f));
@@ -154,6 +154,7 @@ public class Path {
 		/**
 		 * @see Object#hashCode()
 		 */
+                @Override
 		public int hashCode() {
 			return x*y;
 		}
@@ -161,6 +162,7 @@ public class Path {
 		/**
 		 * @see Object#equals(Object)
 		 */
+                @Override
 		public boolean equals(Object other) {
 			if (other instanceof Step) {
 				Step o = (Step) other;

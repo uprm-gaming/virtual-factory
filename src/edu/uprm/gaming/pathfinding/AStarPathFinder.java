@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import edu.uprm.gaming.pathfinding.heuristics.ClosestHeuristic;
-import edu.uprm.gaming.pathfinding.heuristics.ClosestSquaredHeuristic;
 import edu.uprm.gaming.utils.Params;
 
 /**
@@ -68,6 +67,7 @@ public class AStarPathFinder implements PathFinder {
 	/**
 	 * @see PathFinder#findPath(Mover, int, int, int, int)
 	 */
+        @Override
 	public Path findPath(int sx, int sy, int tx, int ty) {
             //Modified for GAMING:
             sx += Params.terrainWidthLoc;
@@ -404,6 +404,7 @@ public class AStarPathFinder implements PathFinder {
 		/**
 		 * @see Comparable#compareTo(Object)
 		 */
+                @Override
 		public int compareTo(Object other) {
 			Node o = (Node) other;
 			

@@ -13,6 +13,7 @@ public class ClosestHeuristic implements AStarHeuristic {
 	/**
 	 * @see AStarHeuristic#getCost(TileMap, Mover, int, int, int, int)
 	 */
+        @Override
 	public float getCost(TileMap map, int x, int y, int tx, int ty) {		
 		float dx = tx - x;
 		float dy = ty - y;

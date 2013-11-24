@@ -25,6 +25,7 @@ public class ManhattanHeuristic implements AStarHeuristic {
 	/**
 	 * @see AStarHeuristic#getCost(TileMap, Mover, int, int, int, int)
 	 */
+        @Override
 	public float getCost(TileMap map, int x, int y, int tx,
 			int ty) {
 		return minimumCost * (Math.abs(x-tx) + Math.abs(y-ty));
