@@ -75,7 +75,7 @@ import edu.uprm.gaming.graphic.nifty.MenuScreenController;
 import edu.uprm.gaming.graphic.nifty.NewGame1MenuDisplay;
 import edu.uprm.gaming.graphic.nifty.NewUserMenuDisplay;
 import edu.uprm.gaming.graphic.nifty.OptionsMenuDisplay;
-import edu.uprm.gaming.graphic.nifty.VirtualFactoryGUI;
+import edu.uprm.gaming.graphic.nifty.VirtualFactoryInterface;
 import edu.uprm.gaming.graphic.nifty.controls.DashboardControl;
 import edu.uprm.gaming.graphic.nifty.controls.FlowChartControl;
 import edu.uprm.gaming.graphic.nifty.controls.GameLogControl;
@@ -273,8 +273,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         nifty.registerMusic("credits", "Interface/sound/Loveshadow_-_Almost_Given_Up.ogg");
         
         // register the dialog and credits controls
-        VirtualFactoryGUI.registerStyles(nifty);
-        VirtualFactoryGUI.registerPopups(nifty);
+        VirtualFactoryInterface.registerStyles(nifty);
+        VirtualFactoryInterface.registerPopups(nifty);
 
         DialogPanelControlDefinition.register(nifty);
         InitialMenuDisplay.register(nifty);
@@ -286,12 +286,12 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         LoadGameMenuDisplay.register(nifty);
         OptionsMenuDisplay.register(nifty);
 
-        VirtualFactoryGUI.createIntroScreen(nifty);
-        VirtualFactoryGUI.createMenuScreen(nifty);
-        VirtualFactoryGUI.createLayerScreen(nifty);
+        VirtualFactoryInterface.createIntroScreen(nifty);
+        VirtualFactoryInterface.createMenuScreen(nifty);
+        VirtualFactoryInterface.createLayerScreen(nifty);
         
         if (!Params.DEBUG_ON)
-        	nifty.gotoScreen("start");
+            nifty.gotoScreen("start");
         
         menuScreenC = (MenuScreenController) nifty.getScreen("initialMenu").getScreenController();
         menuScreenC.setGameEngine(this);

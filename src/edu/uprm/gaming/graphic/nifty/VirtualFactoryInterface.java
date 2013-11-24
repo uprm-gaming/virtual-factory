@@ -45,7 +45,7 @@ import edu.uprm.gaming.graphic.nifty.controls.SupplierControl;
 import edu.uprm.gaming.graphic.nifty.controls.UnitLoadControl;
 import edu.uprm.gaming.utils.Params;
 
-final public class VirtualFactoryGUI {
+final public class VirtualFactoryInterface {
     private static String panelBackgroundImage = "Interface/panelBack3.png";
     private static String buttonBackgroundImage = "Textures/button-green.png";
     private static String popupBackgroundImage = "Interface/panelpopup2.png";//"Textures/background_gray.png";
@@ -72,7 +72,7 @@ final public class VirtualFactoryGUI {
     private static int dashboardWidth = 535;
     private static int dashboardHeight = 430;
     
-    private VirtualFactoryGUI() {}
+    private VirtualFactoryInterface() {}
     
     public static Screen createIntroScreen(final Nifty nifty) {
         Screen screen = new ScreenBuilder("start") {
