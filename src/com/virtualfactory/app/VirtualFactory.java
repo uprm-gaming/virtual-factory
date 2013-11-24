@@ -18,8 +18,16 @@ public final class VirtualFactory extends SimpleApplication {
     
     @Override
     public void simpleInitApp() {
+        disableJmonkeyHUD();
+        loadGame();      
+    }
+    
+    private void disableJmonkeyHUD() {
         setDisplayFps(false);
         setDisplayStatView(false);
-        stateManager.attach(new GameEngine()); // start the game       
+    }
+    
+    private void loadGame() {
+        stateManager.attach(new GameEngine());
     }
 }
