@@ -37,7 +37,7 @@ import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.tools.Color;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
-import com.virtualfactory.GameEngine;
+import com.virtualfactory.app.GameEngine;
 import com.virtualfactory.entity.E_Machine;
 import com.virtualfactory.entity.E_Operation;
 import com.virtualfactory.entity.E_Operator;

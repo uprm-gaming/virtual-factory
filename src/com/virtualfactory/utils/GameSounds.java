@@ -6,7 +6,7 @@ package com.virtualfactory.utils;
 
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
-import com.virtualfactory.GameEngine;
+import com.virtualfactory.app.GameEngine;
 import java.util.ArrayList;
 
 /**

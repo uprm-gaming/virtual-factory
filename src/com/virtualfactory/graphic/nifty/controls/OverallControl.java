@@ -20,7 +20,7 @@ import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.nifty.builder.ElementBuilder.Align;
-import com.virtualfactory.GameEngine;
+import com.virtualfactory.app.GameEngine;
 import com.virtualfactory.entity.E_Game;
 import com.virtualfactory.entity.E_Machine;
 import com.virtualfactory.entity.E_Operator;

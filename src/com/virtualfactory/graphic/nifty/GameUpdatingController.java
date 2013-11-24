@@ -13,7 +13,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
-import com.virtualfactory.GameEngine;
+import com.virtualfactory.app.GameEngine;
 import java.util.Properties;
 
 /**

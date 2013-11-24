@@ -27,7 +27,7 @@ import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.virtualfactory.GameEngine;
+import com.virtualfactory.app.GameEngine;
 import java.util.ArrayList;
 import com.jme3.scene.shape.Sphere;
 import java.util.AbstractMap;

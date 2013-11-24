@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 package com.virtualfactory.data;
-import com.virtualfactory.GameEngine;
+import com.virtualfactory.app.GameEngine;
 import com.virtualfactory.data.sqlite.SQLiteConn;
 import com.virtualfactory.data.sqlite.SQLiteUtilities;
 import com.virtualfactory.entity.E_Bucket;

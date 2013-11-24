@@ -4,7 +4,7 @@ import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.MotionPathListener;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.math.Vector3f;
-import com.virtualfactory.GameEngine;
+import com.virtualfactory.app.GameEngine;
 import com.virtualfactory.entity.E_Machine;
 import com.virtualfactory.entity.E_Operator;
 import com.virtualfactory.pathfinding.AStarPathFinder;

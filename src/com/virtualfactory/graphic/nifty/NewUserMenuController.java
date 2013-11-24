@@ -22,7 +22,7 @@ import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
-import com.virtualfactory.GameEngine;
+import com.virtualfactory.app.GameEngine;
 import com.virtualfactory.entity.E_Player;
 import com.virtualfactory.utils.Messages;
 import com.virtualfactory.utils.Params;

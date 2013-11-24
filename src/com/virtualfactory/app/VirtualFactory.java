@@ -1,4 +1,4 @@
-package com.virtualfactory;
+package com.virtualfactory.app;
 
 import com.virtualfactory.utils.ScreenSettings;
 import com.jme3.app.SimpleApplication;

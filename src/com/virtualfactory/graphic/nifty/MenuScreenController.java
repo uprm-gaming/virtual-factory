@@ -15,7 +15,7 @@ import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
-import com.virtualfactory.GameEngine;
+import com.virtualfactory.app.GameEngine;
 import java.util.logging.Logger;
 import de.lessvoid.nifty.controls.Button;
 

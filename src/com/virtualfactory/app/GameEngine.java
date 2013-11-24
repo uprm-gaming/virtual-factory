@@ -1,4 +1,4 @@
-package com.virtualfactory;
+package com.virtualfactory.app;
 
 import com.virtualfactory.data.GameData;
 import com.jme3.animation.AnimChannel;

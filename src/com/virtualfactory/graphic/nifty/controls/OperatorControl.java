@@ -25,7 +25,7 @@ import de.lessvoid.nifty.controls.window.WindowControl;
 import de.lessvoid.nifty.controls.WindowClosedEvent;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.tools.SizeValue;
-import com.virtualfactory.GameEngine;
+import com.virtualfactory.app.GameEngine;
 import com.virtualfactory.entity.E_Game;
 import com.virtualfactory.entity.E_Operator;
 import com.virtualfactory.entity.E_Skill;

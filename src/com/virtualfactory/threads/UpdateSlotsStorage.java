@@ -7,7 +7,7 @@ package com.virtualfactory.threads;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.shape.Box;
-import com.virtualfactory.GameEngine;
+import com.virtualfactory.app.GameEngine;
 import com.virtualfactory.entity.E_Slot;
 import com.virtualfactory.entity.E_Station;
 import com.virtualfactory.utils.Pair;

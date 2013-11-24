@@ -18,7 +18,7 @@ import de.lessvoid.nifty.controls.ListBox.SelectionMode;
 import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.effects.EffectEventId;
-import com.virtualfactory.GameEngine;
+import com.virtualfactory.app.GameEngine;
 import com.virtualfactory.entity.E_Game;
 import com.virtualfactory.utils.GameObjective;
 import com.virtualfactory.utils.GameType;
