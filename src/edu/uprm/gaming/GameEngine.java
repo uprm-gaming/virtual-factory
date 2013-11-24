@@ -820,7 +820,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener, P
         secondFloorSensor = new GhostControl(new BoxCollisionShape(new Vector3f(90, 5, 25)));
         world.getChild("Mesani Floor").addControl(secondFloorSensor);
         bulletAppState.getPhysicsSpace().add(secondFloorSensor);
-        bulletAppState.setDebugEnabled(true); // set to true so you can see the invisible physics engine
+        bulletAppState.setDebugEnabled(false); // set to true so you can see the invisible physics engine
         // ----------
 
         /* First-person Player */

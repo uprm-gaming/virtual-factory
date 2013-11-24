@@ -10,7 +10,7 @@ public final class VirtualFactory extends SimpleApplication {
     public static void main(String[] args) {
         VirtualFactory app = new VirtualFactory();
         app.setSettings(ScreenSettings.generate());
-        app.setShowSettings(true);
+        app.setShowSettings(false);
         app.setPauseOnLostFocus(false);
         app.start(); // calls simpleInitApp()
     }
