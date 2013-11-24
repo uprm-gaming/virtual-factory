@@ -1,5 +1,6 @@
 package edu.uprm.gaming;
 
+import edu.uprm.gaming.utils.ScreenSettings;
 import com.jme3.app.SimpleApplication;
 
 /**

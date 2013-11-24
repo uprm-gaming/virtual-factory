@@ -1,6 +1,7 @@
-package edu.uprm.gaming;
+package edu.uprm.gaming.utils;
 
 import com.jme3.system.AppSettings;
+import edu.uprm.gaming.VirtualFactory;
 import edu.uprm.gaming.utils.Params;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
