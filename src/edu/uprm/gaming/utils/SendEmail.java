@@ -6,7 +6,6 @@ package edu.uprm.gaming.utils;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
-import javax.activation.*;
 /**
  *
  * @author David
@@ -67,6 +66,7 @@ public class SendEmail {
     }
     
     private class SMTPAuthenticator extends javax.mail.Authenticator {
+        @Override
         public PasswordAuthentication getPasswordAuthentication() {
            String username = SMTP_AUTH_USER;
            String password = SMTP_AUTH_PWD;
