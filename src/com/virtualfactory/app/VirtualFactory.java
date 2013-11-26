@@ -30,4 +30,12 @@ public final class VirtualFactory extends SimpleApplication {
     private void loadGame() {
         stateManager.attach(new GameEngine());
     }
+    
+    //Avoids the close delay when pressing the close button.
+    @Override
+    public void destroy() {
+        stop();
+        System.exit(0);
+    }
+
 }
