@@ -25,8 +25,8 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
- *
- * @author David
+ * @author Jose Martinez
+ * [Note: Based on David Bengoa's original game interface for Virtual Factory 1.0]
  */
 public class MainMenuController implements Controller {
     private Screen screen;
@@ -206,11 +206,27 @@ public class MainMenuController implements Controller {
     
     @NiftyEventSubscriber(id="userManualButton_MMD")
     public void onUserManualButtonClicked(final String id, final ButtonClickedEvent event) {
+        //if the game is fullscreen, change the view in order to see the manual 
+        //in the browser
+        if (gameEngine.app.getContext().getSettings().isFullscreen())
+            gameEngine.changeScreenSize();
+        
         gameEngine.updateCursorIcon(1);
         Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
         if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)){
+            String path = "gamingUserManual.html";
             try{
-                File tutorialFile = new File("gamingUserManual.html");
+                if (Params.BUILD_FOR_MAC_APP) {
+                    path = "";
+                    String javaPath = System.getProperty("java.class.path");
+                    int index = javaPath.indexOf(".app/Contents/Java");
+                    for (int i = 0; i < index; i++)
+                        path += javaPath.charAt(i);
+                    
+                    path += ".app/Contents/Resources/gamingUserManual.html";
+                }
+
+                File tutorialFile = new File(path);
                 desktop.browse(tutorialFile.toURI());
             }catch(Exception e){
                 System.out.println("Error opening user manual: " + e.getMessage());
