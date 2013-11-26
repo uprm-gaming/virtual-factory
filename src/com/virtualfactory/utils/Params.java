@@ -29,18 +29,11 @@ public class Params {
             + "Space Bar: jump\n\n"
             + "Left/Right Arrow Keys: rotate camera\n\n"
             + "Left-Shift:  select an object\n\n"
-            + "Right-Shift: open/close the dashboard\n\n";
+            + "Right-Shift: open/close the dashboard\n\n"
+            + "F1: turn on/off the full screen";
     
     //-------Narator state and specs---------
     public static NarratorAppState gameNarrator = null;
-//    private static final String MAPPING_FIRST_MSG = "narrator first Message";
-//    private static final String MAPPING_SECOND_MSG = "narrator second Message";
-//    private static final String MAPPING_THIRD_MSG = "narrator third Message";
-//    
-//    private static final Trigger TRIGGER_FIRST_MSG = new KeyTrigger(KeyInput.KEY_1);
-//    private static final Trigger TRIGGER_SECOND_MSG = new KeyTrigger(KeyInput.KEY_2);
-//    private static final Trigger TRIGGER_THIRD_MSG = new KeyTrigger(KeyInput.KEY_3);
-    
     public static final float SECOND_FLOOR_Y_POS = 57;
     public static long tempTime = 0;
     public static Vector3f oldPosition = new Vector3f(51.68367f, 59.064148f, -292.67755f);
@@ -53,7 +46,10 @@ public class Params {
     public static Vector3f camAxesLeft = null;
     public static Vector3f camAxesUp = null;
     public static Vector3f camAxesDir = null;
-    
+    public static float rotationSpeed = 0.01f;
+    public static float camMaxY = 0.65f;
+    public static float camMinY = -0.65f;
+
     
     
     //-Virtual Factory 1.0 params

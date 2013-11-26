@@ -37,6 +37,7 @@ import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
@@ -52,6 +53,7 @@ import com.jme3.scene.debug.Grid;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Line;
 import com.jme3.scene.shape.Sphere;
+import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import com.virtualfactory.entity.E_Bucket;
@@ -102,6 +104,7 @@ import com.virtualfactory.utils.GameType;
 import com.virtualfactory.utils.ObjectState;
 import com.virtualfactory.utils.Pair;
 import com.virtualfactory.utils.Params;
+import com.virtualfactory.utils.ScreenSettings;
 import com.virtualfactory.utils.Sounds;
 import com.virtualfactory.utils.StationType;
 import com.virtualfactory.utils.Status;
@@ -203,7 +206,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private boolean backward = false;
     private boolean moveLeft = false;
     private boolean moveRight = false;
-    
+    private boolean camUp = false;
+    private boolean camDown = false;
+
     private float playerSpeed = 1.3f;
     
     private Vector3f camDir;
@@ -271,6 +276,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         nifty.loadControlFile("nifty-default-controls.xml");//Interface/NiftyJars/nifty-default-controls/
         nifty.registerSound("intro", "Interface/sound/19546__tobi123__Gong_mf2.wav");
         nifty.registerMusic("credits", "Interface/sound/Loveshadow_-_Almost_Given_Up.ogg");
+//        nifty.setDebugOptionPanelColors(true);
         
         // register the dialog and credits controls
         VirtualFactoryInterface.registerStyles(nifty);
@@ -392,6 +398,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         player.setGravity(Params.playerGravity);
         player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
         app.getCamera().setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
+        flyCam.setRotationSpeed(1.9499999f);
         player.setViewDirection(new Vector3f(0, 0, 1));
         
         if (topViewEnabled) {
@@ -399,14 +406,10 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             isDebugCamEnabled = !isDebugCamEnabled;
             cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
             flyCam.setMoveSpeed(100);
-            flyCam.setRotationSpeed(Params.flyCamRotationSpeed);
         }
         
-        
         Params.gameNarrator.talk("Press 'T' for a top view of the factory. This is a really long test just to see if the"
-                + " test wraps around and does not continue to the infinite and gets outside our screen."
-                + "Press 'T' for a top view of the factory. This is a really long test just to see if the"
-                + " test wraps around and does not continue to the infinite and gets outside our screen.", 10);
+                + " test wraps around and does not continue to the infinite and beyond. Change this with a better intro message in the future.", 15);
     }
 
     private void LoadElementsToDisplay(GameType gameType) {
@@ -469,6 +472,15 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         
         if (moveRight)
             walkDirection.addLocal(camLeft.negate());
+        
+        if (camUp) {
+            rotateCamera(-Params.rotationSpeed, cam.getLeft());
+        }
+        if (camDown) {
+            rotateCamera(Params.rotationSpeed, cam.getLeft());
+
+        }
+
 
         if (executeGame) {
             
@@ -491,6 +503,31 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         }
     }
     
+     private void rotateCamera(float value, Vector3f axis){
+        
+        Matrix3f mat = new Matrix3f();
+        mat.fromAngleNormalAxis(flyCam.getRotationSpeed() * value, axis);
+        
+        Vector3f tempUp = cam.getUp();
+        Vector3f tempLeft = cam.getLeft();
+        Vector3f tempDir = cam.getDirection();
+        
+        mat.mult(tempUp, tempUp);
+        mat.mult(tempLeft, tempLeft);
+        mat.mult(tempDir, tempDir);
+        
+        if (tempDir.getY() > Params.camMaxY ||
+                tempDir.getY() < Params.camMinY)
+            return;
+            
+        Quaternion q = new Quaternion();
+        q.fromAxes(tempLeft, tempUp, tempDir);
+        q.normalizeLocal();
+        
+        cam.setAxes(q);
+    }
+
+    
     private void checkNarratorMessages(Vector3f newPosition) {
         
         if (Params.oldPosition.getY() < Params.SECOND_FLOOR_Y_POS) {
@@ -511,7 +548,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         if (!this.getGeneralScreenController().getPauseStatus() && gameSounds.machineSoundPlaying()) {
             this.gameSounds.pauseSound(Sounds.MachineWorking);
         }
-        inputManager.deleteTrigger("FLYCAM_RotateDrag", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         if (!executeGame) {
             return;
         }
@@ -731,7 +767,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         dlOpposite.setDirection(new Vector3f(2.8f, -2.8f, 2.8f).normalizeLocal());
         rootNode.addLight(dl);
     }
-
+    
     private void createTerrain() {
         E_Terrain tempTerrain = gameData.getMapTerrain();
 
@@ -751,7 +787,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         rootNode.attachChild(world);
         bulletAppState.getPhysicsSpace().add(worldRigid);
         // ----------
-        
+
         /* TEST: Adding a sensor to the second floor (see simpleUpdate() method to see it in action) */
         // ----------
         secondFloorSensor = new GhostControl(new BoxCollisionShape(new Vector3f(90, 5, 25)));
@@ -1057,23 +1093,25 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private void initKeys() {
         inputManager.deleteMapping("FLYCAM_ZoomIn");
         inputManager.deleteMapping("FLYCAM_ZoomOut");
+        inputManager.deleteMapping("FLYCAM_Up");
+        inputManager.deleteMapping("FLYCAM_Down");
         inputManager.deleteTrigger("FLYCAM_Left", new MouseAxisTrigger(MouseInput.AXIS_X, true));
         inputManager.deleteTrigger("FLYCAM_Right", new MouseAxisTrigger(MouseInput.AXIS_X, false));
-        inputManager.deleteTrigger("FLYCAM_Up", new MouseAxisTrigger(MouseInput.AXIS_Y, false));
-        inputManager.deleteTrigger("FLYCAM_Down", new MouseAxisTrigger(MouseInput.AXIS_Y, true));
+        inputManager.deleteTrigger("FLYCAM_RotateDrag", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
 
         inputManager.addMapping("MousePicking", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addListener(actionListener, "MousePicking");
 
         String[] mappings = {"Forward", "Backward", "Left",
-                             "Right", "Jump", "Picking",
-                             "Dashboard Control", "Top View",
+                             "Right", "Cam Up", "Cam Down", "Jump", "Picking",
+                             "Dashboard Control", "Top View", "Screen Size",
                              "Scale Bigger", "Scale Smaller",
-                             "Activate Debug Cam", "debug"};
+                             "Activate Debug Cam", "debug position"};
         
         int[] triggers = {KeyInput.KEY_W, KeyInput.KEY_S, KeyInput.KEY_A, 
-                          KeyInput.KEY_D, KeyInput.KEY_SPACE, KeyInput.KEY_LSHIFT, 
-                          KeyInput.KEY_RSHIFT, KeyInput.KEY_T,
+                          KeyInput.KEY_D, KeyInput.KEY_UP, KeyInput.KEY_DOWN, 
+                          KeyInput.KEY_SPACE, KeyInput.KEY_LSHIFT, 
+                          KeyInput.KEY_RSHIFT, KeyInput.KEY_T, KeyInput.KEY_F1,
                           KeyInput.KEY_ADD, KeyInput.KEY_SUBTRACT,
                           KeyInput.KEY_0, KeyInput.KEY_H, KeyInput.KEY_B,
                           KeyInput.KEY_NUMPAD4, KeyInput.KEY_NUMPAD6,
@@ -1088,9 +1126,12 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
     
     private ActionListener actionListener = new ActionListener() {
-        int x = 0;
         @Override
-        public void onAction(String name, boolean keyPressed, float tpf) {            
+        public void onAction(String name, boolean keyPressed, float tpf) {   
+            
+            if (name.equals("Screen Size") && !keyPressed)
+                changeScreenSize();
+            
             if (!executeGame) {
                 return;
             }
@@ -1120,6 +1161,14 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                     else { if (!forward && !backward && !left) { footstep.stop(); } }
                     break;
                 
+                case "Cam Up":
+                    camUp = keyPressed;
+                    break;
+                
+                case "Cam Down":
+                    camDown = keyPressed;
+                    break;
+                    
                 case "Picking": case "MousePicking":
                     if (!keyPressed)
                         handlePickedObject(name);
@@ -1133,10 +1182,15 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                             System.out.println("Dashboard Control Key Selected.");
                     }
                     break;
-                case "debug":
+                    
+                case "debug position":
                     if (!keyPressed) {
-                        System.out.println("\n\nLa posicion deseada es estaaaaaaaa: " +  cam.getLocation()
-                                + "\nLa direccion deseada es: " + cam.getDirection() + "\nUp: " + cam.getUp()+ "\nLeft: " + cam.getLeft());
+
+//                        System.out.println("\n\nLa posicion deseada es estaaaaaaaa: " +  cam.getLocation()
+//                                + "\nLa direccion deseada es: " + cam.getDirection() + "\nUp: " + cam.getUp()+ "\nLeft: " + cam.getLeft());
+
+                        System.out.println("\n\nLa direccion deseada es: " + cam.getDirection() + "\nUp: " + cam.getUp()
+                                + "\nFrustrum top : " + cam.getFrustumTop());
                     }
                     break;
                     
@@ -1163,6 +1217,18 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         }
     };
     
+    public void changeScreenSize() {
+        AppSettings settings = ScreenSettings.generate();
+        
+        if (app.getContext().getSettings().isFullscreen()) {
+            settings.setFullscreen(false);
+            settings.setResolution(1280, 720);
+        }
+        app.setSettings(settings);
+        app.restart();
+
+    }
+    
     private void handleTopView() {
         
         if (Params.topViewAvailable && !topViewEnabled) {
@@ -1171,9 +1237,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             Params.camAxesLeft = cam.getLeft();
             Params.camAxesUp = cam.getUp();
             Params.camAxesDir = cam.getDirection();
-            cam.setLocation(new Vector3f(60.30007f, 346.47473f, -115.58435f));
-            cam.setAxes(new Vector3f(0.0043751f, 0.0011244118f, 0.9999898f), 
-                    new Vector3f(-0.99920726f, 0.03957534f, 0.004327148f), new Vector3f(-0.039570034f, -0.99921596f, 0.0012966394f));
+            cam.setLocation(new Vector3f(210.75597f, 191.22467f, -111.45984f));
+            cam.setAxes(new Vector3f(0.006238699f, 0.0011283755f, 0.9999799f), 
+                    new Vector3f(-0.7573153f, 0.6530373f, 0.0039878786f), new Vector3f(-0.6530197f, -0.75732493f, 0.004928589f));
             flyCam.setMoveSpeed(0);
             Params.flyCamRotationSpeed = flyCam.getRotationSpeed();
             flyCam.setRotationSpeed(0);
