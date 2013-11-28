@@ -2,7 +2,6 @@ package com.virtualfactory.utils;
 
 import com.jme3.system.AppSettings;
 import com.virtualfactory.app.VirtualFactory;
-import com.virtualfactory.utils.Params;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
