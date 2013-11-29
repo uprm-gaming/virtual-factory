@@ -1,12 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.virtualfactory.nifty;
 
 import com.virtualfactory.nifty.screens.controllers.ForgotYourPasswordController;
-import com.virtualfactory.nifty.screens.controllers.ForgotYourPasswordController;
-import com.virtualfactory.nifty.CommonBuilders;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;

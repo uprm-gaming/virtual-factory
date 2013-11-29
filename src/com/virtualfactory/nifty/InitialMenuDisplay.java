@@ -1,21 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.virtualfactory.nifty;
 
 import com.virtualfactory.nifty.screens.controllers.InitialMenuController;
-import com.virtualfactory.nifty.DialogPanelControlDefinition;
-import com.virtualfactory.nifty.CommonBuilders;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;
-import de.lessvoid.nifty.builder.ImageBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
+
 /**
  *
  * @author David

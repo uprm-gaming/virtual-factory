@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.virtualfactory.nifty.screens.controllers;
 
 import de.lessvoid.nifty.Nifty;
@@ -9,22 +5,16 @@ import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.ButtonClickedEvent;
 import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.TextField;
-import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 import com.virtualfactory.app.GameEngine;
-import com.virtualfactory.entity.E_Player;
-import com.virtualfactory.utils.Messages;
-import com.virtualfactory.utils.Params;
-import com.virtualfactory.utils.SendEmail;
 import java.util.Properties;
 /**
  *
- * @author David
+ * @author Pepe
  */
 public class ControlsController implements Controller {
     private Screen screen;

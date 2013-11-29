@@ -1,13 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.virtualfactory.nifty.screens.controllers;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.ButtonClickedEvent;
-import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -17,7 +12,6 @@ import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.tools.Color;
 import com.virtualfactory.app.GameEngine;
 import java.util.logging.Logger;
-import de.lessvoid.nifty.controls.Button;
 
 /**
  *
