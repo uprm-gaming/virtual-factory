@@ -24,7 +24,7 @@ import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 import com.virtualfactory.app.GameEngine;
 import com.virtualfactory.entity.E_Activity;
-import com.virtualfactory.gui.CommonBuilders;
+import com.virtualfactory.utils.CommonBuilders;
 import com.virtualfactory.utils.Pair;
 import com.virtualfactory.utils.Utils;
 import java.util.ArrayList;

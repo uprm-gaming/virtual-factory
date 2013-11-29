@@ -1,7 +1,7 @@
 package com.virtualfactory.gui;
 
 import com.virtualfactory.gui.ProgressBarController;
-import com.virtualfactory.gui.CommonBuilders;
+import com.virtualfactory.utils.CommonBuilders;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;

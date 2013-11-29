@@ -4,12 +4,10 @@
  */
 package com.virtualfactory.menu.components;
 
-import com.virtualfactory.menu.components.MenuScreenController;
 import com.virtualfactory.gui.MessagesViewConverter_NewGame2;
 import com.virtualfactory.gui.ListBoxMessages_NewGame2;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
-import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.ButtonClickedEvent;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.elements.Element;
@@ -17,14 +15,9 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 import de.lessvoid.nifty.controls.ListBox;
-import de.lessvoid.nifty.controls.ListBox.SelectionMode;
-import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
-import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.effects.EffectEventId;
 import com.virtualfactory.app.GameEngine;
 import com.virtualfactory.entity.E_Game;
-import com.virtualfactory.utils.GameObjective;
-import com.virtualfactory.utils.GameType;
 import java.util.ArrayList;
 import java.util.Properties;
 /**

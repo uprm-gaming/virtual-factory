@@ -4,12 +4,10 @@
  */
 package com.virtualfactory.menu.components;
 
-import com.virtualfactory.menu.components.MenuScreenController;
-import com.virtualfactory.gui.CommonBuilders;
+import com.virtualfactory.utils.CommonBuilders;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.builder.PanelBuilder;
-import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.ButtonClickedEvent;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.DropDown;

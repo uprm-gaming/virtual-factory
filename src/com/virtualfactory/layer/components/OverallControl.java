@@ -27,7 +27,7 @@ import com.virtualfactory.entity.E_Operator;
 import com.virtualfactory.entity.E_Purchase;
 import com.virtualfactory.entity.E_Ship;
 import com.virtualfactory.entity.E_Station;
-import com.virtualfactory.gui.CommonBuilders;
+import com.virtualfactory.utils.CommonBuilders;
 import com.virtualfactory.utils.GameType;
 import com.virtualfactory.utils.Pair;
 import com.virtualfactory.utils.Params;

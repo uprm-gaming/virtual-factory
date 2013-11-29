@@ -71,7 +71,7 @@ import com.virtualfactory.utils.DispOperatorMachineMovingTo;
 import com.virtualfactory.utils.DispOperatorWalksTo;
 import com.virtualfactory.utils.TerrainMap;
 import com.virtualfactory.menu.components.ControlsDisplay;
-import com.virtualfactory.gui.DialogPanelControlDefinition;
+import com.virtualfactory.menu.components.DialogPanelControlDefinition;
 import com.virtualfactory.menu.components.ForgotYourPasswordDisplay;
 import com.virtualfactory.layer.components.GeneralScreenController;
 import com.virtualfactory.menu.components.InitialMenuDisplay;

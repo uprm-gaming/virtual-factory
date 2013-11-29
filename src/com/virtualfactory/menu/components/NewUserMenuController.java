@@ -4,8 +4,7 @@
  */
 package com.virtualfactory.menu.components;
 
-import com.virtualfactory.menu.components.MenuScreenController;
-import com.virtualfactory.gui.CommonBuilders;
+import com.virtualfactory.utils.CommonBuilders;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.builder.PanelBuilder;
@@ -15,7 +14,6 @@ import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.DropDown;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.RadioButton;
-import de.lessvoid.nifty.controls.RadioButtonGroup;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;

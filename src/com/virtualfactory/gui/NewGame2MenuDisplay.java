@@ -5,8 +5,8 @@
 package com.virtualfactory.gui;
 
 import com.virtualfactory.menu.components.NewGame2MenuController;
-import com.virtualfactory.gui.DialogPanelControlDefinition;
-import com.virtualfactory.gui.CommonBuilders;
+import com.virtualfactory.menu.components.DialogPanelControlDefinition;
+import com.virtualfactory.utils.CommonBuilders;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;

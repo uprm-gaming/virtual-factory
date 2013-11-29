@@ -1,4 +1,4 @@
-package com.virtualfactory.gui;
+package com.virtualfactory.utils;
 
 import de.lessvoid.nifty.builder.EffectBuilder;
 import de.lessvoid.nifty.builder.PanelBuilder;

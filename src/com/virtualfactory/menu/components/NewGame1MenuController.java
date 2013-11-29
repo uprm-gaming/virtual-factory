@@ -4,7 +4,6 @@
  */
 package com.virtualfactory.menu.components;
 
-import com.virtualfactory.menu.components.MenuScreenController;
 import com.virtualfactory.gui.MessagesViewConverter_NewGame1;
 import com.virtualfactory.gui.ListBoxMessages_NewGame1;
 import de.lessvoid.nifty.EndNotify;
@@ -19,7 +18,6 @@ import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 import de.lessvoid.nifty.controls.ListBox;
-import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.effects.EffectEventId;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import com.virtualfactory.app.GameEngine;
@@ -28,8 +26,6 @@ import com.virtualfactory.utils.GameStatus;
 import com.virtualfactory.utils.Params;
 import java.util.ArrayList;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /**
  *
  * @author David

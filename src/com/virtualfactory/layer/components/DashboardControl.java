@@ -22,7 +22,7 @@ import com.virtualfactory.app.GameEngine;
 import com.virtualfactory.entity.E_Slot;
 import com.virtualfactory.entity.E_Station;
 import com.virtualfactory.entity.E_TransportStore;
-import com.virtualfactory.gui.CommonBuilders;
+import com.virtualfactory.utils.CommonBuilders;
 import com.virtualfactory.gui.ListBoxMessages_StationList_DB;
 import com.virtualfactory.gui.ListBoxMessages_TransportList_DB;
 import com.virtualfactory.gui.MessagesViewConverter_StationList_DB;

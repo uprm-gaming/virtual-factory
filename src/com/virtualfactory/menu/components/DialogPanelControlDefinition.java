@@ -1,4 +1,4 @@
-package com.virtualfactory.gui;
+package com.virtualfactory.menu.components;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;

@@ -26,7 +26,7 @@ import com.virtualfactory.entity.E_Operator;
 import com.virtualfactory.entity.E_Purchase;
 import com.virtualfactory.entity.E_Station;
 import com.virtualfactory.entity.E_TransportStore;
-import com.virtualfactory.gui.CommonBuilders;
+import com.virtualfactory.utils.CommonBuilders;
 import com.virtualfactory.utils.MessageType;
 import com.virtualfactory.utils.Messages;
 import com.virtualfactory.utils.ObjectState;

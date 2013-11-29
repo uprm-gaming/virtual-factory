@@ -16,7 +16,7 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
 import com.virtualfactory.app.GameEngine;
-import com.virtualfactory.gui.CommonBuilders;
+import com.virtualfactory.utils.CommonBuilders;
 import com.virtualfactory.gui.ListBoxMessages_Log;
 import com.virtualfactory.gui.MessagesViewConverter_Log;
 import com.virtualfactory.utils.MessageType;

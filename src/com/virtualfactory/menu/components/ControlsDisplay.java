@@ -1,6 +1,5 @@
 package com.virtualfactory.menu.components;
 
-import com.virtualfactory.gui.DialogPanelControlDefinition;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;

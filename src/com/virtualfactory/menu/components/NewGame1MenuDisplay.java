@@ -4,10 +4,7 @@
  */
 package com.virtualfactory.menu.components;
 
-import com.virtualfactory.gui.DialogPanelControlDefinition;
-import com.virtualfactory.gui.CommonBuilders;
-import com.virtualfactory.gui.CommonBuilders;
-import com.virtualfactory.gui.DialogPanelControlDefinition;
+import com.virtualfactory.utils.CommonBuilders;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;
@@ -18,8 +15,6 @@ import de.lessvoid.nifty.builder.PanelBuilder;
 import de.lessvoid.nifty.controls.button.builder.ButtonBuilder;
 import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.listbox.builder.ListBoxBuilder;
-import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
-import de.lessvoid.nifty.tools.Color;
 /**
  *
  * @author David

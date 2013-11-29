@@ -30,7 +30,7 @@ import com.virtualfactory.app.GameEngine;
 import com.virtualfactory.entity.E_Activity;
 import com.virtualfactory.entity.E_Game;
 import com.virtualfactory.entity.E_Machine;
-import com.virtualfactory.gui.CommonBuilders;
+import com.virtualfactory.utils.CommonBuilders;
 import com.virtualfactory.strategy.EventStrategy;
 import com.virtualfactory.utils.MachineCategory;
 import com.virtualfactory.utils.MessageType;

@@ -1,25 +1,7 @@
 package com.virtualfactory.layer;
 
-import com.virtualfactory.layer.components.PriorityControl;
-import com.virtualfactory.layer.components.PartControl;
-import com.virtualfactory.layer.components.OrderControl;
-import com.virtualfactory.layer.components.OperatorControl;
-import com.virtualfactory.layer.components.MainMultipleControls;
-import com.virtualfactory.layer.components.FlowChartControl;
-import com.virtualfactory.layer.components.DashboardControl;
-import com.virtualfactory.layer.components.UnitLoadControl;
-import com.virtualfactory.layer.components.GeneralScreenController;
-import com.virtualfactory.layer.components.MachineControl;
-import com.virtualfactory.layer.components.StorageCostControl;
-import com.virtualfactory.layer.components.OverallControl;
-import com.virtualfactory.layer.components.GameSetupControl;
-import com.virtualfactory.layer.components.CharactersControl;
-import com.virtualfactory.layer.components.ActivityControl;
-import com.virtualfactory.layer.components.StorageStationControl;
-import com.virtualfactory.layer.components.SupplierControl;
-import com.virtualfactory.layer.components.GameLogControl;
-import com.virtualfactory.layer.components.AssignOperatorControl;
-import com.virtualfactory.gui.CommonBuilders;
+import com.virtualfactory.layer.components.*;
+import com.virtualfactory.utils.CommonBuilders;
 import com.virtualfactory.utils.Params;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;

@@ -33,7 +33,7 @@ import com.virtualfactory.entity.E_Bucket;
 import com.virtualfactory.entity.E_Part;
 import com.virtualfactory.entity.E_Slot;
 import com.virtualfactory.entity.E_Station;
-import com.virtualfactory.gui.CommonBuilders;
+import com.virtualfactory.utils.CommonBuilders;
 import com.virtualfactory.gui.ListBoxMessages_Bucket;
 import com.virtualfactory.gui.ListBoxMessages_Slot;
 import com.virtualfactory.gui.MessagesViewConverter_Bucket;
