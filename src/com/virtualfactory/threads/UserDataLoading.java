@@ -11,7 +11,7 @@ import com.virtualfactory.data.D_Player;
 import com.virtualfactory.entity.E_Game;
 import com.virtualfactory.entity.E_Player;
 import com.virtualfactory.entity.E_PlayerLog;
-import com.virtualfactory.gui.menu.resources.InitialMenuController;
+import com.virtualfactory.menu.components.InitialMenuController;
 import com.virtualfactory.gui.ProgressBarController;
 import com.virtualfactory.utils.Params;
 import java.util.ArrayList;

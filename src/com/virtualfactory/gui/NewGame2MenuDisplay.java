@@ -4,7 +4,7 @@
  */
 package com.virtualfactory.gui;
 
-import com.virtualfactory.gui.menu.resources.NewGame2MenuController;
+import com.virtualfactory.menu.components.NewGame2MenuController;
 import com.virtualfactory.gui.DialogPanelControlDefinition;
 import com.virtualfactory.gui.CommonBuilders;
 import de.lessvoid.nifty.Nifty;
