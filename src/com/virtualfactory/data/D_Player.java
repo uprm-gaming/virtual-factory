@@ -8,7 +8,7 @@ import com.virtualfactory.data.sqlite.SQLiteUtilities;
 import com.virtualfactory.entity.E_Player;
 import com.virtualfactory.entity.E_PlayerLog;
 import com.virtualfactory.entity.E_ToUpdate;
-import com.virtualfactory.graphic.nifty.ProgressBarController;
+import com.virtualfactory.nifty.screens.controllers.ProgressBarController;
 import com.virtualfactory.utils.Actions;
 import com.virtualfactory.utils.GameTables;
 import com.virtualfactory.utils.Pair;

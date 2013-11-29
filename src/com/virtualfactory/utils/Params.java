@@ -1,16 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.virtualfactory.utils;
 
 import com.jme3.math.Vector3f;
 import com.virtualfactory.narrator.NarratorAppState;
 
-/**
- *
- * @author David
- */
 public class Params {
     
     public static final boolean DEBUG_ON = true;
@@ -37,7 +29,6 @@ public class Params {
     public static final float SECOND_FLOOR_Y_POS = 57;
     public static long tempTime = 0;
     public static Vector3f oldPosition = new Vector3f(51.68367f, 59.064148f, -292.67755f);
-    
     //-------End of Narator state and specs-----
     
     public static boolean topViewAvailable = true;

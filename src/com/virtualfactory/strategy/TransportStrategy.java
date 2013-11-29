@@ -14,7 +14,7 @@ import com.virtualfactory.entity.E_Station;
 import com.virtualfactory.entity.E_TransportStore;
 import com.virtualfactory.exceptions.ExceededCapacityException;
 import com.virtualfactory.exceptions.InsufficientPartsException;
-import com.virtualfactory.graphic.nifty.controls.GameLogControl;
+import com.virtualfactory.nifty.screens.controllers.GameLogControl;
 import com.virtualfactory.threads.StationAnimation;
 import com.virtualfactory.utils.Distributions;
 import com.virtualfactory.utils.MessageType;

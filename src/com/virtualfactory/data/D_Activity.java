@@ -3,7 +3,7 @@ package com.virtualfactory.data;
 import com.virtualfactory.data.sqlite.SQLiteConn;
 import com.virtualfactory.data.sqlite.SQLiteUtilities;
 import com.virtualfactory.entity.E_Activity;
-import com.virtualfactory.graphic.nifty.ProgressBarController;
+import com.virtualfactory.nifty.screens.controllers.ProgressBarController;
 import com.virtualfactory.utils.Actions;
 import com.virtualfactory.utils.Pair;
 import com.virtualfactory.utils.Params;

@@ -1,5 +1,9 @@
 package com.virtualfactory.app;
 
+import com.virtualfactory.nifty.screens.LayerScreen;
+import com.virtualfactory.nifty.screens.ScreenManager;
+import com.virtualfactory.nifty.screens.IntroScreen;
+import com.virtualfactory.nifty.screens.MenuScreen;
 import com.virtualfactory.data.GameData;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
@@ -63,31 +67,30 @@ import com.virtualfactory.entity.E_Operator;
 import com.virtualfactory.entity.E_Station;
 import com.virtualfactory.entity.E_Terrain;
 import com.virtualfactory.entity.E_TerrainReserved;
-import com.virtualfactory.graphic.DispOperatorMachineMovingTo;
-import com.virtualfactory.graphic.DispOperatorWalksTo;
-import com.virtualfactory.graphic.TerrainMap;
-import com.virtualfactory.graphic.nifty.ControlsDisplay;
-import com.virtualfactory.graphic.nifty.DialogPanelControlDefinition;
-import com.virtualfactory.graphic.nifty.ForgotYourPasswordDisplay;
-import com.virtualfactory.graphic.nifty.GeneralScreenController;
-import com.virtualfactory.graphic.nifty.InitialMenuDisplay;
-import com.virtualfactory.graphic.nifty.LoadGameMenuDisplay;
-import com.virtualfactory.graphic.nifty.MainMenuDisplay;
-import com.virtualfactory.graphic.nifty.MenuScreenController;
-import com.virtualfactory.graphic.nifty.NewGame1MenuDisplay;
-import com.virtualfactory.graphic.nifty.NewUserMenuDisplay;
-import com.virtualfactory.graphic.nifty.OptionsMenuDisplay;
-import com.virtualfactory.graphic.nifty.VirtualFactoryInterface;
-import com.virtualfactory.graphic.nifty.controls.DashboardControl;
-import com.virtualfactory.graphic.nifty.controls.FlowChartControl;
-import com.virtualfactory.graphic.nifty.controls.GameLogControl;
-import com.virtualfactory.graphic.nifty.controls.GameSetupControl;
-import com.virtualfactory.graphic.nifty.controls.MachineControl;
-import com.virtualfactory.graphic.nifty.controls.OperatorControl;
-import com.virtualfactory.graphic.nifty.controls.OrderControl;
-import com.virtualfactory.graphic.nifty.controls.OverallControl;
-import com.virtualfactory.graphic.nifty.controls.PartControl;
-import com.virtualfactory.graphic.nifty.controls.StorageStationControl;
+import com.virtualfactory.utils.DispOperatorMachineMovingTo;
+import com.virtualfactory.utils.DispOperatorWalksTo;
+import com.virtualfactory.utils.TerrainMap;
+import com.virtualfactory.nifty.ControlsDisplay;
+import com.virtualfactory.nifty.DialogPanelControlDefinition;
+import com.virtualfactory.nifty.ForgotYourPasswordDisplay;
+import com.virtualfactory.nifty.screens.controllers.GeneralScreenController;
+import com.virtualfactory.nifty.InitialMenuDisplay;
+import com.virtualfactory.nifty.LoadGameMenuDisplay;
+import com.virtualfactory.nifty.MainMenuDisplay;
+import com.virtualfactory.nifty.screens.controllers.MenuScreenController;
+import com.virtualfactory.nifty.NewGame1MenuDisplay;
+import com.virtualfactory.nifty.NewUserMenuDisplay;
+import com.virtualfactory.nifty.OptionsMenuDisplay;
+import com.virtualfactory.nifty.screens.controllers.DashboardControl;
+import com.virtualfactory.nifty.screens.controllers.FlowChartControl;
+import com.virtualfactory.nifty.screens.controllers.GameLogControl;
+import com.virtualfactory.nifty.screens.controllers.GameSetupControl;
+import com.virtualfactory.nifty.screens.controllers.MachineControl;
+import com.virtualfactory.nifty.screens.controllers.OperatorControl;
+import com.virtualfactory.nifty.screens.controllers.OrderControl;
+import com.virtualfactory.nifty.screens.controllers.OverallControl;
+import com.virtualfactory.nifty.screens.controllers.PartControl;
+import com.virtualfactory.nifty.screens.controllers.StorageStationControl;
 import com.virtualfactory.pathfinding.Path;
 import com.virtualfactory.pathfinding.Path.Step;
 import com.virtualfactory.simpack.LinkedListFutureEventList;
@@ -279,8 +282,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 //        nifty.setDebugOptionPanelColors(true);
         
         // register the dialog and credits controls
-        VirtualFactoryInterface.registerStyles(nifty);
-        VirtualFactoryInterface.registerPopups(nifty);
+        ScreenManager.registerStyles(nifty);
+        ScreenManager.registerPopups(nifty);
 
         DialogPanelControlDefinition.register(nifty);
         InitialMenuDisplay.register(nifty);
@@ -292,9 +295,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         LoadGameMenuDisplay.register(nifty);
         OptionsMenuDisplay.register(nifty);
 
-        VirtualFactoryInterface.createIntroScreen(nifty);
-        VirtualFactoryInterface.createMenuScreen(nifty);
-        VirtualFactoryInterface.createLayerScreen(nifty);
+        IntroScreen.build(nifty);
+        MenuScreen.build(nifty);
+        LayerScreen.build(nifty);
         
         if (!Params.DEBUG_ON)
             nifty.gotoScreen("start");
