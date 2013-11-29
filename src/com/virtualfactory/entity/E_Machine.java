@@ -17,7 +17,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
 import com.virtualfactory.app.GameEngine;
-import com.virtualfactory.nifty.screens.controllers.GameLogControl;
+import com.virtualfactory.gui.layer.resources.GameLogControl;
 import com.virtualfactory.threads.MachineAnimation;
 import com.virtualfactory.utils.Colors;
 import com.virtualfactory.utils.Distributions;

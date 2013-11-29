@@ -6,7 +6,7 @@ package com.virtualfactory.data;
 import com.virtualfactory.data.sqlite.SQLiteConn;
 import com.virtualfactory.data.sqlite.SQLiteUtilities;
 import com.virtualfactory.entity.E_Part;
-import com.virtualfactory.nifty.screens.controllers.ProgressBarController;
+import com.virtualfactory.gui.ProgressBarController;
 import com.virtualfactory.utils.Actions;
 import com.virtualfactory.utils.Owner;
 import com.virtualfactory.utils.Pair;
