@@ -21,7 +21,7 @@ final public class MenuScreen {
     
     private MenuScreen() {}
     
-    public static Screen build(final Nifty nifty) {
+    public static void build(final Nifty nifty) {
         if (isScreenAlreadyBuilt)
             throw new UnsupportedOperationException("Menu Screen has already been built.");
         
@@ -56,6 +56,5 @@ final public class MenuScreen {
         }.build(nifty);
         
         isScreenAlreadyBuilt = true;
-        return screen;
     }
 }

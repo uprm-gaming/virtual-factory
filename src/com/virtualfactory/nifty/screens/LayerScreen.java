@@ -72,7 +72,7 @@ final public class LayerScreen {
     
     private LayerScreen() {}
     
-    public static Screen build(final Nifty nifty) {
+    public static void build(final Nifty nifty) {
         if (isScreenAlreadyBuilt)
             throw new UnsupportedOperationException("Layer Screen has already been built.");
         
@@ -4491,6 +4491,5 @@ final public class LayerScreen {
         }.build(nifty);
         
         isScreenAlreadyBuilt = true;
-        return screen;
     }
 }

@@ -14,7 +14,7 @@ final public class IntroScreen {
     
     private IntroScreen() {}
     
-    public static Screen build(final Nifty nifty) {
+    public static void build(final Nifty nifty) {
         if (isScreenAlreadyBuilt)
             throw new UnsupportedOperationException("Intro Screen has already been built.");
         
@@ -143,6 +143,5 @@ final public class IntroScreen {
         }.build(nifty);
         
         isScreenAlreadyBuilt = true;
-        return screen;
     }
 }
