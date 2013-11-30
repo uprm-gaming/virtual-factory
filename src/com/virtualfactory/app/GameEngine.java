@@ -120,12 +120,6 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Game Engine 2.0
- * @author Abner Coimbre
- * @author Jose Martinez
- * [Note: Based on David Bengoa's original game engine for Virtual Factory 1.0]
- */
 public class GameEngine extends AbstractAppState implements AnimEventListener {
     
     protected BulletAppState bulletAppState;
