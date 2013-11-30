@@ -136,7 +136,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private ArrayList<StationAnimation> arrStationAnimations;
     private TerrainMap terrainMap;
     private NiftyJmeDisplay niftyDisplay;
-    private Nifty nifty;
+    private Nifty niftyGUI;
     private Status currentSystemStatus;
     private double currentSystemTime;
     private long currentTempSystemTime;
@@ -235,38 +235,38 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         //screens previous the game - START NIFTY
         executeGame = false;
         niftyDisplay = new NiftyJmeDisplay(assetManager, inputManager, app.getAudioRenderer(), guiViewPort);
-        nifty = niftyDisplay.getNifty();
         guiViewPort.addProcessor(niftyDisplay);
-        nifty.loadStyleFile("Interface/NiftyJars/nifty-style-black/nifty-default-styles.xml");
-        nifty.loadControlFile("nifty-default-controls.xml");//Interface/NiftyJars/nifty-default-controls/
-        nifty.registerSound("intro", "Interface/sound/19546__tobi123__Gong_mf2.wav");
-        nifty.registerMusic("credits", "Interface/sound/Loveshadow_-_Almost_Given_Up.ogg");
+        niftyGUI = niftyDisplay.getNifty();
+        niftyGUI.loadStyleFile("Interface/NiftyJars/nifty-style-black/nifty-default-styles.xml");
+        niftyGUI.loadControlFile("nifty-default-controls.xml");//Interface/NiftyJars/nifty-default-controls/
+        niftyGUI.registerSound("intro", "Interface/sound/19546__tobi123__Gong_mf2.wav");
+        niftyGUI.registerMusic("credits", "Interface/sound/Loveshadow_-_Almost_Given_Up.ogg");
 //        nifty.setDebugOptionPanelColors(true);
         
         // register the dialog and credits controls
-        PopupsAndCreditsManager.registerStyles(nifty);
-        PopupsAndCreditsManager.registerPopups(nifty);
+        PopupsAndCreditsManager.registerStyles(niftyGUI);
+        PopupsAndCreditsManager.registerPopups(niftyGUI);
 
-        DialogPanelControlDefinition.register(nifty);
-        InitialMenuDisplay.register(nifty);
-        ForgotYourPasswordDisplay.register(nifty);
-        MainMenuDisplay.register(nifty);
-        ControlsDisplay.register(nifty);
-        NewUserMenuDisplay.register(nifty);
-        NewGame1MenuDisplay.register(nifty);
-        LoadGameMenuDisplay.register(nifty);
-        OptionsMenuDisplay.register(nifty);
+        DialogPanelControlDefinition.register(niftyGUI);
+        InitialMenuDisplay.register(niftyGUI);
+        ForgotYourPasswordDisplay.register(niftyGUI);
+        MainMenuDisplay.register(niftyGUI);
+        ControlsDisplay.register(niftyGUI);
+        NewUserMenuDisplay.register(niftyGUI);
+        NewGame1MenuDisplay.register(niftyGUI);
+        LoadGameMenuDisplay.register(niftyGUI);
+        OptionsMenuDisplay.register(niftyGUI);
 
-        IntroScreen.build(nifty);
-        MenuScreen.build(nifty);
-        LayerScreen.build(nifty);
+        IntroScreen.build(niftyGUI);
+        MenuScreen.build(niftyGUI);
+        LayerScreen.build(niftyGUI);
         
         if (!Params.DEBUG_ON)
-            nifty.gotoScreen("start");
+            niftyGUI.gotoScreen("start");
         
-        menuScreenC = (MenuScreenController) nifty.getScreen("initialMenu").getScreenController();
+        menuScreenC = (MenuScreenController) niftyGUI.getScreen("initialMenu").getScreenController();
         menuScreenC.setGameEngine(this);
-        generalScreenController = (LayerScreenController) nifty.getScreen("layerScreen").getScreenController();
+        generalScreenController = (LayerScreenController) niftyGUI.getScreen("layerScreen").getScreenController();
         generalScreenController.setGameEngine(this);
         inputManager.setCursorVisible(true);
         cursors = new ArrayList<>();
@@ -280,7 +280,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
         System.out.println("--------End-of-SimpleAppInit-------");
         if (Params.DEBUG_ON) {
-            nifty.gotoScreen("initialMenu");
+            niftyGUI.gotoScreen("initialMenu");
             System.out.println("DEBUG MODE: Entered to initial menu successfully.");
         }
         Params.gameNarrator = com.virtualfactory.narrator.NarratorAppState.newInstance(assetManager, app.getGuiNode());
@@ -332,16 +332,16 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         //load extra data
         gameData.updateTimeOrders();
         //show static windows
-        nifty.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).loadWindowControl(this, 0, null);
-        nifty.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).loadWindowControl(this, 0, null);
-        nifty.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).loadWindowControl(this, 0, null);
-        nifty.getScreen("layerScreen").findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).loadWindowControl(this, -1, null);// -1 because we dont want it to be visible
-        nifty.getScreen("layerScreen").findElementByName("winFCC_Element").getControl(FlowChartScreenController.class).loadWindowControl(this, -1, null);
-        nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardScreenController.class).loadWindowControl(this, 0, null);
+        niftyGUI.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).loadWindowControl(this, 0, null);
+        niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).loadWindowControl(this, 0, null);
+        niftyGUI.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).loadWindowControl(this, 0, null);
+        niftyGUI.getScreen("layerScreen").findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).loadWindowControl(this, -1, null); // -1 because we dont want it to be visible
+        niftyGUI.getScreen("layerScreen").findElementByName("winFCC_Element").getControl(FlowChartScreenController.class).loadWindowControl(this, -1, null);
+        niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardScreenController.class).loadWindowControl(this, 0, null);
         //clean lists
-        nifty.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).cleanOrders();
-        nifty.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).cleanMessages();
-        nifty.getScreen("layerScreen").findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).updateAllStepStatus(false);
+        niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).cleanOrders();
+        niftyGUI.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).cleanMessages();
+        niftyGUI.getScreen("layerScreen").findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).updateAllStepStatus(false);
         getGeneralScreenController().updateQuantityCurrentMoney(gameData.getCurrentMoney());
         inputManager.setMouseCursor(cursors.get(0));
         getGeneralScreenController().forcePauseGame();
@@ -354,9 +354,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         getGeneralScreenController().showHideDynamicButtons(0);
         getGeneralScreenController().showHideDynamicSubLevelButtons(0);
         
-        nifty.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).HideWindow();
-        nifty.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).HideWindow();
-        nifty.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).showHide();
+        niftyGUI.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).HideWindow();
+        niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).HideWindow();
+        niftyGUI.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).showHide();
         
         player.setJumpSpeed(45);
         player.setFallSpeed(120);
@@ -547,7 +547,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                 manageEvents.executeEvent();
                 //it happens each TIME-UNIT
                 Sim.schedule(new SimEvent(Sim.time() + getGeneralScreenController().getTimeFactor(), Params.startEvent));
-                nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardScreenController.class).updateQuantityPeopleStatus(gameData.getNoUserOperator(Status.Busy), gameData.getNoUserOperator(Status.Idle));
+                niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardScreenController.class).updateQuantityPeopleStatus(gameData.getNoUserOperator(Status.Busy), gameData.getNoUserOperator(Status.Idle));
             } else {
                 manageEvents.setStrategy(nextEvent.getToken());
                 manageEvents.releaseResourcesEvent();
@@ -558,13 +558,13 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
 
     private void manageDashboard() {
-        nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardScreenController.class).updateData();
+        niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardScreenController.class).updateData();
         if (showHideDashboard) {
             if (isDashboardVisible) {
-                nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").hide();
+                niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").hide();
                 isDashboardVisible = false;
             } else {
-                nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").show();
+                niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").show();
                 isDashboardVisible = true;
 
             }
@@ -589,13 +589,13 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
     private void showPopupAttemptingToCloseGame() {
         getGeneralScreenController().pauseGame();
-        Element exitPopup = nifty.createPopup("gameClosing");
-        nifty.showPopup(nifty.getCurrentScreen(), exitPopup.getId(), null);
-        nifty.getCurrentScreen().processAddAndRemoveLayerElements();
+        Element exitPopup = niftyGUI.createPopup("gameClosing");
+        niftyGUI.showPopup(niftyGUI.getCurrentScreen(), exitPopup.getId(), null);
+        niftyGUI.getCurrentScreen().processAddAndRemoveLayerElements();
         closeGame = new CloseGame();
         closeGame.setGameEngine(this);
-        closeGame.setScreen(nifty.getCurrentScreen());
-        closeGame.setNifty(nifty);
+        closeGame.setScreen(niftyGUI.getCurrentScreen());
+        closeGame.setNifty(niftyGUI);
         closeGame.setExitPopup(exitPopup);
         closeGame.start();
     }
@@ -1271,20 +1271,20 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         getGeneralScreenController().showHideDynamicButtons(0);
         getGeneralScreenController().showHideDynamicSubLevelButtons(0);
         if (winControl.contains(TypeElements.OPERATOR.toString())) {
-            nifty.getScreen("layerScreen").findElementByName("winOC_Element").getControl(OperatorScreenController.class).loadWindowControl(this, Integer.valueOf(winControl.replace(TypeElements.OPERATOR.toString(), "")), positionWC);
+            niftyGUI.getScreen("layerScreen").findElementByName("winOC_Element").getControl(OperatorScreenController.class).loadWindowControl(this, Integer.valueOf(winControl.replace(TypeElements.OPERATOR.toString(), "")), positionWC);
             getGeneralScreenController().setCurrentOptionselected("windowOperator");
         } else if (winControl.contains(TypeElements.PART.toString())) {
-            nifty.getScreen("layerScreen").findElementByName("winPC_Element").getControl(PartScreenController.class).loadWindowControl(this, Integer.valueOf(winControl.split("_")[winControl.split("_").length - 1].replace(TypeElements.PART.toString(), "")), positionWC);
+            niftyGUI.getScreen("layerScreen").findElementByName("winPC_Element").getControl(PartScreenController.class).loadWindowControl(this, Integer.valueOf(winControl.split("_")[winControl.split("_").length - 1].replace(TypeElements.PART.toString(), "")), positionWC);
             getGeneralScreenController().setCurrentOptionselected("windowPart");
         } else if (winControl.contains(TypeElements.STATION.toString()) && !winControl.contains(TypeElements.BUCKET.toString())) {
             E_Station tempStation = getGameData().getMapUserStation().get(Integer.valueOf(winControl.replace(TypeElements.STATION.toString(), "")));
             if (!tempStation.getStationType().equals(StationType.MachineZone) && !tempStation.getStationType().equals(StationType.StaffZone)) {
-                nifty.getScreen("layerScreen").findElementByName("winSSC_Element").getControl(StorageStationScreenController.class).loadWindowControl(this, Integer.valueOf(winControl.replace(TypeElements.STATION.toString(), "")), positionWC);
+                niftyGUI.getScreen("layerScreen").findElementByName("winSSC_Element").getControl(StorageStationScreenController.class).loadWindowControl(this, Integer.valueOf(winControl.replace(TypeElements.STATION.toString(), "")), positionWC);
                 getGeneralScreenController().setCurrentOptionselected("windowStorageStation");
             }
 
         } else if (winControl.contains(TypeElements.MACHINE.toString())) {
-            nifty.getScreen("layerScreen").findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(this, Integer.valueOf(winControl.replace(TypeElements.MACHINE.toString(), "")), positionWC);
+            niftyGUI.getScreen("layerScreen").findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(this, Integer.valueOf(winControl.replace(TypeElements.MACHINE.toString(), "")), positionWC);
             getGeneralScreenController().setCurrentOptionselected("windowMachine");
         }
     }
@@ -1422,11 +1422,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
 
     public Nifty getNifty() {
-        return nifty;
+        return niftyGUI;
     }
 
     public void setNifty(Nifty nifty) {
-        this.nifty = nifty;
+        this.niftyGUI = nifty;
     }
 
     public int getInitialGameId() {
