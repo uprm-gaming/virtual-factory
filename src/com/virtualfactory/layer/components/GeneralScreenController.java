@@ -12,7 +12,6 @@ package com.virtualfactory.layer.components;
 
 //import com.sun.org.apache.bcel.internal.generic.IFEQ;
 import com.virtualfactory.menu.components.MenuScreenController;
-import com.virtualfactory.gui.ListBoxMessages;
 import com.virtualfactory.utils.CommonBuilders;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;

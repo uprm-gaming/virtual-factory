@@ -2,8 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.virtualfactory.gui;
-
+package com.virtualfactory.layer.components;
 import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
@@ -11,12 +10,12 @@ import de.lessvoid.nifty.elements.render.TextRenderer;
  *
  * @author David
  */
-public class MessagesViewConverter_StationList_DB implements ListBoxViewConverter<ListBoxMessages_StationList_DB>{
-    private static final String CHAT_LINE_STATIONNAME = "#station";
+public class MessagesViewConverter_TransportList_DB implements ListBoxViewConverter<ListBoxMessages_TransportList_DB>{
+    private static final String CHAT_LINE_STATIONNAME = "#fromTo";
     private static final String CHAT_LINE_PARTNAME = "#part";
-    private static final String CHAT_LINE_QUANTITY = "#quantity";
+    private static final String CHAT_LINE_QUANTITY = "#required";
     
-    public void display(Element listBoxItem, ListBoxMessages_StationList_DB item) {
+    public void display(Element listBoxItem, ListBoxMessages_TransportList_DB item) {
         final Element station = listBoxItem.findElementByName(CHAT_LINE_STATIONNAME);
         if (station == null)   return;
         final TextRenderer stationRenderer = station.getRenderer(TextRenderer.class);
@@ -27,7 +26,7 @@ public class MessagesViewConverter_StationList_DB implements ListBoxViewConverte
         if (quantity == null)   return;
         final TextRenderer quantityRenderer = quantity.getRenderer(TextRenderer.class);
         if (item != null) {
-            stationRenderer.setText(item.getStationName());
+            stationRenderer.setText(item.getFromToName());
             partRenderer.setText(item.getPartName());
             quantityRenderer.setText(item.getQuantity());
         } else {
@@ -37,7 +36,7 @@ public class MessagesViewConverter_StationList_DB implements ListBoxViewConverte
         }
     }
 
-    public int getWidth(Element listBoxItem, ListBoxMessages_StationList_DB item) {
+    public int getWidth(Element listBoxItem, ListBoxMessages_TransportList_DB item) {
         final Element station = listBoxItem.findElementByName(CHAT_LINE_STATIONNAME);
         if (station == null)   return 0;
         final TextRenderer stationRenderer = station.getRenderer(TextRenderer.class);
@@ -47,8 +46,9 @@ public class MessagesViewConverter_StationList_DB implements ListBoxViewConverte
         final Element quantity = listBoxItem.findElementByName(CHAT_LINE_QUANTITY);
         if (quantity == null)   return 0;
         final TextRenderer quantityRenderer = quantity.getRenderer(TextRenderer.class);
-        return ((stationRenderer.getFont() == null) ? 0 : stationRenderer.getFont().getWidth(item.getStationName()))
+        return ((stationRenderer.getFont() == null) ? 0 : stationRenderer.getFont().getWidth(item.getFromToName()))
                 + ((partRenderer.getFont() == null) ? 0 : partRenderer.getFont().getWidth(item.getPartName()))
                 + ((quantityRenderer.getFont() == null) ? 0 : quantityRenderer.getFont().getWidth(item.getQuantity()));
     }
+    
 }

@@ -24,8 +24,6 @@ import com.virtualfactory.app.GameEngine;
 import com.virtualfactory.entity.E_Game;
 import com.virtualfactory.entity.E_Order;
 import com.virtualfactory.menu.components.MenuScreenController;
-import com.virtualfactory.gui.ListBoxMessages_Order;
-import com.virtualfactory.gui.MessagesViewConverter_Order;
 import com.virtualfactory.menu.components.NewGame1MenuController;
 import com.virtualfactory.menu.components.NewGame1MenuController;
 import com.virtualfactory.utils.GameStatus;

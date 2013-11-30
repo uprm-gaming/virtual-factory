@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.virtualfactory.gui;
+package com.virtualfactory.menu.components;
 
-import com.virtualfactory.gui.ListBoxMessages_NewGame1;
+import com.virtualfactory.menu.components.ListBoxMessages_NewGame1;
 import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.ImageRenderer;

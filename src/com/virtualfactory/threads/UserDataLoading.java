@@ -12,7 +12,7 @@ import com.virtualfactory.entity.E_Game;
 import com.virtualfactory.entity.E_Player;
 import com.virtualfactory.entity.E_PlayerLog;
 import com.virtualfactory.menu.components.InitialMenuController;
-import com.virtualfactory.gui.ProgressBarController;
+import com.virtualfactory.ui.ProgressBarController;
 import com.virtualfactory.utils.Params;
 import java.util.ArrayList;
 import java.util.Map;

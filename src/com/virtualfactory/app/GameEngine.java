@@ -1,7 +1,7 @@
 package com.virtualfactory.app;
 
 import com.virtualfactory.layer.LayerScreen;
-import com.virtualfactory.gui.ScreenManager;
+import com.virtualfactory.ui.ScreenManager;
 import com.virtualfactory.intro.IntroScreen;
 import com.virtualfactory.menu.MenuScreen;
 import com.virtualfactory.data.GameData;

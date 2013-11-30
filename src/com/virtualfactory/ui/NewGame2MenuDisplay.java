@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.virtualfactory.gui;
+package com.virtualfactory.ui;
 
 import com.virtualfactory.menu.components.NewGame2MenuController;
 import com.virtualfactory.menu.components.DialogPanelControlDefinition;

@@ -2,19 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.virtualfactory.gui;
+package com.virtualfactory.ui;
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.Button;
 import de.lessvoid.nifty.controls.Controller;
-import de.lessvoid.nifty.controls.Label;
-import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
-import com.virtualfactory.app.GameEngine;
 import java.util.Properties;
 /**
  *

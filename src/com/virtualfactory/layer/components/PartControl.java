@@ -22,8 +22,6 @@ import com.virtualfactory.app.GameEngine;
 import com.virtualfactory.entity.E_AssemblyDetails;
 import com.virtualfactory.entity.E_Game;
 import com.virtualfactory.entity.E_Part;
-import com.virtualfactory.gui.ListBoxMessages_Assembly;
-import com.virtualfactory.gui.MessagesViewConverter_Assembly;
 import com.virtualfactory.utils.Pair;
 import com.virtualfactory.utils.Params;
 import java.util.ArrayList;

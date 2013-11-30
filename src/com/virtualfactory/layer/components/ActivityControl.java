@@ -47,8 +47,6 @@ import com.virtualfactory.entity.E_Skill;
 import com.virtualfactory.entity.E_Supplier;
 import com.virtualfactory.entity.E_TransportStore;
 import com.virtualfactory.utils.CommonBuilders;
-import com.virtualfactory.gui.ListBoxMessages_Assembly;
-import com.virtualfactory.gui.MessagesViewConverter_Assembly;
 import com.virtualfactory.utils.Pair;
 import com.virtualfactory.utils.TypeActivity;
 import com.virtualfactory.utils.Utils;

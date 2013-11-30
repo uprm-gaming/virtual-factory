@@ -5,14 +5,12 @@
 package com.virtualfactory.layer.components;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.builder.TextBuilder;
 import de.lessvoid.nifty.controls.Controller;
 import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.window.WindowControl;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.ImageRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
@@ -23,10 +21,6 @@ import com.virtualfactory.entity.E_Slot;
 import com.virtualfactory.entity.E_Station;
 import com.virtualfactory.entity.E_TransportStore;
 import com.virtualfactory.utils.CommonBuilders;
-import com.virtualfactory.gui.ListBoxMessages_StationList_DB;
-import com.virtualfactory.gui.ListBoxMessages_TransportList_DB;
-import com.virtualfactory.gui.MessagesViewConverter_StationList_DB;
-import com.virtualfactory.gui.MessagesViewConverter_TransportList_DB;
 import com.virtualfactory.utils.Pair;
 import com.virtualfactory.utils.SlotStatus;
 import com.virtualfactory.utils.StationType;

@@ -4,8 +4,6 @@
  */
 package com.virtualfactory.menu.components;
 
-import com.virtualfactory.gui.MessagesViewConverter_NewGame1;
-import com.virtualfactory.gui.ListBoxMessages_NewGame1;
 import de.lessvoid.nifty.EndNotify;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;

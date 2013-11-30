@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.virtualfactory.gui;
+package com.virtualfactory.ui;
 
 import de.lessvoid.nifty.controls.ListBox.ListBoxViewConverter;
 import de.lessvoid.nifty.elements.Element;
