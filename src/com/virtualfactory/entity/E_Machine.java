@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.virtualfactory.entity;
 
 import com.jme3.animation.AnimChannel;
@@ -10,14 +6,13 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.events.MotionTrack;
 import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
 import com.virtualfactory.app.GameEngine;
-import com.virtualfactory.layer.components.GameLogControl;
+import com.virtualfactory.screen.layer.components.GameLogScreenController;
 import com.virtualfactory.threads.MachineAnimation;
 import com.virtualfactory.utils.Colors;
 import com.virtualfactory.utils.Distributions;
@@ -32,6 +27,7 @@ import com.virtualfactory.utils.Sounds;
 import com.virtualfactory.utils.Status;
 import com.virtualfactory.utils.TypeElements;
 import com.virtualfactory.utils.Utils;
+
 /**
  *
  * @author David
@@ -1067,9 +1063,9 @@ public class E_Machine{
                 setCurrentWorkingTime(-getRepairTimeCalculated());
                 setStatus(Status.Broken);
                 if (getMachineCategory().equals(MachineCategory.Operation))
-                    GameLogControl.addMessage(MessageType.Notification, Messages.machineEquipmentBroken.replace(Messages.wildCard, "Machine").replace(Messages.wildCard2, String.valueOf(getIdMachine())));
+                    GameLogScreenController.addMessage(MessageType.Notification, Messages.machineEquipmentBroken.replace(Messages.wildCard, "Machine").replace(Messages.wildCard2, String.valueOf(getIdMachine())));
                 else
-                    GameLogControl.addMessage(MessageType.Notification, Messages.machineEquipmentBroken.replace(Messages.wildCard, "Equipment").replace(Messages.wildCard2, String.valueOf(getIdMachine())));
+                    GameLogScreenController.addMessage(MessageType.Notification, Messages.machineEquipmentBroken.replace(Messages.wildCard, "Equipment").replace(Messages.wildCard2, String.valueOf(getIdMachine())));
             }
         }
     }

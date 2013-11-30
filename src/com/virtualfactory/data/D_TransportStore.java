@@ -7,7 +7,7 @@ import com.virtualfactory.data.sqlite.SQLiteConn;
 import com.virtualfactory.data.sqlite.SQLiteUtilities;
 import com.virtualfactory.entity.E_Activity;
 import com.virtualfactory.entity.E_TransportStore;
-import com.virtualfactory.ui.ProgressBarController;
+import com.virtualfactory.screen.other.ProgressBarController;
 import com.virtualfactory.strategy.StateMachine;
 import com.virtualfactory.utils.Actions;
 import com.virtualfactory.utils.Pair;

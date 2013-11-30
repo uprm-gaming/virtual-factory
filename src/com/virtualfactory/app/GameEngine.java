@@ -1,9 +1,9 @@
 package com.virtualfactory.app;
 
-import com.virtualfactory.layer.LayerScreen;
-import com.virtualfactory.ui.ScreenManager;
-import com.virtualfactory.intro.IntroScreen;
-import com.virtualfactory.menu.MenuScreen;
+import com.virtualfactory.screen.layer.LayerScreen;
+import com.virtualfactory.screen.other.PopupsAndCreditsManager;
+import com.virtualfactory.screen.intro.IntroScreen;
+import com.virtualfactory.screen.menu.MenuScreen;
 import com.virtualfactory.data.GameData;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
@@ -70,27 +70,27 @@ import com.virtualfactory.entity.E_TerrainReserved;
 import com.virtualfactory.utils.DispOperatorMachineMovingTo;
 import com.virtualfactory.utils.DispOperatorWalksTo;
 import com.virtualfactory.utils.TerrainMap;
-import com.virtualfactory.menu.components.ControlsDisplay;
-import com.virtualfactory.menu.components.DialogPanelControlDefinition;
-import com.virtualfactory.menu.components.ForgotYourPasswordDisplay;
-import com.virtualfactory.layer.components.GeneralScreenController;
-import com.virtualfactory.menu.components.InitialMenuDisplay;
-import com.virtualfactory.menu.components.LoadGameMenuDisplay;
-import com.virtualfactory.menu.components.MainMenuDisplay;
-import com.virtualfactory.menu.components.MenuScreenController;
-import com.virtualfactory.menu.components.NewGame1MenuDisplay;
-import com.virtualfactory.menu.components.NewUserMenuDisplay;
-import com.virtualfactory.menu.components.OptionsMenuDisplay;
-import com.virtualfactory.layer.components.DashboardControl;
-import com.virtualfactory.layer.components.FlowChartControl;
-import com.virtualfactory.layer.components.GameLogControl;
-import com.virtualfactory.layer.components.GameSetupControl;
-import com.virtualfactory.layer.components.MachineControl;
-import com.virtualfactory.layer.components.OperatorControl;
-import com.virtualfactory.layer.components.OrderControl;
-import com.virtualfactory.layer.components.OverallControl;
-import com.virtualfactory.layer.components.PartControl;
-import com.virtualfactory.layer.components.StorageStationControl;
+import com.virtualfactory.screen.menu.components.ControlsDisplay;
+import com.virtualfactory.screen.menu.components.DialogPanelControlDefinition;
+import com.virtualfactory.screen.menu.components.ForgotYourPasswordDisplay;
+import com.virtualfactory.screen.layer.LayerScreenController;
+import com.virtualfactory.screen.menu.components.InitialMenuDisplay;
+import com.virtualfactory.screen.menu.components.LoadGameMenuDisplay;
+import com.virtualfactory.screen.menu.components.MainMenuDisplay;
+import com.virtualfactory.screen.menu.MenuScreenController;
+import com.virtualfactory.screen.menu.components.NewGame1MenuDisplay;
+import com.virtualfactory.screen.menu.components.NewUserMenuDisplay;
+import com.virtualfactory.screen.menu.components.OptionsMenuDisplay;
+import com.virtualfactory.screen.layer.components.DashboardScreenController;
+import com.virtualfactory.screen.layer.components.FlowChartScreenController;
+import com.virtualfactory.screen.layer.components.GameLogScreenController;
+import com.virtualfactory.screen.layer.components.GameSetupScreenController;
+import com.virtualfactory.screen.layer.components.MachineScreenController;
+import com.virtualfactory.screen.layer.components.OperatorScreenController;
+import com.virtualfactory.screen.layer.components.OrderScreenController;
+import com.virtualfactory.screen.layer.components.OverallScreenController;
+import com.virtualfactory.screen.layer.components.PartScreenController;
+import com.virtualfactory.screen.layer.components.StorageStationScreenController;
 import com.virtualfactory.pathfinding.Path;
 import com.virtualfactory.pathfinding.Path.Step;
 import com.virtualfactory.simpack.LinkedListFutureEventList;
@@ -155,7 +155,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private ManageEvents manageEvents;
     private boolean executeGame;
     private MenuScreenController menuScreenC;
-    private GeneralScreenController generalScreenController;
+    private LayerScreenController generalScreenController;
     private Spatial floor;
     private RigidBodyControl floorRigid;
     private Node world;
@@ -282,8 +282,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 //        nifty.setDebugOptionPanelColors(true);
         
         // register the dialog and credits controls
-        ScreenManager.registerStyles(nifty);
-        ScreenManager.registerPopups(nifty);
+        PopupsAndCreditsManager.registerStyles(nifty);
+        PopupsAndCreditsManager.registerPopups(nifty);
 
         DialogPanelControlDefinition.register(nifty);
         InitialMenuDisplay.register(nifty);
@@ -304,7 +304,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         
         menuScreenC = (MenuScreenController) nifty.getScreen("initialMenu").getScreenController();
         menuScreenC.setGameEngine(this);
-        generalScreenController = (GeneralScreenController) nifty.getScreen("layerScreen").getScreenController();
+        generalScreenController = (LayerScreenController) nifty.getScreen("layerScreen").getScreenController();
         generalScreenController.setGameEngine(this);
         inputManager.setCursorVisible(true);
         cursors = new ArrayList<>();
@@ -370,16 +370,16 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         //load extra data
         gameData.updateTimeOrders();
         //show static windows
-        nifty.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallControl.class).loadWindowControl(this, 0, null);
-        nifty.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderControl.class).loadWindowControl(this, 0, null);
-        nifty.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogControl.class).loadWindowControl(this, 0, null);
-        nifty.getScreen("layerScreen").findElementByName("winGSC_Element").getControl(GameSetupControl.class).loadWindowControl(this, -1, null);// -1 because we dont want it to be visible
-        nifty.getScreen("layerScreen").findElementByName("winFCC_Element").getControl(FlowChartControl.class).loadWindowControl(this, -1, null);
-        nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardControl.class).loadWindowControl(this, 0, null);
+        nifty.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).loadWindowControl(this, 0, null);
+        nifty.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).loadWindowControl(this, 0, null);
+        nifty.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).loadWindowControl(this, 0, null);
+        nifty.getScreen("layerScreen").findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).loadWindowControl(this, -1, null);// -1 because we dont want it to be visible
+        nifty.getScreen("layerScreen").findElementByName("winFCC_Element").getControl(FlowChartScreenController.class).loadWindowControl(this, -1, null);
+        nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardScreenController.class).loadWindowControl(this, 0, null);
         //clean lists
-        nifty.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderControl.class).cleanOrders();
-        nifty.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogControl.class).cleanMessages();
-        nifty.getScreen("layerScreen").findElementByName("winGSC_Element").getControl(GameSetupControl.class).updateAllStepStatus(false);
+        nifty.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).cleanOrders();
+        nifty.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).cleanMessages();
+        nifty.getScreen("layerScreen").findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).updateAllStepStatus(false);
         getGeneralScreenController().updateQuantityCurrentMoney(gameData.getCurrentMoney());
         inputManager.setMouseCursor(cursors.get(0));
         getGeneralScreenController().forcePauseGame();
@@ -392,9 +392,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         getGeneralScreenController().showHideDynamicButtons(0);
         getGeneralScreenController().showHideDynamicSubLevelButtons(0);
         
-        nifty.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallControl.class).HideWindow();
-        nifty.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderControl.class).HideWindow();
-        nifty.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogControl.class).showHide();
+        nifty.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).HideWindow();
+        nifty.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).HideWindow();
+        nifty.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).showHide();
         
         player.setJumpSpeed(45);
         player.setFallSpeed(120);
@@ -585,7 +585,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                 manageEvents.executeEvent();
                 //it happens each TIME-UNIT
                 Sim.schedule(new SimEvent(Sim.time() + getGeneralScreenController().getTimeFactor(), Params.startEvent));
-                nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardControl.class).updateQuantityPeopleStatus(gameData.getNoUserOperator(Status.Busy), gameData.getNoUserOperator(Status.Idle));
+                nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardScreenController.class).updateQuantityPeopleStatus(gameData.getNoUserOperator(Status.Busy), gameData.getNoUserOperator(Status.Idle));
             } else {
                 manageEvents.setStrategy(nextEvent.getToken());
                 manageEvents.releaseResourcesEvent();
@@ -596,7 +596,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
 
     private void manageDashboard() {
-        nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardControl.class).updateData();
+        nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardScreenController.class).updateData();
         if (showHideDashboard) {
             if (isDashboardVisible) {
                 nifty.getScreen("layerScreen").findElementByName("winDashboard_Element").hide();
@@ -1309,20 +1309,20 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         getGeneralScreenController().showHideDynamicButtons(0);
         getGeneralScreenController().showHideDynamicSubLevelButtons(0);
         if (winControl.contains(TypeElements.OPERATOR.toString())) {
-            nifty.getScreen("layerScreen").findElementByName("winOC_Element").getControl(OperatorControl.class).loadWindowControl(this, Integer.valueOf(winControl.replace(TypeElements.OPERATOR.toString(), "")), positionWC);
+            nifty.getScreen("layerScreen").findElementByName("winOC_Element").getControl(OperatorScreenController.class).loadWindowControl(this, Integer.valueOf(winControl.replace(TypeElements.OPERATOR.toString(), "")), positionWC);
             getGeneralScreenController().setCurrentOptionselected("windowOperator");
         } else if (winControl.contains(TypeElements.PART.toString())) {
-            nifty.getScreen("layerScreen").findElementByName("winPC_Element").getControl(PartControl.class).loadWindowControl(this, Integer.valueOf(winControl.split("_")[winControl.split("_").length - 1].replace(TypeElements.PART.toString(), "")), positionWC);
+            nifty.getScreen("layerScreen").findElementByName("winPC_Element").getControl(PartScreenController.class).loadWindowControl(this, Integer.valueOf(winControl.split("_")[winControl.split("_").length - 1].replace(TypeElements.PART.toString(), "")), positionWC);
             getGeneralScreenController().setCurrentOptionselected("windowPart");
         } else if (winControl.contains(TypeElements.STATION.toString()) && !winControl.contains(TypeElements.BUCKET.toString())) {
             E_Station tempStation = getGameData().getMapUserStation().get(Integer.valueOf(winControl.replace(TypeElements.STATION.toString(), "")));
             if (!tempStation.getStationType().equals(StationType.MachineZone) && !tempStation.getStationType().equals(StationType.StaffZone)) {
-                nifty.getScreen("layerScreen").findElementByName("winSSC_Element").getControl(StorageStationControl.class).loadWindowControl(this, Integer.valueOf(winControl.replace(TypeElements.STATION.toString(), "")), positionWC);
+                nifty.getScreen("layerScreen").findElementByName("winSSC_Element").getControl(StorageStationScreenController.class).loadWindowControl(this, Integer.valueOf(winControl.replace(TypeElements.STATION.toString(), "")), positionWC);
                 getGeneralScreenController().setCurrentOptionselected("windowStorageStation");
             }
 
         } else if (winControl.contains(TypeElements.MACHINE.toString())) {
-            nifty.getScreen("layerScreen").findElementByName("winMC_Element").getControl(MachineControl.class).loadWindowControl(this, Integer.valueOf(winControl.replace(TypeElements.MACHINE.toString(), "")), positionWC);
+            nifty.getScreen("layerScreen").findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(this, Integer.valueOf(winControl.replace(TypeElements.MACHINE.toString(), "")), positionWC);
             getGeneralScreenController().setCurrentOptionselected("windowMachine");
         }
     }
@@ -1419,7 +1419,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         this.gameData = gameData;
     }
 
-    public GeneralScreenController getGeneralScreenController() {
+    public LayerScreenController getGeneralScreenController() {
         return generalScreenController;
     }
 

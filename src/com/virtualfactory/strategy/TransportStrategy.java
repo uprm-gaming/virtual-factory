@@ -14,7 +14,7 @@ import com.virtualfactory.entity.E_Station;
 import com.virtualfactory.entity.E_TransportStore;
 import com.virtualfactory.exceptions.ExceededCapacityException;
 import com.virtualfactory.exceptions.InsufficientPartsException;
-import com.virtualfactory.layer.components.GameLogControl;
+import com.virtualfactory.screen.layer.components.GameLogScreenController;
 import com.virtualfactory.threads.StationAnimation;
 import com.virtualfactory.utils.Distributions;
 import com.virtualfactory.utils.MessageType;
@@ -220,11 +220,11 @@ public class TransportStrategy implements EventStrategy {
                 int numberRequiredParts = gameData.existsWaitOrderByRequiredPart(dataTransport.getIdPart());
                 String namePart = gameData.getMapUserPart().get(dataTransport.getIdPart()).getPartDescription();
                 if (numberRequiredParts > 0 && toBucket.getSize() - toBucket.getUnitsToRemove() < numberRequiredParts){
-                    GameLogControl.addMessage(MessageType.Info, Messages.orderMoveParts.replace(Messages.wildCard, namePart));
+                    GameLogScreenController.addMessage(MessageType.Info, Messages.orderMoveParts.replace(Messages.wildCard, namePart));
                     if (fromBucket.getSize() - fromBucket.getUnitsToRemove() >= numberRequiredParts){
-                        GameLogControl.addMessage(MessageType.Info, Messages.orderEnoughParts.replace(Messages.wildCard, namePart));
+                        GameLogScreenController.addMessage(MessageType.Info, Messages.orderEnoughParts.replace(Messages.wildCard, namePart));
                     }else{
-                        GameLogControl.addMessage(MessageType.Info, Messages.orderInsufficientParts.replace(Messages.wildCard, namePart));
+                        GameLogScreenController.addMessage(MessageType.Info, Messages.orderInsufficientParts.replace(Messages.wildCard, namePart));
                     }
                 }else{
                     return false;
@@ -236,7 +236,7 @@ public class TransportStrategy implements EventStrategy {
                 fromStationLocation = new Pair<Integer,Integer>(curMachine.getCurrentLocationX(), curMachine.getCurrentLocationZ());
             }
             if (fromStationLocation == null){
-                GameLogControl.addMessage(MessageType.Error, Messages.noSpaceAvailableInStation.replace(Messages.wildCard, fromStation.getStationDescription()));
+                GameLogScreenController.addMessage(MessageType.Error, Messages.noSpaceAvailableInStation.replace(Messages.wildCard, fromStation.getStationDescription()));
                 return false;
             }
             if (Integer.parseInt(curMachine.getVirtualIdLocation().replace(TypeElements.STATION.toString(), "")) != toStation.getIdStation())
@@ -245,7 +245,7 @@ public class TransportStrategy implements EventStrategy {
                 toStationLocation = new Pair<Integer,Integer>(curMachine.getCurrentLocationX(), curMachine.getCurrentLocationZ());
             }
             if (toStationLocation == null){
-                GameLogControl.addMessage(MessageType.Error, Messages.noSpaceAvailableInStation.replace(Messages.wildCard, toStation.getStationDescription()));
+                GameLogScreenController.addMessage(MessageType.Error, Messages.noSpaceAvailableInStation.replace(Messages.wildCard, toStation.getStationDescription()));
                 fromStation.releaseParkingZone(fromStationLocation.getSecond());//AT THIS LEVEL WE HAVE 'RESERVED' PARKING ZONE IN 'FROM' STATION
                 return false;
             }

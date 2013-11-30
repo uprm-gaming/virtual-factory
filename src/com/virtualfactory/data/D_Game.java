@@ -6,7 +6,7 @@ package com.virtualfactory.data;
 import com.virtualfactory.data.sqlite.SQLiteConn;
 import com.virtualfactory.data.sqlite.SQLiteUtilities;
 import com.virtualfactory.entity.E_Game;
-import com.virtualfactory.ui.ProgressBarController;
+import com.virtualfactory.screen.other.ProgressBarController;
 import com.virtualfactory.utils.Actions;
 import com.virtualfactory.utils.GameCategory;
 import com.virtualfactory.utils.GameStatus;
