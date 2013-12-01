@@ -148,7 +148,7 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
     public void onGameClosingQuitPopupButtonClicked(final String id, final ButtonClickedEvent event) {
         if (id.equals("quitPopupYes")){
             gameEngine.getGameData().logoutPlayer();
-            gameEngine.app.stop();
+            gameEngine.jmonkeyApp.stop();
             System.exit(0);
         }else{
             nifty.closePopup(quitPopup.getId());

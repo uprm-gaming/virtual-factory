@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.virtualfactory.screen.menu.components;
 
 import com.virtualfactory.screen.menu.MenuScreenController;
@@ -209,7 +205,7 @@ public class MainMenuController implements Controller {
     public void onUserManualButtonClicked(final String id, final ButtonClickedEvent event) {
         //if the game is fullscreen, change the view in order to see the manual 
         //in the browser
-        if (gameEngine.app.getContext().getSettings().isFullscreen())
+        if (gameEngine.jmonkeyApp.getContext().getSettings().isFullscreen())
             gameEngine.changeScreenSize();
         
         gameEngine.updateCursorIcon(1);

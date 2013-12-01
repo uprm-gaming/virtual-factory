@@ -321,8 +321,8 @@ public class TransportStrategy implements EventStrategy {
             }
         }
         curMachine.showHideItemsInMachine(true);
-        //double timeCalculated = dataTransport.getUnitLoad()*(factorMachine * factorOperator) * gameEngine.getGeneralScreenController().getTimeFactor();
-        timeCalculatedPickUpPlacement = toMove*(timeForTaskExecution * factorOperator) * gameEngine.getGeneralScreenController().getTimeFactor();
+        //double timeCalculated = dataTransport.getUnitLoad()*(factorMachine * factorOperator) * gameEngine.getLayerScreenController().getTimeFactor();
+        timeCalculatedPickUpPlacement = toMove*(timeForTaskExecution * factorOperator) * gameEngine.getLayerScreenController().getTimeFactor();
         double timeCalculated = timeCalculatedPickUpPlacement;
 //        System.out.println("Operator: " + curOperator.getNameOperator() + " - timePickup:" + timeCalculated);
         if (timeCalculated < 0) timeCalculated = Math.abs(timeCalculated);
@@ -367,7 +367,7 @@ public class TransportStrategy implements EventStrategy {
 //                break;
 //            }
 //        }
-//        double timeCalculated = dataTransport.getUnitLoad()*(factorMachine * factorOperator ) * gameEngine.getGeneralScreenController().getTimeFactor();
+//        double timeCalculated = dataTransport.getUnitLoad()*(factorMachine * factorOperator ) * gameEngine.getLayerScreenController().getTimeFactor();
         double timeCalculated = timeCalculatedPickUpPlacement;
 //        System.out.println("Operator: " + curOperator.getNameOperator() + " - timePlacement:" + timeCalculated);
         if (timeCalculated < 0) timeCalculated = Math.abs(timeCalculated);

@@ -37,7 +37,7 @@ public class CloseGame extends Thread {
         updatingLabel = nifty.getCurrentScreen().findNiftyControl("gameClosingMessage", Label.class);
         updatingLabel.setText(Messages.gameClosing.replace(Messages.wildCard, String.valueOf(Params.timeToExitGameSeconds)));
         int newMissingTime = 0;
-        while (newMissingTime >= 0 && !continueGame&&!this.gameEngine.getGeneralScreenController().getPauseStatus()){
+        while (newMissingTime >= 0 && !continueGame&&!this.gameEngine.getLayerScreenController().getPauseStatus()){
             currentTimeExit = System.currentTimeMillis()/1000;
             newMissingTime = Params.timeToExitGameSeconds - (int)(currentTimeExit - initialTimeExit);
             updatingLabel.setText(Messages.gameClosing.replace(Messages.wildCard, String.valueOf(newMissingTime)));
@@ -55,7 +55,7 @@ public class CloseGame extends Thread {
             }
             nifty.closePopup(exitPopup.getId());
             gameEngine.getGameData().logoutPlayer();
-            gameEngine.app.stop();
+            gameEngine.jmonkeyApp.stop();
              System.exit(0);
         }        
     }

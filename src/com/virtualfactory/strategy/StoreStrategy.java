@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.virtualfactory.strategy;
 
 import com.virtualfactory.data.GameData;
@@ -265,7 +261,7 @@ public class StoreStrategy implements EventStrategy {
         curMachine.showHideItemsInMachine(true);
 //        curMachine.addItemsDynamically(true);
 //        System.out.println("==== STORE:" + idStrategy + " - PickUpTime:" + (quantityPart / (factorMachine * factorOperator * factorPart)));
-        return (quantityPart / (factorMachine * factorOperator * factorPart)) * gameEngine.getGeneralScreenController().getTimeFactor();
+        return (quantityPart / (factorMachine * factorOperator * factorPart)) * gameEngine.getLayerScreenController().getTimeFactor();
     }
     
     private boolean validatePositions_OperatorAndMachineWalkToStation(Pair<Integer,Integer> stationLocation)
@@ -303,7 +299,7 @@ public class StoreStrategy implements EventStrategy {
         }
 //        curMachine.removeItemsDynamically(true);
 //        System.out.println("==== STORE:" + idStrategy + " - StoringTime:" + (quantityPart / (factorMachine * factorOperator * factorPart)));
-        return (quantityPart / (factorMachine * factorOperator * factorPart)) * gameEngine.getGeneralScreenController().getTimeFactor();
+        return (quantityPart / (factorMachine * factorOperator * factorPart)) * gameEngine.getLayerScreenController().getTimeFactor();
     }
     
     private boolean operatorNearToMachine(E_Operator tempOpe, E_Machine tempMach)
@@ -358,7 +354,7 @@ public class StoreStrategy implements EventStrategy {
         //FIXME: Should use the time distributions to calculate processiong time.
 //        System.out.println("Algorithim for Store #" +dataStore.getIdTransportStore()+ " executed successfully.");
 //        executeMessage = "Algorithim for Store #" +dataStore.getIdTransportStore()+ " executing successfully.";
-//        return curOperator.getMotionControl().getDuration() + dataStore.getProcessingTime() * gameEngine.getGeneralScreenController().getTimeFactor();
+//        return curOperator.getMotionControl().getDuration() + dataStore.getProcessingTime() * gameEngine.getLayerScreenController().getTimeFactor();
     }
     
     private void releaseResources(){

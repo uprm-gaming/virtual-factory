@@ -200,6 +200,6 @@ public class GameSounds {
 
     public void notifyAudio(GameEngine engine)
     {
-        engine.getGeneralScreenController().notifySound();
+        engine.getLayerScreenController().notifySound();
     }
 }

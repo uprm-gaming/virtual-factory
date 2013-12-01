@@ -523,7 +523,7 @@ public class E_Operator {
                     if (!"Walk".equals(animationChannel.getAnimationName())) {
                             animationChannel.setAnim("Walk",0);
                             animationChannel.setLoopMode(LoopMode.Loop);
-                            animationChannel.setSpeed(gameEngine.getGeneralScreenController().getTimeFactorForSpeed());
+                            animationChannel.setSpeed(gameEngine.getLayerScreenController().getTimeFactorForSpeed());
                         }
                     break;
                 case Operation:
@@ -531,7 +531,7 @@ public class E_Operator {
                         getCharacter().setViewDirection(new Vector3f(-32, 0, 0)); // face machine
                         animationChannel.setAnim("Dodge",0);
                         animationChannel.setLoopMode(LoopMode.Loop);
-                        animationChannel.setSpeed(gameEngine.getGeneralScreenController().getTimeFactorForSpeed());
+                        animationChannel.setSpeed(gameEngine.getLayerScreenController().getTimeFactorForSpeed());
                     }
                     break;                
             }
@@ -802,7 +802,7 @@ public class E_Operator {
         if (activateLaterDeactivation && status == Status.Idle){
             activateLaterDeactivation = false;
             setState(ObjectState.Inactive);
-//            gameEngine.getGeneralScreenController().updateOptionButtonClicked();    //update buttons
+//            gameEngine.getLayerScreenController().updateOptionButtonClicked();    //update buttons
         }
         if (status.equals(Status.Idle))
             activityDescriptionAssigned = "";
@@ -861,7 +861,7 @@ public class E_Operator {
                 }                    
             }
         }
-//        gameEngine.getGeneralScreenController().updateOptionButtonClicked();    //update buttons
+//        gameEngine.getLayerScreenController().updateOptionButtonClicked();    //update buttons
     }
     
     private Pair<Integer,Double> getSkillSelected(int idskillRequired){

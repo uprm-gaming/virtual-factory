@@ -112,10 +112,10 @@ public class OrderScreenController implements Controller {
             winControls.getContent().show();
             isVisible = true;
             if (position != null){
-                if (winControls.getWidth() + position.getFirst() > gameEngine.app.getGuiViewPort().getCamera().getWidth())
-                    position.setFirst(gameEngine.app.getGuiViewPort().getCamera().getWidth() - winControls.getWidth());
-                if (winControls.getHeight() + position.getSecond() > gameEngine.app.getGuiViewPort().getCamera().getHeight())
-                    position.setSecond(gameEngine.app.getGuiViewPort().getCamera().getHeight() - winControls.getHeight());
+                if (winControls.getWidth() + position.getFirst() > gameEngine.jmonkeyApp.getGuiViewPort().getCamera().getWidth())
+                    position.setFirst(gameEngine.jmonkeyApp.getGuiViewPort().getCamera().getWidth() - winControls.getWidth());
+                if (winControls.getHeight() + position.getSecond() > gameEngine.jmonkeyApp.getGuiViewPort().getCamera().getHeight())
+                    position.setSecond(gameEngine.jmonkeyApp.getGuiViewPort().getCamera().getHeight() - winControls.getHeight());
                 winControls.getElement().setConstraintX(new SizeValue(position.getFirst() + "px"));
                 winControls.getElement().setConstraintY(new SizeValue(position.getSecond() + "px"));
                 winControls.getElement().getParent().layoutElements();
@@ -203,7 +203,7 @@ public class OrderScreenController implements Controller {
             gameEngine.getGameSounds().stopSound(Sounds.Background);
             gameEngine.getGameSounds().stopSound(Sounds.GameNoMoney);
             gameEngine.getGameSounds().playSound(Sounds.GameOver);
-            gameEngine.getGeneralScreenController().pauseGame();
+            gameEngine.getLayerScreenController().pauseGame();
             gameEngine.getGameData().getCurrentGame().setAttemptNumbers(gameEngine.getGameData().getCurrentGame().getAttemptNumbers()+1);
             gameEngine.getGameData().updateFailedGame();
             gameEngine.getGameData().updatePlayerLog();
@@ -215,7 +215,7 @@ public class OrderScreenController implements Controller {
             gameEngine.getGameSounds().stopSound(Sounds.Background);
             gameEngine.getGameSounds().playSound(Sounds.GameWon);
             gameEngine.getNifty().getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).updateData();
-            gameEngine.getGeneralScreenController().pauseGame();
+            gameEngine.getLayerScreenController().pauseGame();
             gameEngine.getGameData().getCurrentGame().setGameStatus(GameStatus.Completed);
             gameEngine.getGameData().updateWonGame();
             gameEngine.getGameData().updatePlayerLog();
@@ -270,7 +270,7 @@ public class OrderScreenController implements Controller {
     
     @NiftyEventSubscriber(id="gameWonNextGame")
     public void onGameWonNextGameButtonClicked(final String id, final ButtonClickedEvent event) {
-        gameEngine.getGeneralScreenController().pauseGame();
+        gameEngine.getLayerScreenController().pauseGame();
         cleanOrders();
       
         nifty.closePopup(gameWonPopup.getId(),new popupClosed());
@@ -300,7 +300,7 @@ public class OrderScreenController implements Controller {
     public void onAnswerPopupButtonClicked(final String id, final ButtonClickedEvent event) {
         if (id.equals("quitPopupYes")){
             gameEngine.getGameData().logoutPlayer();
-            gameEngine.app.stop();
+            gameEngine.jmonkeyApp.stop();
              System.exit(0);
         }else{
             nifty.closePopup(quitPopup.getId());

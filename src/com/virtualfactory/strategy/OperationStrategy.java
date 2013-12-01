@@ -83,7 +83,7 @@ public class OperationStrategy implements EventStrategy {
 //            stateMachine.update(StateMachine.Status.valueOf(operation.getActivityStatus()));
 //        }
         arrIdOperatorSkilled = gameData.getOperatorsSkilled(dataOperation.getArrSkillsRequired(), dataOperation.getArrAssignedOperators());
-        gameSound = new GameSounds(gameEngine.app.getAssetManager());
+        gameSound = new GameSounds(gameEngine.jmonkeyApp.getAssetManager());
     }
     
     public void updateStrategy(){
@@ -294,7 +294,7 @@ public class OperationStrategy implements EventStrategy {
                 curStation.updatePartsInBucket(current.getFirst().getIdPart());
             }
             curOperator.setActivityDoing(TypeActivity.Operation);
-            curOperator.playStopAnimation(this.gameEngine.getGeneralScreenController().getPauseStatus());
+            curOperator.playStopAnimation(this.gameEngine.getLayerScreenController().getPauseStatus());
             curMachine.setPartsToProduce(dataOperation.getQuantityOutput()*outPart.getOutputQuantity());
             gameSound.playSound(Sounds.MachineWorking);
             pairGameSound = new Pair<GameSounds, Sounds>(gameSound, Sounds.MachineWorking);
@@ -310,12 +310,12 @@ public class OperationStrategy implements EventStrategy {
         //FIXME: Should use the time distributions to calculate processiong time.
 //        System.out.println("Algorithim for Operation #" +dataOperation.getIdOperation()+ " executed successfully.");
 //        executeMessage = "Algorithim for Operation #" +dataOperation.getIdOperation()+ " executing successfully.";
-//        System.out.println(" --- Execution Time:" + (dataOperation.getProcessingTime() * gameEngine.getGeneralScreenController().getTimeFactor()));
+//        System.out.println(" --- Execution Time:" + (dataOperation.getProcessingTime() * gameEngine.getLayerScreenController().getTimeFactor()));
 //        double machineTime = Distributions.calculateDist(Distributions.distNormal, Params.machineNormalParam, curMachine.getMachineTimeCalculated());
         double machineTime = Params.machineTimeParam;
 //        System.out.println("OPERATION time:" + machineTime);
         if (machineTime < 0) machineTime = Math.abs(machineTime);
-        return  dataOperation.getQuantityOutput()*(machineTime * curMachine.getFactor_calculated()) * gameEngine.getGeneralScreenController().getTimeFactor();
+        return  dataOperation.getQuantityOutput()*(machineTime * curMachine.getFactor_calculated()) * gameEngine.getLayerScreenController().getTimeFactor();
     }
     
     public void releaseResources(){

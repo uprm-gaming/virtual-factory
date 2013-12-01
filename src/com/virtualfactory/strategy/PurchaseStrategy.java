@@ -171,7 +171,7 @@ public class PurchaseStrategy implements EventStrategy {
             newPurchaseTime = Params.firstPurchaseTime;
             isFirstPurchase = false;
         }else{
-            timeCalculated = catalog.getProductionCalculated() * gameEngine.getGeneralScreenController().getTimeFactor();
+            timeCalculated = catalog.getProductionCalculated() * gameEngine.getLayerScreenController().getTimeFactor();
             newPurchaseTime = (int)catalog.getProductionCalculated();
         }
         if (gameEngine.getGameData().getCurrentPurchaseId() < 0){

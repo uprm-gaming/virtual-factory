@@ -137,7 +137,7 @@ public class ShipStrategy implements EventStrategy {
             this.dataShip.setStatus(Status.Busy);
             order.setState(OrderStates.Working);
             gameEngine.getGameData().setNextOrderDueDate(Integer.MAX_VALUE);
-            gameEngine.getGeneralScreenController().setNextDueDate("-");
+            gameEngine.getLayerScreenController().setNextDueDate("-");
             gameEngine.getGameData().updateOrderControlData();
 //            dock.setStatus(Status.Busy);
             return true;
@@ -156,7 +156,7 @@ public class ShipStrategy implements EventStrategy {
         this.bucket.setSize(this.bucket.getSize() - order.getQuantity());
         //FIXME: Should use the time distributions to calculate processiong time.
 //        executeMessage = "Algorithim for Ship #" +dataShip.getIdShip()+ " executing successfully.";
-        return dataShip.getShippingTimeCalculated() * gameEngine.getGeneralScreenController().getTimeFactor();
+        return dataShip.getShippingTimeCalculated() * gameEngine.getLayerScreenController().getTimeFactor();
     }
     
     private void releaseResources(){

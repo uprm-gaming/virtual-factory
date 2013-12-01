@@ -393,7 +393,7 @@ public class E_Station {
     }
     
     public void addItemsInSlotDynamically(Pair<Pair<Integer,Integer>,Pair<Integer,Integer>> slotSelected, double timeToFinish, boolean isAdding, boolean isZeroItems, int quantity, int idStrategy){
-        Geometry part = (Geometry)gameEngine.app.getRootNode().getChild(TypeElements.STATION.toString() + idStation + "_" + TypeElements.PART.toString() + slotSelected.getFirst().getFirst() + "_" + slotSelected.getFirst().getSecond());
+        Geometry part = (Geometry)gameEngine.jmonkeyApp.getRootNode().getChild(TypeElements.STATION.toString() + idStation + "_" + TypeElements.PART.toString() + slotSelected.getFirst().getFirst() + "_" + slotSelected.getFirst().getSecond());
         if (part != null && quantity > 0){
             ColorRGBA colorRGBA = Colors.getColorRGBA(gameEngine.getGameData().getMapUserPart().get(slotSelected.getSecond().getFirst()).getPartDesignColor());
             part.getMaterial().setColor("Color", colorRGBA);

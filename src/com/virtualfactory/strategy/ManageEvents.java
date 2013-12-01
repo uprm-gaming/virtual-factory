@@ -155,7 +155,7 @@ public class ManageEvents {
         for (EventStrategy tempEvent : arrEvents){
             final TOKEN token = new TOKEN();
             token.setAttribute(0, tempEvent.getIdStrategy());
-            token.setAttribute(1, gameEngine.getGeneralScreenController().getTimeFactor());
+            token.setAttribute(1, gameEngine.getLayerScreenController().getTimeFactor());
             double timeEvent = tempEvent.execute();
             if (timeEvent >= 0){
                 if (tempEvent.getType().equals(TypeActivity.Purchase.toString())){

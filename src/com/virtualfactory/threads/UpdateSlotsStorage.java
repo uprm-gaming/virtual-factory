@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.virtualfactory.threads;
 
 import com.jme3.math.Vector3f;
@@ -38,7 +34,7 @@ public class UpdateSlotsStorage extends Thread{
                     if (matrixValue[i][j].getSlotStatus().equals(SlotStatus.Free) || matrixValue[i][j].getSlotStatus().equals(SlotStatus.Unavailable)){
                         if (!station.getMatrix()[i][j].equals(0)){
                             slot = (Pair<Pair<Integer,Integer>,Pair<Integer,Integer>>)station.getMatrix()[i][j];
-                            part = (Geometry)gameEngine.app.getRootNode().getChild(TypeElements.STATION.toString() + station.getIdStation() + "_" 
+                            part = (Geometry)gameEngine.jmonkeyApp.getRootNode().getChild(TypeElements.STATION.toString() + station.getIdStation() + "_" 
                                     + TypeElements.PART.toString() + slot.getFirst().getFirst() + "_" + slot.getFirst().getSecond());
                             partBox = (Box)part.getMesh();
                             if (partBox.getYExtent() > 0){

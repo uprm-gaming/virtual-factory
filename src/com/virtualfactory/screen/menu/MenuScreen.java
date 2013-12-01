@@ -4,6 +4,7 @@ import com.virtualfactory.screen.menu.components.InitialMenuDisplay;
 import com.virtualfactory.screen.menu.components.NewGame1MenuDisplay;
 import com.virtualfactory.screen.menu.components.NewUserMenuDisplay;
 import com.virtualfactory.screen.menu.components.ControlsDisplay;
+import com.virtualfactory.screen.menu.components.DialogPanelControlDefinition;
 import com.virtualfactory.screen.menu.components.MainMenuDisplay;
 import com.virtualfactory.screen.menu.components.ForgotYourPasswordDisplay;
 import com.virtualfactory.screen.menu.components.LoadGameMenuDisplay;
@@ -20,8 +21,12 @@ final public class MenuScreen {
     private MenuScreen() {}
     
     public static void build(final Nifty niftyGUI) {
-        if (isScreenAlreadyBuilt)
-            throw new UnsupportedOperationException("Menu Screen has already been built.");
+        if (niftyGUI == null || isScreenAlreadyBuilt) {
+            String values = "niftyGUI = " + niftyGUI + "\nisScreenAlreadyBuilt = " + isScreenAlreadyBuilt;
+            throw new IllegalStateException("Either Nifty GUI is not initialized or Menu Screen already exists.\n" + values);
+        }
+        
+        registerMenuScreenComponents(niftyGUI);
         
         new ScreenBuilder("initialMenu") {
             {
@@ -54,5 +59,17 @@ final public class MenuScreen {
         }.build(niftyGUI);
         
         isScreenAlreadyBuilt = true;
+    }
+    
+    private static void registerMenuScreenComponents(Nifty niftyGUI) {
+        DialogPanelControlDefinition.register(niftyGUI);
+        InitialMenuDisplay.register(niftyGUI);
+        ForgotYourPasswordDisplay.register(niftyGUI);
+        MainMenuDisplay.register(niftyGUI);
+        ControlsDisplay.register(niftyGUI);
+        NewUserMenuDisplay.register(niftyGUI);
+        NewGame1MenuDisplay.register(niftyGUI);
+        LoadGameMenuDisplay.register(niftyGUI);
+        OptionsMenuDisplay.register(niftyGUI);
     }
 }

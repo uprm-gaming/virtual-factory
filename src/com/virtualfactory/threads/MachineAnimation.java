@@ -33,17 +33,17 @@ public class MachineAnimation extends Thread {
     
     @Override
     public void run(){
-        timeFactor = gameEngine.getGeneralScreenController().getTimeFactor();
+        timeFactor = gameEngine.getLayerScreenController().getTimeFactor();
         initialTime = gameEngine.getCurrentSystemTime();
         float currentHeight = boxForMachine.getYExtent();
         int numberIterations = 0;
         int heightFactor = 4;
-        while (moveItemsDynamically && (initialTime + timeToFinish > gameEngine.getCurrentSystemTime()) && gameEngine.getCurrentSystemStatus().equals(Status.Busy)&&gameEngine.getGeneralScreenController().getPauseStatus()){
-            if (timeFactor != gameEngine.getGeneralScreenController().getTimeFactor()&&this.gameEngine.isExecuteGame()){
+        while (moveItemsDynamically && (initialTime + timeToFinish > gameEngine.getCurrentSystemTime()) && gameEngine.getCurrentSystemStatus().equals(Status.Busy)&&gameEngine.getLayerScreenController().getPauseStatus()){
+            if (timeFactor != gameEngine.getLayerScreenController().getTimeFactor()&&this.gameEngine.isExecuteGame()){
                 double timeToComplete = initialTime + timeToFinish - gameEngine.getCurrentSystemTime();
                 timeToFinish = timeToFinish - timeToComplete;
-                timeToFinish = timeToFinish + timeToComplete*gameEngine.getGeneralScreenController().getTimeFactor()/timeFactor;
-                timeFactor = gameEngine.getGeneralScreenController().getTimeFactor();
+                timeToFinish = timeToFinish + timeToComplete*gameEngine.getLayerScreenController().getTimeFactor()/timeFactor;
+                timeFactor = gameEngine.getLayerScreenController().getTimeFactor();
             }            
             numberIterations++;
             if (addItems){  //add
@@ -62,13 +62,13 @@ public class MachineAnimation extends Thread {
 //            float currentHeight = boxForMachine.getYExtent();
 //            float paramCenterY = 0;            
 //            if (addItems){  //add
-//                currentHeight = currentHeight + (int)gameEngine.getGeneralScreenController().getTimeFactorForSpeed();
-//                paramCenterY = (int)gameEngine.getGeneralScreenController().getTimeFactorForSpeed();
+//                currentHeight = currentHeight + (int)gameEngine.getLayerScreenController().getTimeFactorForSpeed();
+//                paramCenterY = (int)gameEngine.getLayerScreenController().getTimeFactorForSpeed();
 //            }else{  //remove
 //                if (currentHeight > 0){
-//                    currentHeight = (currentHeight - (int)gameEngine.getGeneralScreenController().getTimeFactorForSpeed() < 0)
-//                            ? 0 : (currentHeight - (int)gameEngine.getGeneralScreenController().getTimeFactorForSpeed());
-//                    paramCenterY = -(int)gameEngine.getGeneralScreenController().getTimeFactorForSpeed();
+//                    currentHeight = (currentHeight - (int)gameEngine.getLayerScreenController().getTimeFactorForSpeed() < 0)
+//                            ? 0 : (currentHeight - (int)gameEngine.getLayerScreenController().getTimeFactorForSpeed());
+//                    paramCenterY = -(int)gameEngine.getLayerScreenController().getTimeFactorForSpeed();
 //                }
 //            }
 //            boxForMachine.updateGeometry(new Vector3f(boxForMachine.getCenter().getX(), boxForMachine.getCenter().getY() + paramCenterY, boxForMachine.getCenter().getZ()), boxForMachine.getXExtent(), currentHeight, boxForMachine.getZExtent());

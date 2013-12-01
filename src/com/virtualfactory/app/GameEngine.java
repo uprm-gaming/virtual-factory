@@ -1,9 +1,9 @@
 package com.virtualfactory.app;
 
-import com.virtualfactory.screen.layer.LayerScreen;
-import com.virtualfactory.screen.other.PopupsAndCreditsManager;
+import com.virtualfactory.screen.layer.*;
+import com.virtualfactory.screen.other.Popups;
 import com.virtualfactory.screen.intro.IntroScreen;
-import com.virtualfactory.screen.menu.MenuScreen;
+import com.virtualfactory.screen.menu.*;
 import com.virtualfactory.data.GameData;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
@@ -15,70 +15,34 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.collision.shapes.BoxCollisionShape;
-import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
-import com.jme3.bullet.collision.shapes.CollisionShape;
-import com.jme3.bullet.collision.shapes.MeshCollisionShape;
-import com.jme3.bullet.control.CharacterControl;
-import com.jme3.bullet.control.GhostControl;
-import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.bullet.collision.shapes.*;
+import com.jme3.bullet.control.*;
 import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.cursors.plugins.JmeCursor;
-import com.jme3.input.ChaseCamera;
-import com.jme3.input.FlyByCamera;
-import com.jme3.input.InputManager;
-import com.jme3.input.KeyInput;
-import com.jme3.input.MouseInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseAxisTrigger;
-import com.jme3.input.controls.MouseButtonTrigger;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
-import com.jme3.light.PointLight;
+import com.jme3.input.*;
+import com.jme3.input.controls.*;
+import com.jme3.light.*;
 import com.jme3.material.Material;
-import com.jme3.material.RenderState;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Matrix3f;
-import com.jme3.math.Quaternion;
-import com.jme3.math.Ray;
-import com.jme3.math.Vector3f;
+import com.jme3.math.*;
 import com.jme3.niftygui.NiftyJmeDisplay;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.CartoonEdgeFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
+import com.jme3.scene.*;
 import com.jme3.scene.debug.Grid;
-import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.*;
 import com.jme3.scene.shape.Line;
-import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
-import com.virtualfactory.entity.E_Bucket;
-import com.virtualfactory.entity.E_Game;
-import com.virtualfactory.entity.E_Machine;
-import com.virtualfactory.entity.E_Operator;
-import com.virtualfactory.entity.E_Station;
-import com.virtualfactory.entity.E_Terrain;
-import com.virtualfactory.entity.E_TerrainReserved;
-import com.virtualfactory.utils.DispOperatorMachineMovingTo;
-import com.virtualfactory.utils.DispOperatorWalksTo;
-import com.virtualfactory.utils.TerrainMap;
-import com.virtualfactory.screen.menu.components.ControlsDisplay;
-import com.virtualfactory.screen.menu.components.DialogPanelControlDefinition;
-import com.virtualfactory.screen.menu.components.ForgotYourPasswordDisplay;
-import com.virtualfactory.screen.layer.LayerScreenController;
-import com.virtualfactory.screen.menu.components.*;
-import com.virtualfactory.screen.menu.MenuScreenController;
+import com.virtualfactory.entity.*;
 import com.virtualfactory.screen.layer.components.*;
 import com.virtualfactory.pathfinding.Path;
 import com.virtualfactory.pathfinding.Path.Step;
+import com.virtualfactory.screen.other.Credits;
 import com.virtualfactory.simpack.*;
 import com.virtualfactory.strategy.ManageEvents;
 import com.virtualfactory.threads.*;
@@ -86,7 +50,6 @@ import com.virtualfactory.utils.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.*;
 
 public class GameEngine extends AbstractAppState implements AnimEventListener {
     
@@ -115,11 +78,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     CharacterControl character_Disp;
     private GameData gameData;
     private ManageEvents manageEvents;
-    private boolean executeGame;
+    private boolean isPlayerInsideFactory;
     private MenuScreenController menuScreenC;
-    private LayerScreenController generalScreenController;
-    private Spatial floor;
-    private RigidBodyControl floorRigid;
+    private LayerScreenController layerScreenC;
     private Node world;
     private RigidBodyControl worldRigid;
     private RigidBodyControl bucketRigid;
@@ -135,7 +96,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private ArrayList<DispOperatorMachineMovingTo> arrOperatorsMachinesMovingTo;
     private ArrayList<StationAnimation> arrStationAnimations;
     private TerrainMap terrainMap;
-    private NiftyJmeDisplay niftyDisplay;
     private Nifty niftyGUI;
     private Status currentSystemStatus;
     private double currentSystemTime;
@@ -155,14 +115,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private boolean showHideDashboard = false;
     private long currentDashboardTime;
 
-    public SimpleApplication app;
-    private AppStateManager stateManager;
-    private AssetManager assetManager;
+    public SimpleApplication jmonkeyApp;
     private Node rootNode;
     private InputManager inputManager;
     private FlyByCamera flyCam;
     private Camera cam;
-    private ViewPort viewPort;
     private ViewPort guiViewPort;
     private CharacterControl player;
     private GhostControl secondFloorSensor;
@@ -184,111 +141,223 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private AudioNode footstep;
     private boolean isDebugCamEnabled = false;
     private boolean topViewEnabled = false;
-    private Node shopFloorNode;
-    
-    private PointLight lamp;
+
     private PointLight lamp2, lamp3;
+    private AssetManager assetManager;
+    private AppStateManager appStateManager;
   
     @Override
     public void initialize(AppStateManager manager, Application application) {
-        
-        app = (SimpleApplication) application;
-        stateManager = manager;
-        assetManager = app.getAssetManager();
-        inputManager = app.getInputManager();
-        flyCam = app.getFlyByCamera();
-        cam = app.getCamera();
-        viewPort = app.getViewPort();
-        guiViewPort = app.getGuiViewPort();
-        rootNode = app.getRootNode();
+        Params.tempTime = System.currentTimeMillis();
         Params.screenHeight = application.getContext().getSettings().getHeight();
         
-        Logger.getLogger("com.jme3").setLevel(Level.WARNING);
-        Logger.getLogger("de.lessvoid").setLevel(Level.WARNING);
-        Logger root = Logger.getLogger("");
-        
-        Handler[] handlers = root.getHandlers();
-        for (int i = 0; i < handlers.length; i++) {
-            if (handlers[i] instanceof ConsoleHandler) {
-                ((ConsoleHandler) handlers[i]).setLevel(Level.WARNING);
-            }
-        }
-        
-        bulletAppState = new BulletAppState();
-        bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
-        stateManager.attach(bulletAppState);
-        
-        //createLight();
-        createLightBulb();
-        
-        if (Params.renderer.equalsIgnoreCase(Params.supportedRenderer))
-            setupFilter();
-        
-        initKeys();
-        initSoundEffects();
-        Params.tempTime = System.currentTimeMillis();
-        //***********************************************
-        gameData = GameData.getInstance();
-        gameData.setGameEngine(this);
-        gameSounds = new GameSounds(assetManager);
-        arrGameSounds = new ArrayList<>();
-        //screens previous the game - START NIFTY
-        executeGame = false;
-        niftyDisplay = new NiftyJmeDisplay(assetManager, inputManager, app.getAudioRenderer(), guiViewPort);
+        jmonkeyApp = (SimpleApplication) application;
+
+        loadJmonkeyAppResources();
+
+        loadGameData();
+
+        loadGameSounds();
+
+        loadGameControls();
+
+        NiftyJmeDisplay niftyDisplay = new NiftyJmeDisplay(assetManager, inputManager, jmonkeyApp.getAudioRenderer(), guiViewPort);
         guiViewPort.addProcessor(niftyDisplay);
         niftyGUI = niftyDisplay.getNifty();
+        
+        buildGameScreens(niftyGUI);
+        
+        if (Params.DEBUG_ON)
+            niftyGUI.gotoScreen("initialMenu");
+        else
+            niftyGUI.gotoScreen("start");
+
+        activateNarrator();
+    }
+    
+    private void loadJmonkeyAppResources() {
+        if (jmonkeyApp == null)
+            throw new IllegalStateException("jmonkeyApp has not been initialized.");
+
+        appStateManager = jmonkeyApp.getStateManager();
+        assetManager = jmonkeyApp.getAssetManager();
+        inputManager = jmonkeyApp.getInputManager();
+        flyCam = jmonkeyApp.getFlyByCamera();
+        cam = jmonkeyApp.getCamera();
+        guiViewPort = jmonkeyApp.getGuiViewPort();
+        rootNode = jmonkeyApp.getRootNode();
+    }
+
+    private void loadGameData() {
+        gameData = GameData.getInstance();
+        gameData.setGameEngine(this);
+    }
+
+    private void loadGameSounds() {
+        gameSounds = new GameSounds(assetManager);
+        arrGameSounds = new ArrayList<>();
+    }
+
+    private void loadGameControls() {
+        loadCursors();
+
+        inputManager.addMapping("MousePicking", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        inputManager.addListener(actionListener, "MousePicking");
+
+        inputManager.addMapping("FLYCAM_RotateDrag", new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
+        inputManager.addMapping("FLYCAM_RotateDrag", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
+        
+        inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
+        inputManager.deleteMapping("FLYCAM_ZoomIn");
+        inputManager.deleteMapping("FLYCAM_ZoomOut");
+        inputManager.deleteMapping("FLYCAM_Up");
+        inputManager.deleteMapping("FLYCAM_Down");
+
+        inputManager.deleteTrigger("FLYCAM_Left", new MouseAxisTrigger(MouseInput.AXIS_X, true));
+        inputManager.deleteTrigger("FLYCAM_Right", new MouseAxisTrigger(MouseInput.AXIS_X, false));
+        inputManager.deleteTrigger("FLYCAM_RotateDrag", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+
+
+        String[] mappings = {"Forward", "Backward", "Left",
+                             "Right", "Cam Up", "Cam Down", "Jump", "Picking",
+                             "Dashboard Control", "Top View", "Screen Size",
+                             "Scale Bigger", "Scale Smaller",
+                             "Activate Debug Cam", "debug position"};
+        
+        int[] triggers = {KeyInput.KEY_W, KeyInput.KEY_S, KeyInput.KEY_A, 
+                          KeyInput.KEY_D, KeyInput.KEY_UP, KeyInput.KEY_DOWN, 
+                          KeyInput.KEY_SPACE, KeyInput.KEY_LSHIFT, 
+                          KeyInput.KEY_RSHIFT, KeyInput.KEY_T, KeyInput.KEY_F1,
+                          KeyInput.KEY_ADD, KeyInput.KEY_SUBTRACT,
+                          KeyInput.KEY_0, KeyInput.KEY_H, KeyInput.KEY_B,
+                          KeyInput.KEY_NUMPAD4, KeyInput.KEY_NUMPAD6,
+                          KeyInput.KEY_NUMPAD8, KeyInput.KEY_NUMPAD2,
+                          KeyInput.KEY_ADD, KeyInput.KEY_SUBTRACT,
+                          KeyInput.KEY_2, KeyInput.KEY_1};
+        
+        for (int i = 0; i < mappings.length; i++) {
+            inputManager.addMapping(mappings[i], new KeyTrigger(triggers[i]));
+            inputManager.addListener(actionListener, mappings[i]);
+        } 
+    }
+
+    private void loadCursors() {
+        inputManager.setCursorVisible(true);
+
+        cursors = new ArrayList<>();
+        cursors.add((JmeCursor) assetManager.loadAsset("Interface/Cursor/cursorWood.ico"));
+        cursors.add((JmeCursor) assetManager.loadAsset("Interface/Cursor/busy.ani"));
+        updateCursorIcon(0);
+
+        flyCam.setDragToRotate(true); // TODO: Is this necessary here?
+    }
+    
+    public void updateCursorIcon(int newCursorValue) {
+        inputManager.setMouseCursor(cursors.get(newCursorValue));
+    }
+    
+    private ActionListener actionListener = new ActionListener() {
+        @Override
+        public void onAction(String name, boolean keyPressed, float tpf) {   
+            
+            if (name.equals("Screen Size") && !keyPressed)
+                changeScreenSize();
+            
+            if (!isPlayerInsideFactory) {
+                return;
+            }
+            
+            switch (name) {
+                case "Forward":
+                    forward = keyPressed;
+                    break;
+                    
+                case "Backward":
+                    backward = keyPressed;
+                    break;
+                    
+                case "Left":
+                    moveLeft = keyPressed;
+                    break;
+                    
+                case "Right":
+                    moveRight = keyPressed;
+                    break;
+                
+                case "Cam Up":
+                    camUp = keyPressed;
+                    break;
+                
+                case "Cam Down":
+                    camDown = keyPressed;
+                    break;
+                    
+                case "Picking": case "MousePicking":
+                    if (!keyPressed)
+                        handlePickedObject(name);
+                    break;
+                
+                case "Dashboard Control":
+                    if (!keyPressed) {
+                        showHideDashboard = true;
+                        manageDashboard();
+                    }
+                    break;
+                    
+                case "debug position":
+                    if (!keyPressed) {
+                        System.out.println("\n\nLa direccion deseada es: " + cam.getDirection() + "\nUp: " + cam.getUp()
+                                + "\nFrustrum top : " + cam.getFrustumTop());
+                    }
+                    break;
+                    
+                case "Top View":
+                    if (!keyPressed)
+                        handleTopView();
+                    break;
+                    
+                case "Activate Debug Cam":
+                    if (!keyPressed)
+                        isDebugCamEnabled = !isDebugCamEnabled;
+                    break;
+
+                case "Jump":
+                    if (!keyPressed)
+                        player.jump();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    };
+
+    private void buildGameScreens(Nifty niftyGUI) {
+        if (niftyGUI == null) 
+            throw new IllegalStateException("Cannot build game screens. Nifty GUI was not initialized.");
+
         niftyGUI.loadStyleFile("Interface/NiftyJars/nifty-style-black/nifty-default-styles.xml");
-        niftyGUI.loadControlFile("nifty-default-controls.xml");//Interface/NiftyJars/nifty-default-controls/
+        niftyGUI.loadControlFile("nifty-default-controls.xml");
         niftyGUI.registerSound("intro", "Interface/sound/19546__tobi123__Gong_mf2.wav");
         niftyGUI.registerMusic("credits", "Interface/sound/Loveshadow_-_Almost_Given_Up.ogg");
-//        nifty.setDebugOptionPanelColors(true);
-        
-        // register the dialog and credits controls
-        PopupsAndCreditsManager.registerStyles(niftyGUI);
-        PopupsAndCreditsManager.registerPopups(niftyGUI);
-
-        DialogPanelControlDefinition.register(niftyGUI);
-        InitialMenuDisplay.register(niftyGUI);
-        ForgotYourPasswordDisplay.register(niftyGUI);
-        MainMenuDisplay.register(niftyGUI);
-        ControlsDisplay.register(niftyGUI);
-        NewUserMenuDisplay.register(niftyGUI);
-        NewGame1MenuDisplay.register(niftyGUI);
-        LoadGameMenuDisplay.register(niftyGUI);
-        OptionsMenuDisplay.register(niftyGUI);
 
         IntroScreen.build(niftyGUI);
         MenuScreen.build(niftyGUI);
         LayerScreen.build(niftyGUI);
         
-        if (!Params.DEBUG_ON)
-            niftyGUI.gotoScreen("start");
+        Credits.register(niftyGUI);
+        Popups.register(niftyGUI);
         
         menuScreenC = (MenuScreenController) niftyGUI.getScreen("initialMenu").getScreenController();
         menuScreenC.setGameEngine(this);
-        generalScreenController = (LayerScreenController) niftyGUI.getScreen("layerScreen").getScreenController();
-        generalScreenController.setGameEngine(this);
-        inputManager.setCursorVisible(true);
-        cursors = new ArrayList<>();
-        cursors.add((JmeCursor) assetManager.loadAsset("Interface/Cursor/cursorWood.ico"));//pointer2.cur"));//cursor.cur"));//PliersLeft.cur"));//
-        cursors.add((JmeCursor) assetManager.loadAsset("Interface/Cursor/busy.ani"));
-        inputManager.setMouseCursor(cursors.get(0));
-        flyCam.setDragToRotate(true);
-        //END NIFTY
-        inputManager.addMapping("FLYCAM_RotateDrag", new MouseButtonTrigger(MouseInput.BUTTON_MIDDLE));
-        inputManager.addMapping("FLYCAM_RotateDrag", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
-        inputManager.deleteMapping(SimpleApplication.INPUT_MAPPING_EXIT);
-        System.out.println("--------End-of-SimpleAppInit-------");
-        if (Params.DEBUG_ON) {
-            niftyGUI.gotoScreen("initialMenu");
-            System.out.println("DEBUG MODE: Entered to initial menu successfully.");
-        }
-        Params.gameNarrator = com.virtualfactory.narrator.NarratorAppState.newInstance(assetManager, app.getGuiNode());
-        stateManager.attach(Params.gameNarrator);
+
+        layerScreenC = (LayerScreenController) niftyGUI.getScreen("layerScreen").getScreenController();
+        layerScreenC.setGameEngine(this);
     }
 
-    public void updateCursorIcon(int newCursorValue) {
-        inputManager.setMouseCursor(cursors.get(newCursorValue));
+    private void activateNarrator() {
+        Params.gameNarrator = com.virtualfactory.narrator.NarratorAppState.newInstance(assetManager, jmonkeyApp.getGuiNode());
+        appStateManager.attach(Params.gameNarrator);
     }
 
     public void playGame(E_Game tempGame, boolean newGame) {
@@ -301,8 +370,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         initialGameId = tempGame.getIdGame();
         //clean memory after new reload
         rootNode.detachAllChildren();
-        bulletAppState.getPhysicsSpace().destroy();
-        bulletAppState.getPhysicsSpace().create();
+        resetPhysicsEngine();
         System.gc();
         //end clean memory
         if (newGame) {
@@ -315,11 +383,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         } else {
             gameData.loadGame(tempGame);
         }
-        getGeneralScreenController().updateStartScreen();
-        getGeneralScreenController().setTimeFactor((float) gameData.getCurrentGame().getTimeFactor());
-        getGeneralScreenController().setGameNamePrincipal(gameData.getCurrentGame().getGameName());
-        getGeneralScreenController().setNextDueDate("-");
-        getGeneralScreenController().setNextPurchaseDueDate("-");
+        getLayerScreenController().updateStartScreen();
+        getLayerScreenController().setTimeFactor((float) gameData.getCurrentGame().getTimeFactor());
+        getLayerScreenController().setGameNamePrincipal(gameData.getCurrentGame().getGameName());
+        getLayerScreenController().setNextDueDate("-");
+        getLayerScreenController().setNextPurchaseDueDate("-");
         LoadElementsToDisplay(newGame ? GameType.New : GameType.Load);
         manageEvents = new ManageEvents(this, gameData);
         //initialize Simpack
@@ -327,8 +395,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         currentSystemTime = gameData.getCurrentGame().getCurrentTime();
         currentTempSystemTime = System.currentTimeMillis();// 1000.0;
         Sim.init(currentSystemTime, new LinkedListFutureEventList());
-        Sim.schedule(new SimEvent(Sim.time() + getGeneralScreenController().getTimeFactor(), Params.startEvent));
-        executeGame = true;
+        Sim.schedule(new SimEvent(Sim.time() + getLayerScreenController().getTimeFactor(), Params.startEvent));
+        isPlayerInsideFactory = true;
         //load extra data
         gameData.updateTimeOrders();
         //show static windows
@@ -342,17 +410,17 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).cleanOrders();
         niftyGUI.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).cleanMessages();
         niftyGUI.getScreen("layerScreen").findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).updateAllStepStatus(false);
-        getGeneralScreenController().updateQuantityCurrentMoney(gameData.getCurrentMoney());
+        getLayerScreenController().updateQuantityCurrentMoney(gameData.getCurrentMoney());
         inputManager.setMouseCursor(cursors.get(0));
-        getGeneralScreenController().forcePauseGame();
+        getLayerScreenController().forcePauseGame();
         initialRealSystemTime = System.currentTimeMillis() / 1000;
         currentIdleSystemTime = System.currentTimeMillis() / 1000;
         currentWindowRefreshSystemTime = System.currentTimeMillis() / 1000;
         currentDashboardTime = 0;
         timeToUpdateSlots = gameData.getCurrentTimeWithFactor();
-        getGeneralScreenController().hideCurrentControlsWindow();
-        getGeneralScreenController().showHideDynamicButtons(0);
-        getGeneralScreenController().showHideDynamicSubLevelButtons(0);
+        getLayerScreenController().hideCurrentControlsWindow();
+        getLayerScreenController().showHideDynamicButtons(0);
+        getLayerScreenController().showHideDynamicSubLevelButtons(0);
         
         niftyGUI.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).HideWindow();
         niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).HideWindow();
@@ -362,7 +430,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         player.setFallSpeed(120);
         player.setGravity(Params.playerGravity);
         player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
-        app.getCamera().setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
+        jmonkeyApp.getCamera().setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
         flyCam.setRotationSpeed(1.9499999f);
         player.setViewDirection(new Vector3f(0, 0, 1));
         
@@ -375,6 +443,17 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         
         Params.gameNarrator.talk("Press 'T' for a top view of the factory. This is a really long test just to see if the"
                 + " test wraps around and does not continue to the infinite and beyond. Change this with a better intro message in the future.", 15);
+    }
+
+    private void resetPhysicsEngine() {
+        if (bulletAppState == null) {
+            bulletAppState = new BulletAppState();
+            bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
+            appStateManager.attach(bulletAppState);
+        } else {
+            bulletAppState.getPhysicsSpace().destroy();
+            bulletAppState.getPhysicsSpace().create();
+        }
     }
 
     private void LoadElementsToDisplay(GameType gameType) {
@@ -410,7 +489,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     @Override
     public void update(float tpf) {
         // TEST Second floor sensor
-        if (executeGame) {
+        if (isPlayerInsideFactory) {
             if (secondFloorSensor.getOverlappingCount() > 1) // NOTE: getOverlappingCount() has a value of 1 by default
                 System.out.println("Character is on second floor.");
         }
@@ -422,8 +501,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
     
     public void updatePlayerPosition() {
-        camDir = app.getCamera().getDirection().clone().multLocal(playerSpeed);
-        camLeft = app.getCamera().getLeft().clone().multLocal(playerSpeed);
+        camDir = jmonkeyApp.getCamera().getDirection().clone().multLocal(playerSpeed);
+        camLeft = jmonkeyApp.getCamera().getLeft().clone().multLocal(playerSpeed);
         
         walkDirection.set(0, 0, 0); // reset walkDirection vector
         if (forward)
@@ -447,15 +526,15 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         }
 
 
-        if (executeGame) {
+        if (isPlayerInsideFactory) {
             
             
             player.setWalkDirection(walkDirection); // walk!
-            app.getCamera().setLocation(player.getPhysicsLocation());
+            jmonkeyApp.getCamera().setLocation(player.getPhysicsLocation());
             
             if ((Math.abs(System.currentTimeMillis() - Params.tempTime)/1000.00) > 0.5) {
                 Params.tempTime = System.currentTimeMillis();
-                Vector3f newPosition = app.getCamera().getLocation();
+                Vector3f newPosition = jmonkeyApp.getCamera().getLocation();
                 checkNarratorMessages(newPosition);
             }
             
@@ -510,10 +589,10 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     
     public void simpleUpdateLocal() {
         //Added by Chris
-        if (!this.getGeneralScreenController().getPauseStatus() && gameSounds.machineSoundPlaying()) {
+        if (!this.getLayerScreenController().getPauseStatus() && gameSounds.machineSoundPlaying()) {
             this.gameSounds.pauseSound(Sounds.MachineWorking);
         }
-        if (!executeGame) {
+        if (!isPlayerInsideFactory) {
             return;
         }
         if (currentSystemStatus.equals(Status.Busy)) {
@@ -539,21 +618,21 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         manageDashboard();
         currentTempSystemTime = System.currentTimeMillis();
         gameData.getCurrentGame().setCurrentTime(currentSystemTime);
-        getGeneralScreenController().setCurrentGameTime(gameData.getCurrentTimeGame());
+        getLayerScreenController().setCurrentGameTime(gameData.getCurrentTimeGame());
         SimEvent nextEvent = Sim.next_event(currentSystemTime, Sim.Mode.SYNC);
         while (nextEvent != null) {
             if (nextEvent.getId() == Params.startEvent) {
                 gameData.manageMachineStates();
                 manageEvents.executeEvent();
                 //it happens each TIME-UNIT
-                Sim.schedule(new SimEvent(Sim.time() + getGeneralScreenController().getTimeFactor(), Params.startEvent));
+                Sim.schedule(new SimEvent(Sim.time() + getLayerScreenController().getTimeFactor(), Params.startEvent));
                 niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardScreenController.class).updateQuantityPeopleStatus(gameData.getNoUserOperator(Status.Busy), gameData.getNoUserOperator(Status.Idle));
             } else {
                 manageEvents.setStrategy(nextEvent.getToken());
                 manageEvents.releaseResourcesEvent();
             }
             nextEvent = Sim.next_event(currentSystemTime, Sim.Mode.SYNC);
-            getGeneralScreenController().updateQuantityCurrentMoney(gameData.getCurrentMoney());
+            getLayerScreenController().updateQuantityCurrentMoney(gameData.getCurrentMoney());
         }
     }
 
@@ -588,7 +667,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
 
     private void showPopupAttemptingToCloseGame() {
-        getGeneralScreenController().pauseGame();
+        getLayerScreenController().pauseGame();
         Element exitPopup = niftyGUI.createPopup("gameClosing");
         niftyGUI.showPopup(niftyGUI.getCurrentScreen(), exitPopup.getId(), null);
         niftyGUI.getCurrentScreen().processAddAndRemoveLayerElements();
@@ -615,14 +694,14 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             double oldTime = tempEvent.getTime();
             //System.out.println("UPDATE: token:" + tempToken + " attribute0:" + tempToken.getAttribute(0) + " - attribute1:" + tempToken.getAttribute(1) + " - tempEvent:" + tempEvent.getId());
             if (tempToken.getAttribute(1) != 0) {
-                tempEvent.setTime((oldTime - currentSystemTime) * getGeneralScreenController().getTimeFactor() / tempToken.getAttribute(1) + currentSystemTime);
-//                System.out.println("CHANGED TIME - attritube0:" + tempToken.getAttribute(0) + " - Time:" + currentSystemTime + " - EndTime:" + tempEvent.getTime() + " - OldEndTime:" + oldTime + " - OldFactorTime:" + tempToken.getAttribute(1) + " - NewFactorTime:" + getGeneralScreenController().getTimeFactor());
+                tempEvent.setTime((oldTime - currentSystemTime) * getLayerScreenController().getTimeFactor() / tempToken.getAttribute(1) + currentSystemTime);
+//                System.out.println("CHANGED TIME - attritube0:" + tempToken.getAttribute(0) + " - Time:" + currentSystemTime + " - EndTime:" + tempEvent.getTime() + " - OldEndTime:" + oldTime + " - OldFactorTime:" + tempToken.getAttribute(1) + " - NewFactorTime:" + getLayerScreenController().getTimeFactor());
                 if (tempToken.getAttribute(2) == Params.simpackPurchase && tempToken.getAttribute(0) == gameData.getCurrentPurchaseId()) {
-                    gameData.setNextPurchaseDueDate((int) ((tempEvent.getTime() - currentSystemTime) * getGeneralScreenController().getTimeFactorForSpeed()));
-                    getGeneralScreenController().setNextPurchaseDueDate(gameData.convertTimeUnistToHourMinute(gameData.getNextPurchaseDueDate()));
-                    //System.out.println("PURCHASE MISSING REAL_TIME:" + (tempEvent.getTime()-currentSystemTime) + " - GAME_TIME:" + (tempEvent.getTime()-currentSystemTime)*getGeneralScreenController().getTimeFactorForSpeed() + " - CLOCK_TIME:" + gameData.getNextPurchaseDueDate());
+                    gameData.setNextPurchaseDueDate((int) ((tempEvent.getTime() - currentSystemTime) * getLayerScreenController().getTimeFactorForSpeed()));
+                    getLayerScreenController().setNextPurchaseDueDate(gameData.convertTimeUnistToHourMinute(gameData.getNextPurchaseDueDate()));
+                    //System.out.println("PURCHASE MISSING REAL_TIME:" + (tempEvent.getTime()-currentSystemTime) + " - GAME_TIME:" + (tempEvent.getTime()-currentSystemTime)*getLayerScreenController().getTimeFactorForSpeed() + " - CLOCK_TIME:" + gameData.getNextPurchaseDueDate());
                 }
-                tempToken.setAttribute(1, getGeneralScreenController().getTimeFactor());
+                tempToken.setAttribute(1, getLayerScreenController().getTimeFactor());
             }
         }
     }
@@ -650,43 +729,23 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 //        }
     }
     
-    /**
-     * Make each spatial on the scene cartoonish.
-     * @param spatial the spatial to apply the cartoon effect
-     */
     public void transformToCartoon(Spatial spatial) {
-        /* Use recursion to access every geometry of each node */
         if (spatial instanceof Node) {
             Node n = (Node) spatial;
             
-            for (Spatial child : n.getChildren()) {
+            for (Spatial child : n.getChildren())
                 transformToCartoon(child);
-            }
+
         } else if (spatial instanceof Geometry) {
             Geometry g = (Geometry) spatial;
             
-            String geomName = g.getName();
-            if (geomName.equals("Juanito body") || geomName.equals("Barbed wire")) { 
-                g.removeFromParent(); 
-                return; 
-            }
-            
-            /* We use a LightBlow material definition, particularly good for toon shaders */
-            Material newMat = new Material(assetManager, "ShaderBlow/MatDefs/LightBlow.j3md");
-            //newMat.setTexture("DiffuseMap", g.getMaterial().getTextureParam("DiffuseMap").getTextureValue());
-            newMat.setTexture("ColorRamp", assetManager.loadTexture("Textures/toon.png"));
-            newMat.setBoolean("Toon", true);
-            //newMat.setFloat("EdgeSize", 0.2f);
-            //newMat.setBoolean("Fog_Edges", true);
-            
-            
-            /* Enable Professor Zapata's backface culling of the factory */
-            if (g.getName().equals("Shop building")) {
-                newMat.getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
-            }
-            
-            /* Give the geometry its new toonish material */ 
-            g.setMaterial(newMat);
+            Material newCartoonishMat = new Material(assetManager, "ShaderBlow/MatDefs/LightBlow.j3md");
+    
+            newCartoonishMat.setTexture("ColorRamp", assetManager.loadTexture("Textures/toon.png"));
+
+            newCartoonishMat.setBoolean("Toon", true);
+
+            g.setMaterial(newCartoonishMat);
         }
     }
     
@@ -703,34 +762,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         lamp3.setColor(color);
         lamp3.setRadius(lamp2.getRadius());
         rootNode.addLight(lamp3);
-
-    
     }
 
     private void createShootable() {
         shootables = new Node("Shootables");
         rootNode.attachChild(shootables);
-    }
-
-    private void createLight() {
-        AmbientLight al = new AmbientLight();
-        al.setColor(ColorRGBA.White.mult(1.3f));
-        rootNode.addLight(al);
-        
-        DirectionalLight dl = new DirectionalLight();
-        dl.setColor(ColorRGBA.White);
-        dl.setDirection(new Vector3f(2.8f, -2.8f, -2.8f).normalizeLocal());
-        rootNode.addLight(dl);
-        
-        DirectionalLight dlNew = new DirectionalLight();
-        dlNew.setColor(ColorRGBA.White);
-        dlNew.setDirection(new Vector3f(0f, 40f, 0));
-        rootNode.addLight(dlNew);
-        
-        DirectionalLight dlOpposite = new DirectionalLight();
-        dlOpposite.setColor(ColorRGBA.White);
-        dlOpposite.setDirection(new Vector3f(2.8f, -2.8f, 2.8f).normalizeLocal());
-        rootNode.addLight(dl);
     }
     
     private void createTerrain() {
@@ -770,7 +806,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         player.setFallSpeed(120);
         player.setGravity(Params.playerGravity);
         player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
-        app.getCamera().setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
+        jmonkeyApp.getCamera().setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
         player.setViewDirection(new Vector3f(0, 0, 1));
         bulletAppState.getPhysicsSpace().add(player);
         // ----------
@@ -781,7 +817,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             setTerrainMap(tempBlockedZone.getLocationX(), tempBlockedZone.getLocationZ(), tempBlockedZone.getWidth(), tempBlockedZone.getLength(), true);
         }
         
-        //transformToCartoon(rootNode);
+        boolean isToonFilterSupported = Params.renderer.equalsIgnoreCase(Params.supportedRenderer);
+        if (isToonFilterSupported)
+            loadToonFilter(); 
+
+        createLightBulb();
     }
 
     private void createGrid(int iniX, int iniZ, int sizeW, int sizeL) {
@@ -913,23 +953,23 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
 
     public void operatorWalksTo(E_Operator operator, int posX, int posZ) {
-        arrOperatorsWalksTo.add(new DispOperatorWalksTo(this, operator, posX, posZ, getGeneralScreenController().getTimeFactorForSpeed()));
+        arrOperatorsWalksTo.add(new DispOperatorWalksTo(this, operator, posX, posZ, getLayerScreenController().getTimeFactorForSpeed()));
     }
 
     public void operatorWalksToStaffZone(E_Operator operator, int posX, int posZ) {
-        arrOperatorsWalksTo.add(new DispOperatorWalksTo(this, operator, posX, posZ, getGeneralScreenController().getTimeFactorForSpeed(), true));
+        arrOperatorsWalksTo.add(new DispOperatorWalksTo(this, operator, posX, posZ, getLayerScreenController().getTimeFactorForSpeed(), true));
     }
 
     public void operatorWalksToSpecificMachine(E_Operator operator, E_Machine machine, int posX, int posZ) {
-        arrOperatorsWalksTo.add(new DispOperatorWalksTo(this, operator, machine, posX, posZ, getGeneralScreenController().getTimeFactorForSpeed()));
+        arrOperatorsWalksTo.add(new DispOperatorWalksTo(this, operator, machine, posX, posZ, getLayerScreenController().getTimeFactorForSpeed()));
     }
 
     public void operatorAndMachineMovingTo(E_Operator operator, E_Machine machine, int posX, int posZ) {
-        arrOperatorsMachinesMovingTo.add(new DispOperatorMachineMovingTo(this, rootNode, operator, machine, posX, posZ, getGeneralScreenController().getTimeFactorForSpeed()));
+        arrOperatorsMachinesMovingTo.add(new DispOperatorMachineMovingTo(this, rootNode, operator, machine, posX, posZ, getLayerScreenController().getTimeFactorForSpeed()));
     }
 
     public void operatorAndMachineMovingToMachineZone(E_Operator operator, E_Machine machine, int posX, int posZ) {
-        arrOperatorsMachinesMovingTo.add(new DispOperatorMachineMovingTo(this, rootNode, operator, machine, posX, posZ, getGeneralScreenController().getTimeFactorForSpeed(), true));
+        arrOperatorsMachinesMovingTo.add(new DispOperatorMachineMovingTo(this, rootNode, operator, machine, posX, posZ, getLayerScreenController().getTimeFactorForSpeed(), true));
     }
 
     private void createMachines(E_Machine machine, GameType gameType) {
@@ -1034,163 +1074,24 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         cam.setAxes(new Vector3f(-0.0024178028f, 0.0011213422f, 0.9999965f), new Vector3f(-0.96379673f, 0.26662517f, -0.00262928f), new Vector3f(-0.26662725f, -0.96379966f, 0.00043606758f));
     }
 
-    private void setupFilter() {
+    private void loadToonFilter() {
         FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
-
         CartoonEdgeFilter toonFilter = new CartoonEdgeFilter();
-        //
         toonFilter.setEdgeWidth(1.0f);
         fpp.addFilter(toonFilter);
-        
-        viewPort.addProcessor(fpp);
+        jmonkeyApp.getViewPort().addProcessor(fpp);
+        //transformToCartoon(rootNode);
     }
-    
-    /**
-     * For now, here we initialize all sound effects related to the player. 
-     */
-    private void initSoundEffects() {
-        /* Initialize player's footsteps */
-        footstep = new AudioNode(assetManager, "Sounds/footstep.ogg", false);
-        footstep.setPositional(false);
-        footstep.setLooping(true);
-    }
-
-    private void initKeys() {
-        inputManager.deleteMapping("FLYCAM_ZoomIn");
-        inputManager.deleteMapping("FLYCAM_ZoomOut");
-        inputManager.deleteMapping("FLYCAM_Up");
-        inputManager.deleteMapping("FLYCAM_Down");
-        inputManager.deleteTrigger("FLYCAM_Left", new MouseAxisTrigger(MouseInput.AXIS_X, true));
-        inputManager.deleteTrigger("FLYCAM_Right", new MouseAxisTrigger(MouseInput.AXIS_X, false));
-        inputManager.deleteTrigger("FLYCAM_RotateDrag", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-
-        inputManager.addMapping("MousePicking", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-        inputManager.addListener(actionListener, "MousePicking");
-
-        String[] mappings = {"Forward", "Backward", "Left",
-                             "Right", "Cam Up", "Cam Down", "Jump", "Picking",
-                             "Dashboard Control", "Top View", "Screen Size",
-                             "Scale Bigger", "Scale Smaller",
-                             "Activate Debug Cam", "debug position"};
-        
-        int[] triggers = {KeyInput.KEY_W, KeyInput.KEY_S, KeyInput.KEY_A, 
-                          KeyInput.KEY_D, KeyInput.KEY_UP, KeyInput.KEY_DOWN, 
-                          KeyInput.KEY_SPACE, KeyInput.KEY_LSHIFT, 
-                          KeyInput.KEY_RSHIFT, KeyInput.KEY_T, KeyInput.KEY_F1,
-                          KeyInput.KEY_ADD, KeyInput.KEY_SUBTRACT,
-                          KeyInput.KEY_0, KeyInput.KEY_H, KeyInput.KEY_B,
-                          KeyInput.KEY_NUMPAD4, KeyInput.KEY_NUMPAD6,
-                          KeyInput.KEY_NUMPAD8, KeyInput.KEY_NUMPAD2,
-                          KeyInput.KEY_ADD, KeyInput.KEY_SUBTRACT,
-                          KeyInput.KEY_2, KeyInput.KEY_1};
-        
-        for (int i = 0; i < mappings.length; i++) {
-            inputManager.addMapping(mappings[i], new KeyTrigger(triggers[i]));
-            inputManager.addListener(actionListener, mappings[i]);
-        } 
-    }
-    
-    private ActionListener actionListener = new ActionListener() {
-        @Override
-        public void onAction(String name, boolean keyPressed, float tpf) {   
-            
-            if (name.equals("Screen Size") && !keyPressed)
-                changeScreenSize();
-            
-            if (!executeGame) {
-                return;
-            }
-            
-            switch (name) {
-                case "Forward":
-                    forward = keyPressed;
-                    if (keyPressed && !isDebugCamEnabled) { footstep.play(); }
-                    else { if (!backward && !left && !right) { footstep.stop();  } }
-                    break;
-                    
-                case "Backward":
-                    backward = keyPressed;
-                    if (keyPressed && !isDebugCamEnabled) { footstep.play(); }
-                    else { if (!forward && !left && !right) { footstep.stop(); } }
-                    break;
-                    
-                case "Left":
-                    moveLeft = keyPressed;
-                    if (keyPressed && !isDebugCamEnabled) { footstep.play(); }
-                    else { if (!forward && !backward && !right) { footstep.stop(); } }
-                    break;
-                    
-                case "Right":
-                    moveRight = keyPressed;
-                    if (keyPressed && !isDebugCamEnabled) { footstep.play(); }
-                    else { if (!forward && !backward && !left) { footstep.stop(); } }
-                    break;
-                
-                case "Cam Up":
-                    camUp = keyPressed;
-                    break;
-                
-                case "Cam Down":
-                    camDown = keyPressed;
-                    break;
-                    
-                case "Picking": case "MousePicking":
-                    if (!keyPressed)
-                        handlePickedObject(name);
-                    break;
-                
-                case "Dashboard Control":
-                    if (!keyPressed) {
-                        showHideDashboard = true;
-                        manageDashboard();
-                        if (Params.DEBUG_ON)
-                            System.out.println("Dashboard Control Key Selected.");
-                    }
-                    break;
-                    
-                case "debug position":
-                    if (!keyPressed) {
-
-//                        System.out.println("\n\nLa posicion deseada es estaaaaaaaa: " +  cam.getLocation()
-//                                + "\nLa direccion deseada es: " + cam.getDirection() + "\nUp: " + cam.getUp()+ "\nLeft: " + cam.getLeft());
-
-                        System.out.println("\n\nLa direccion deseada es: " + cam.getDirection() + "\nUp: " + cam.getUp()
-                                + "\nFrustrum top : " + cam.getFrustumTop());
-                    }
-                    break;
-                    
-                case "Top View":
-                    if (!keyPressed){
-                        handleTopView();
-                    }
-                    break;
-                    
-                case "Activate Debug Cam":
-                    if (!keyPressed) {
-                        isDebugCamEnabled = !isDebugCamEnabled;
-                    }
-                    break;
-                case "Jump":
-                    if (!keyPressed) {
-                        player.jump();
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-        }
-    };
     
     public void changeScreenSize() {
         AppSettings settings = ScreenSettings.generate();
         
-        if (app.getContext().getSettings().isFullscreen()) {
+        if (jmonkeyApp.getContext().getSettings().isFullscreen()) {
             settings.setFullscreen(false);
             settings.setResolution(1280, 720);
         }
-        app.setSettings(settings);
-        app.restart();
+        jmonkeyApp.setSettings(settings);
+        jmonkeyApp.restart();
 
     }
     
@@ -1226,7 +1127,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         Ray ray;
         if (pickingType.equals("Picking")) { //Picking with the SHIFT Button
             ray = new Ray(cam.getLocation(), cam.getDirection());
-            getGeneralScreenController().hideCurrentControlsWindow();
+            getLayerScreenController().hideCurrentControlsWindow();
         }
         else { //Picking with mouse
             Vector3f origin    = cam.getWorldCoordinates(inputManager.getCursorPosition(), 0.0f);
@@ -1267,25 +1168,25 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
     private void loadWindowControl(String winControl) {
         Pair<Integer, Integer> positionWC = new Pair((int) inputManager.getCursorPosition().getX(), guiViewPort.getCamera().getHeight() - (int) inputManager.getCursorPosition().getY());
-        getGeneralScreenController().hideCurrentControlsWindow();
-        getGeneralScreenController().showHideDynamicButtons(0);
-        getGeneralScreenController().showHideDynamicSubLevelButtons(0);
+        getLayerScreenController().hideCurrentControlsWindow();
+        getLayerScreenController().showHideDynamicButtons(0);
+        getLayerScreenController().showHideDynamicSubLevelButtons(0);
         if (winControl.contains(TypeElements.OPERATOR.toString())) {
             niftyGUI.getScreen("layerScreen").findElementByName("winOC_Element").getControl(OperatorScreenController.class).loadWindowControl(this, Integer.valueOf(winControl.replace(TypeElements.OPERATOR.toString(), "")), positionWC);
-            getGeneralScreenController().setCurrentOptionselected("windowOperator");
+            getLayerScreenController().setCurrentOptionselected("windowOperator");
         } else if (winControl.contains(TypeElements.PART.toString())) {
             niftyGUI.getScreen("layerScreen").findElementByName("winPC_Element").getControl(PartScreenController.class).loadWindowControl(this, Integer.valueOf(winControl.split("_")[winControl.split("_").length - 1].replace(TypeElements.PART.toString(), "")), positionWC);
-            getGeneralScreenController().setCurrentOptionselected("windowPart");
+            getLayerScreenController().setCurrentOptionselected("windowPart");
         } else if (winControl.contains(TypeElements.STATION.toString()) && !winControl.contains(TypeElements.BUCKET.toString())) {
             E_Station tempStation = getGameData().getMapUserStation().get(Integer.valueOf(winControl.replace(TypeElements.STATION.toString(), "")));
             if (!tempStation.getStationType().equals(StationType.MachineZone) && !tempStation.getStationType().equals(StationType.StaffZone)) {
                 niftyGUI.getScreen("layerScreen").findElementByName("winSSC_Element").getControl(StorageStationScreenController.class).loadWindowControl(this, Integer.valueOf(winControl.replace(TypeElements.STATION.toString(), "")), positionWC);
-                getGeneralScreenController().setCurrentOptionselected("windowStorageStation");
+                getLayerScreenController().setCurrentOptionselected("windowStorageStation");
             }
 
         } else if (winControl.contains(TypeElements.MACHINE.toString())) {
             niftyGUI.getScreen("layerScreen").findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(this, Integer.valueOf(winControl.replace(TypeElements.MACHINE.toString(), "")), positionWC);
-            getGeneralScreenController().setCurrentOptionselected("windowMachine");
+            getLayerScreenController().setCurrentOptionselected("windowMachine");
         }
     }
 
@@ -1358,11 +1259,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
 
     public boolean isExecuteGame() {
-        return executeGame;
+        return isPlayerInsideFactory;
     }
 
-    public void setExecuteGame(boolean executeGame) {
-        this.executeGame = executeGame;
+    public void setExecuteGame(boolean isPlayerInsideFactory) {
+        this.isPlayerInsideFactory = isPlayerInsideFactory;
     }
 
     public ManageEvents getManageEvents() {
@@ -1381,8 +1282,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         this.gameData = gameData;
     }
 
-    public LayerScreenController getGeneralScreenController() {
-        return generalScreenController;
+    public LayerScreenController getLayerScreenController() {
+        return layerScreenC;
     }
 
     public TerrainMap getTerrainMap() {

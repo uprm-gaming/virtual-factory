@@ -39,17 +39,17 @@ public class StationAnimation extends Thread{
     
     @Override
     public void run(){
-        timeFactor = gameEngine.getGeneralScreenController().getTimeFactor();
+        timeFactor = gameEngine.getLayerScreenController().getTimeFactor();
         initialTime = gameEngine.getCurrentSystemTime();
         float currentHeight = partBox.getYExtent();
         int numberIterations = 0;
 //        isCompleted = false;
         while (initialTime + timeToFinish > gameEngine.getCurrentSystemTime() && gameEngine.getCurrentSystemStatus().equals(Status.Busy)&&gameEngine.isExecuteGame()){
-            if (timeFactor != gameEngine.getGeneralScreenController().getTimeFactor()){
+            if (timeFactor != gameEngine.getLayerScreenController().getTimeFactor()){
                 double timeToComplete = initialTime + timeToFinish - gameEngine.getCurrentSystemTime();
                 timeToFinish = timeToFinish - timeToComplete;
-                timeToFinish = timeToFinish + timeToComplete*gameEngine.getGeneralScreenController().getTimeFactor()/timeFactor;
-                timeFactor = gameEngine.getGeneralScreenController().getTimeFactor();
+                timeToFinish = timeToFinish + timeToComplete*gameEngine.getLayerScreenController().getTimeFactor()/timeFactor;
+                timeFactor = gameEngine.getLayerScreenController().getTimeFactor();
             }            
             numberIterations++;
             if (addItems){  //add

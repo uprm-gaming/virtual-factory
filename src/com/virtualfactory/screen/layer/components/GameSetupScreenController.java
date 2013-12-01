@@ -125,10 +125,10 @@ public class GameSetupScreenController implements Controller {
             winControls.getContent().show();
             isVisible = true;
             if (position != null){
-                if (winControls.getWidth() + position.getFirst() > gameEngine.app.getGuiViewPort().getCamera().getWidth())
-                    position.setFirst(gameEngine.app.getGuiViewPort().getCamera().getWidth() - winControls.getWidth());
-                if (winControls.getHeight() + position.getSecond() > gameEngine.app.getGuiViewPort().getCamera().getHeight())
-                    position.setSecond(gameEngine.app.getGuiViewPort().getCamera().getHeight() - winControls.getHeight());
+                if (winControls.getWidth() + position.getFirst() > gameEngine.jmonkeyApp.getGuiViewPort().getCamera().getWidth())
+                    position.setFirst(gameEngine.jmonkeyApp.getGuiViewPort().getCamera().getWidth() - winControls.getWidth());
+                if (winControls.getHeight() + position.getSecond() > gameEngine.jmonkeyApp.getGuiViewPort().getCamera().getHeight())
+                    position.setSecond(gameEngine.jmonkeyApp.getGuiViewPort().getCamera().getHeight() - winControls.getHeight());
                 winControls.getElement().setConstraintX(new SizeValue(position.getFirst() + "px"));
                 winControls.getElement().setConstraintY(new SizeValue(position.getSecond() + "px"));
                 winControls.getElement().getParent().layoutElements();
@@ -149,8 +149,8 @@ public class GameSetupScreenController implements Controller {
     
     public void clickSetupResources(){
         manageWindows(resources);
-        gameEngine.getGeneralScreenController().optionButtonClicked("buttonOptionControls");
-        gameEngine.getGeneralScreenController().onDynamicButtonClicked("dynBut3");
+        gameEngine.getLayerScreenController().optionButtonClicked("buttonOptionControls");
+        gameEngine.getLayerScreenController().onDynamicButtonClicked("dynBut3");
     }
     
     public void setupResourcesDone(){
@@ -163,8 +163,8 @@ public class GameSetupScreenController implements Controller {
     
     public void clickSetupStorage(){
         manageWindows(storage);
-        gameEngine.getGeneralScreenController().optionButtonClicked("buttonOptionControls");
-        gameEngine.getGeneralScreenController().onDynamicButtonClicked("dynBut0");
+        gameEngine.getLayerScreenController().optionButtonClicked("buttonOptionControls");
+        gameEngine.getLayerScreenController().onDynamicButtonClicked("dynBut0");
     }
     
     public void setupStorageDone(){
@@ -177,8 +177,8 @@ public class GameSetupScreenController implements Controller {
     
     public void clickSetupUnitLoad(){
         manageWindows(unitLoad);
-        gameEngine.getGeneralScreenController().optionButtonClicked("buttonOptionControls");
-        gameEngine.getGeneralScreenController().onDynamicButtonClicked("dynBut4");
+        gameEngine.getLayerScreenController().optionButtonClicked("buttonOptionControls");
+        gameEngine.getLayerScreenController().onDynamicButtonClicked("dynBut4");
     }
     
     public void setupUnitLoadDone(){
@@ -191,8 +191,8 @@ public class GameSetupScreenController implements Controller {
     
     public void clickSetupPurchase(){
         manageWindows(purchase);
-        gameEngine.getGeneralScreenController().optionButtonClicked("buttonOptionActivities");
-        gameEngine.getGeneralScreenController().onDynamicButtonClicked("dynBut1");
+        gameEngine.getLayerScreenController().optionButtonClicked("buttonOptionActivities");
+        gameEngine.getLayerScreenController().onDynamicButtonClicked("dynBut1");
     }
     
     public void setupPurchaseDone(){
@@ -205,8 +205,8 @@ public class GameSetupScreenController implements Controller {
     
     public void clickSetupOperators(){
         manageWindows(operators);
-        gameEngine.getGeneralScreenController().optionButtonClicked("buttonOptionControls");
-        gameEngine.getGeneralScreenController().onDynamicButtonClicked("dynBut1");
+        gameEngine.getLayerScreenController().optionButtonClicked("buttonOptionControls");
+        gameEngine.getLayerScreenController().onDynamicButtonClicked("dynBut1");
     }
     
     public void setupOperatorsDone(){
@@ -219,8 +219,8 @@ public class GameSetupScreenController implements Controller {
     
     public void clickSetupPriority(){
         manageWindows(priority);
-        gameEngine.getGeneralScreenController().optionButtonClicked("buttonOptionControls");
-        gameEngine.getGeneralScreenController().onDynamicButtonClicked("dynBut2");
+        gameEngine.getLayerScreenController().optionButtonClicked("buttonOptionControls");
+        gameEngine.getLayerScreenController().onDynamicButtonClicked("dynBut2");
     }
     
     public void setupPriorityDone(){
@@ -234,11 +234,11 @@ public class GameSetupScreenController implements Controller {
     private void manageWindows(String newWindows){
         if (!currentWindowVisible.equals(newWindows)){
             currentWindowVisible = newWindows;
-            if (!gameEngine.getGeneralScreenController().getCurrentOptionselected().isEmpty())
-                gameEngine.getGeneralScreenController().optionButtonClicked(gameEngine.getGeneralScreenController().getCurrentOptionselected());
+            if (!gameEngine.getLayerScreenController().getCurrentOptionselected().isEmpty())
+                gameEngine.getLayerScreenController().optionButtonClicked(gameEngine.getLayerScreenController().getCurrentOptionselected());
         }else{
-            if (gameEngine.getGeneralScreenController().getCurrentOptionselected().isEmpty())
-                gameEngine.getGeneralScreenController().setButtonSelectedSecondLevel("");
+            if (gameEngine.getLayerScreenController().getCurrentOptionselected().isEmpty())
+                gameEngine.getLayerScreenController().setButtonSelectedSecondLevel("");
         }
     }
     
@@ -356,16 +356,16 @@ public class GameSetupScreenController implements Controller {
             activity.setPriorityQueue(activity.getDefaultValuePriority());
         }
         updateAllStepStatus(true);
-        gameEngine.getGeneralScreenController().hideCurrentControlsWindow();
-        gameEngine.getGeneralScreenController().showHideDynamicButtons(0);
-        gameEngine.getGeneralScreenController().showHideDynamicSubLevelButtons(0);
+        gameEngine.getLayerScreenController().hideCurrentControlsWindow();
+        gameEngine.getLayerScreenController().showHideDynamicButtons(0);
+        gameEngine.getLayerScreenController().showHideDynamicSubLevelButtons(0);
     }
     
     @NiftyEventSubscriber(id="setupStartGame")
     public void onStartButtonClicked(final String id, final ButtonClickedEvent event) {
         gameEngine.updateLastActivitySystemTime();
         if (isReadyToStart){
-            gameEngine.getGeneralScreenController().playGame();
+            gameEngine.getLayerScreenController().playGame();
             loadWindowControl(gameEngine, -1, null);
         }else{
             GameLogScreenController.addMessage(MessageType.Notification, Messages.gameSetup);
