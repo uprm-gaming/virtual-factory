@@ -343,81 +343,46 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
     
     public void playGame(E_Game tempGame, boolean newGame) {
+        initialGameId = tempGame.getIdGame(); // NOTE: Game ID == Level
+
         updateCursorIcon(1);
 
-        terrainMap = new TerrainMap();
-        initialGameId = tempGame.getIdGame();
-
-        rootNode.detachAllChildren();
-        resetPhysicsEngine();
-        System.gc(); // garbage collector
+        flushPreviousGame();
 
         if (newGame) {
             this.getArrGameSounds().clear();
-            this.gameSounds.stopSound(Sounds.Background); // added by Chris
+            this.gameSounds.stopSound(Sounds.Background); // Added by Chris
             gameData.createGame(tempGame);
         } else {
             gameData.loadGame(tempGame);
         }
 
-        getLayerScreenController().updateStartScreen();
-        getLayerScreenController().setTimeFactor((float) gameData.getCurrentGame().getTimeFactor());
-        getLayerScreenController().setGameNamePrincipal(gameData.getCurrentGame().getGameName());
-        getLayerScreenController().setNextDueDate("-");
-        getLayerScreenController().setNextPurchaseDueDate("-");
-
-        loadElementsToDisplay(newGame ? GameType.New : GameType.Load);
         manageEvents = new ManageEvents(this, gameData);
 
-        //initialize Simpack
-        currentSystemStatus = Status.Busy;
-        currentSystemTime = gameData.getCurrentGame().getCurrentTime();
-        currentTempSystemTime = System.currentTimeMillis();// 1000.0;
-        Sim.init(currentSystemTime, new LinkedListFutureEventList());
-        Sim.schedule(new SimEvent(Sim.time() + getLayerScreenController().getTimeFactor(), Params.startEvent));
+        gameData.updateTimeOrders();
+
+        resetLayerScreen();
+
+        initSimPack();
+
+        loadElementsToDisplay(newGame ? GameType.New : GameType.Load);
+
+        enableLayerScreen();
+
+        updateCursorIcon(0);
 
         isPlayerInsideFactory = true;
         
-        //load extra data
-        gameData.updateTimeOrders();
-
-        //show static windows
-        niftyGUI.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).loadWindowControl(this, 0, null);
-        niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).loadWindowControl(this, 0, null);
-        niftyGUI.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).loadWindowControl(this, 0, null);
-        niftyGUI.getScreen("layerScreen").findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).loadWindowControl(this, -1, null); // -1 because we dont want it to be visible
-        niftyGUI.getScreen("layerScreen").findElementByName("winFCC_Element").getControl(FlowChartScreenController.class).loadWindowControl(this, -1, null);
-        niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardScreenController.class).loadWindowControl(this, 0, null);
-        
-        //clean lists
-        niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).cleanOrders();
-        niftyGUI.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).cleanMessages();
-        niftyGUI.getScreen("layerScreen").findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).updateAllStepStatus(false);
-        
-        getLayerScreenController().updateQuantityCurrentMoney(gameData.getCurrentMoney());
-        updateCursorIcon(0);
-        getLayerScreenController().forcePauseGame();
-        initialRealSystemTime = System.currentTimeMillis() / 1000;
-        currentIdleSystemTime = System.currentTimeMillis() / 1000;
-        currentWindowRefreshSystemTime = System.currentTimeMillis() / 1000;
-        currentDashboardTime = 0;
-        timeToUpdateSlots = gameData.getCurrentTimeWithFactor();
-        getLayerScreenController().hideCurrentControlsWindow();
-        getLayerScreenController().showHideDynamicButtons(0);
-        getLayerScreenController().showHideDynamicSubLevelButtons(0);
-        
-        niftyGUI.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).HideWindow();
-        niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).HideWindow();
-        niftyGUI.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).showHide();
-        
-        if (topViewEnabled) {
-            topViewEnabled = false;
-            cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
-            flyCam.setMoveSpeed(100);
-        }
-        
         Params.gameNarrator.talk("Press 'T' for a top view of the factory. This is a really long test just to see if the"
                 + " test wraps around and does not continue to the infinite and beyond. Change this with a better intro message in the future.", 15);
+    }
+
+    private void flushPreviousGame() {
+        rootNode.detachAllChildren();
+        resetPhysicsEngine();
+        System.gc(); // Garbage collector
+
+        terrainMap = new TerrainMap();
     }
 
     private void resetPhysicsEngine() {
@@ -429,6 +394,22 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             bulletAppState.getPhysicsSpace().destroy();
             bulletAppState.getPhysicsSpace().create();
         }
+    }
+
+    private void resetLayerScreen() {
+        getLayerScreenController().updateStartScreen();
+        getLayerScreenController().setTimeFactor((float) gameData.getCurrentGame().getTimeFactor());
+        getLayerScreenController().setGameNamePrincipal(gameData.getCurrentGame().getGameName());
+        getLayerScreenController().setNextDueDate("-");
+        getLayerScreenController().setNextPurchaseDueDate("-");
+    }
+
+    private void initSimPack() {
+        currentSystemStatus = Status.Busy;
+        currentSystemTime = gameData.getCurrentGame().getCurrentTime();
+        currentTempSystemTime = System.currentTimeMillis();// 1000.0;
+        Sim.init(currentSystemTime, new LinkedListFutureEventList());
+        Sim.schedule(new SimEvent(Sim.time() + getLayerScreenController().getTimeFactor(), Params.startEvent));
     }
 
     private void loadElementsToDisplay(GameType gameType) {
@@ -459,6 +440,42 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             }
         }
         createShowSpotObject();
+
+        if (topViewEnabled) {
+            topViewEnabled = false;
+            cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
+            flyCam.setMoveSpeed(100);
+        }
+    }
+
+    private void enableLayerScreen() {
+        //show static windows
+        niftyGUI.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).loadWindowControl(this, 0, null);
+        niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).loadWindowControl(this, 0, null);
+        niftyGUI.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).loadWindowControl(this, 0, null);
+        niftyGUI.getScreen("layerScreen").findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).loadWindowControl(this, -1, null); // -1 because we dont want it to be visible
+        niftyGUI.getScreen("layerScreen").findElementByName("winFCC_Element").getControl(FlowChartScreenController.class).loadWindowControl(this, -1, null);
+        niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardScreenController.class).loadWindowControl(this, 0, null);
+        
+        //clean lists
+        niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).cleanOrders();
+        niftyGUI.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).cleanMessages();
+        niftyGUI.getScreen("layerScreen").findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).updateAllStepStatus(false);
+        
+        getLayerScreenController().updateQuantityCurrentMoney(gameData.getCurrentMoney());
+        getLayerScreenController().forcePauseGame();
+        initialRealSystemTime = System.currentTimeMillis() / 1000;
+        currentIdleSystemTime = System.currentTimeMillis() / 1000;
+        currentWindowRefreshSystemTime = System.currentTimeMillis() / 1000;
+        currentDashboardTime = 0;
+        timeToUpdateSlots = gameData.getCurrentTimeWithFactor();
+        getLayerScreenController().hideCurrentControlsWindow();
+        getLayerScreenController().showHideDynamicButtons(0);
+        getLayerScreenController().showHideDynamicSubLevelButtons(0);
+        
+        niftyGUI.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).HideWindow();
+        niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).HideWindow();
+        niftyGUI.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).showHide();
     }
 
     @Override
