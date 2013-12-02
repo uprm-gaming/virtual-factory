@@ -1,12 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.virtualfactory.screen.layer.components;
 
 import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.Nifty;
 import com.virtualfactory.utils.TypeActivity;
+
 /**
  *
  * @author David
