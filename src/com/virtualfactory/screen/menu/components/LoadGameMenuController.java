@@ -16,7 +16,7 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 import de.lessvoid.nifty.controls.ListBox;
 import de.lessvoid.nifty.effects.EffectEventId;
-import com.virtualfactory.app.GameEngine;
+import com.virtualfactory.engine.GameEngine;
 import com.virtualfactory.entity.E_Game;
 import java.util.ArrayList;
 import java.util.Properties;

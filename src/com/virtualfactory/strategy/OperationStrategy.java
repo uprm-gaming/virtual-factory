@@ -6,7 +6,7 @@ package com.virtualfactory.strategy;
 
 import com.jme3.math.Vector3f;
 import com.virtualfactory.data.GameData;
-import com.virtualfactory.app.GameEngine;
+import com.virtualfactory.engine.GameEngine;
 import com.virtualfactory.entity.E_AssemblyDetails;
 import com.virtualfactory.entity.E_Bucket;
 import com.virtualfactory.entity.E_Machine;

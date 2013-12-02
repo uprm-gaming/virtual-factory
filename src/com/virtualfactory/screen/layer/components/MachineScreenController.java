@@ -22,7 +22,7 @@ import de.lessvoid.nifty.controls.label.builder.LabelBuilder;
 import de.lessvoid.nifty.controls.window.WindowControl;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.tools.SizeValue;
-import com.virtualfactory.app.GameEngine;
+import com.virtualfactory.engine.GameEngine;
 import com.virtualfactory.entity.E_Game;
 import com.virtualfactory.entity.E_Machine;
 import com.virtualfactory.utils.CommonBuilders;

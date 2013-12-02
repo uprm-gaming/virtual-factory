@@ -29,7 +29,7 @@ import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.controls.window.WindowControl;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.tools.SizeValue;
-import com.virtualfactory.app.GameEngine;
+import com.virtualfactory.engine.GameEngine;
 import com.virtualfactory.entity.E_Activity;
 import com.virtualfactory.entity.E_AssemblyDetails;
 import com.virtualfactory.entity.E_Bucket;

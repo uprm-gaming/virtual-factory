@@ -12,7 +12,7 @@ import de.lessvoid.nifty.render.NiftyImage;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.tools.SizeValue;
 import de.lessvoid.xml.xpp3.Attributes;
-import com.virtualfactory.app.GameEngine;
+import com.virtualfactory.engine.GameEngine;
 import com.virtualfactory.entity.E_Slot;
 import com.virtualfactory.entity.E_Station;
 import com.virtualfactory.entity.E_TransportStore;

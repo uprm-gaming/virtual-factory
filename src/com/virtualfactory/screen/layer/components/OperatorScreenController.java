@@ -20,7 +20,7 @@ import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.window.WindowControl;
 import de.lessvoid.nifty.controls.WindowClosedEvent;
 import de.lessvoid.nifty.tools.SizeValue;
-import com.virtualfactory.app.GameEngine;
+import com.virtualfactory.engine.GameEngine;
 import com.virtualfactory.entity.E_Game;
 import com.virtualfactory.entity.E_Operator;
 import com.virtualfactory.strategy.EventStrategy;

@@ -7,7 +7,7 @@ import com.virtualfactory.utils.ObjectState;
 import com.virtualfactory.utils.Unit;
 import com.virtualfactory.utils.Direction;
 import com.virtualfactory.utils.Utils;
-import com.virtualfactory.app.GameEngine;
+import com.virtualfactory.engine.GameEngine;
 import com.virtualfactory.exceptions.ExceededCapacityException;
 import com.virtualfactory.exceptions.InsufficientPartsException;
 /**

@@ -1,7 +1,7 @@
 package com.virtualfactory.strategy;
 
 import com.virtualfactory.data.GameData;
-import com.virtualfactory.app.GameEngine;
+import com.virtualfactory.engine.GameEngine;
 import com.virtualfactory.entity.E_Operation;
 import com.virtualfactory.entity.E_Purchase;
 import com.virtualfactory.entity.E_Ship;

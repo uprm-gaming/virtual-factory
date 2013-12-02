@@ -14,7 +14,7 @@ import de.lessvoid.nifty.controls.ListBoxSelectionChangedEvent;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.controls.window.WindowControl;
 import de.lessvoid.nifty.tools.SizeValue;
-import com.virtualfactory.app.GameEngine;
+import com.virtualfactory.engine.GameEngine;
 import com.virtualfactory.entity.E_Catalog;
 import com.virtualfactory.entity.E_Game;
 import com.virtualfactory.entity.E_Supplier;

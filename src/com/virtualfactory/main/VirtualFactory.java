@@ -1,5 +1,6 @@
-package com.virtualfactory.app;
+package com.virtualfactory.main;
 
+import com.virtualfactory.engine.GameEngine;
 import com.virtualfactory.utils.ScreenSettings;
 import com.jme3.app.SimpleApplication;
 

@@ -5,7 +5,7 @@
 package com.virtualfactory.strategy;
 
 import com.virtualfactory.data.GameData;
-import com.virtualfactory.app.GameEngine;
+import com.virtualfactory.engine.GameEngine;
 import com.virtualfactory.entity.E_Bucket;
 import com.virtualfactory.entity.E_Machine;
 import com.virtualfactory.entity.E_Operator;
