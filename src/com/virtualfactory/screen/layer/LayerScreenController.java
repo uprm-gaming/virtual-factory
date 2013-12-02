@@ -442,7 +442,7 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
             gameEngine.updateAnimations();
         }else{//PAUSE
             gameEngine.setCurrentSystemStatus(Status.Idle);
-            gameEngine.simpleUpdateLocal();
+            gameEngine.updateGameDataAndLogic();
             gameEngine.getGameData().playPauseElements(Status.Idle);
         }
     }

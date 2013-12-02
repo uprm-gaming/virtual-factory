@@ -199,8 +199,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         updateCursorIcon(0);
 
-        deleteDefaultControls(); // TODO: Pepe, it is ideal to replace this method with inputManager.clearMappings(),
-                                         // but there is only one problem.
+        deleteDefaultControls(); // TODO: Pepe, it is ideal to replace this method with inputManager.clearMappings(), but there is one issue
+
         //inputManager.clearMappings();
 
         String[] mappings = {"Forward", "Backward", 
@@ -293,7 +293,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                 case "Toggle Dashboard":
                     if (!keyPressed) {
                         showHideDashboard = true;
-                        manageDashboard();
+                        toggleDashBoard();
                     }
                     break;
                     
@@ -305,7 +305,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                     
                 case "Toggle Top View":
                     if (!keyPressed)
-                        handleTopView();
+                        toggleTopView();
                     break;
 
                 case "Jump":
@@ -343,7 +343,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
     
     public void playGame(E_Game tempGame, boolean newGame) {
-        initialGameId = tempGame.getIdGame(); // NOTE: Game ID == Level
+        initialGameId = tempGame.getIdGame();
 
         updateCursorIcon(1);
 
@@ -351,7 +351,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         if (newGame) {
             this.getArrGameSounds().clear();
-            this.gameSounds.stopSound(Sounds.Background); // Added by Chris
+            this.gameSounds.stopSound(Sounds.Background);
             gameData.createGame(tempGame);
         } else {
             gameData.loadGame(tempGame);
@@ -380,8 +380,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private void flushPreviousGame() {
         rootNode.detachAllChildren();
         resetPhysicsEngine();
-        System.gc(); // Garbage collector
-
+        System.gc(); 
         terrainMap = new TerrainMap();
     }
 
@@ -407,7 +406,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private void initSimPack() {
         currentSystemStatus = Status.Busy;
         currentSystemTime = gameData.getCurrentGame().getCurrentTime();
-        currentTempSystemTime = System.currentTimeMillis();// 1000.0;
+        currentTempSystemTime = System.currentTimeMillis();
         Sim.init(currentSystemTime, new LinkedListFutureEventList());
         Sim.schedule(new SimEvent(Sim.time() + getLayerScreenController().getTimeFactor(), Params.startEvent));
     }
@@ -415,7 +414,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private void loadElementsToDisplay(GameType gameType) {
         createShootable();
         createTerrain();
-        //*******************        
+       
         arrOperatorsWalksTo = new ArrayList<>();
         arrOperatorsMachinesMovingTo = new ArrayList<>();
         arrStationAnimations = new ArrayList<>();
@@ -448,6 +447,82 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         }
     }
 
+    private void createShootable() {
+        shootables = new Node("Shootables");
+        rootNode.attachChild(shootables);
+    }
+    
+    private void createTerrain() {
+        E_Terrain tempTerrain = gameData.getMapTerrain();
+
+        /* Factory */
+        // ----------
+        world = (Node) assetManager.loadModel("Models/World28/World28.j3o");
+        world.getChild("Machine vibration Empty").removeFromParent();
+        world.setLocalScale(250.0f, 250.0f, 250.0f);
+        world.setLocalTranslation(-9.0f, 0.0f, 82.0f);
+        // ----------
+        
+        /* Factory's Collision Shape */
+        // ----------
+        CollisionShape worldShape = CollisionShapeFactory.createMeshShape(world);
+        worldRigid = new RigidBodyControl(worldShape, 0);
+        world.addControl(worldRigid);
+        rootNode.attachChild(world);
+        bulletAppState.getPhysicsSpace().add(worldRigid);
+        // ----------
+
+        /* TEST: Adding a sensor to the second floor (see simpleUpdate() method to see it in action) */
+        // ----------
+        secondFloorSensor = new GhostControl(new BoxCollisionShape(new Vector3f(90, 5, 25)));
+        world.getChild("Mesani Floor").addControl(secondFloorSensor);
+        bulletAppState.getPhysicsSpace().add(secondFloorSensor);
+        bulletAppState.setDebugEnabled(false); // set to true so you can see the invisible physics engine
+        // ----------
+
+        /* First-person Player */
+        // ----------
+        CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(0.4f, 24.5f, 1);
+        // Use deprecated CharacterControl until BetterCharacterControl is updated
+        player = new CharacterControl(capsuleShape, 0.05f);
+        player.setJumpSpeed(45);
+        player.setFallSpeed(120);
+        player.setGravity(Params.playerGravity);
+        player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
+        cam.setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
+        flyCam.setRotationSpeed(1.9499999f);
+        player.setViewDirection(new Vector3f(0, 0, 1));
+        bulletAppState.getPhysicsSpace().add(player);
+        // ----------
+
+        //blocked zones
+        Map<Integer, E_TerrainReserved> tempBlockedZones = tempTerrain.getArrZones();
+        for (E_TerrainReserved tempBlockedZone : tempBlockedZones.values()) {
+            setTerrainMap(tempBlockedZone.getLocationX(), tempBlockedZone.getLocationZ(), tempBlockedZone.getWidth(), tempBlockedZone.getLength(), true);
+        }
+        
+        boolean isToonFilterSupported = Params.renderer.equalsIgnoreCase(Params.supportedRenderer);
+        if (isToonFilterSupported)
+            loadToonFilter(); 
+
+        createLightBulb();
+    }
+
+    private void createLightBulb() {
+        ColorRGBA color = ColorRGBA.White;
+        lamp2 = new PointLight();
+        lamp2.setPosition(new Vector3f(40, 200, 150));
+        lamp2.setColor(color);
+        lamp2.setRadius(lamp2.getRadius()/20);
+        rootNode.addLight(lamp2);
+        
+        lamp3 = new PointLight();
+        lamp3.setPosition(new Vector3f(43.50383f, 80.081642f, -310.90753f));
+        lamp3.setColor(color);
+        lamp3.setRadius(lamp2.getRadius());
+        rootNode.addLight(lamp3);
+    }
+
     private void enableLayerScreen() {
         //show static windows
         niftyGUI.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).loadWindowControl(this, 0, null);
@@ -477,22 +552,21 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).HideWindow();
         niftyGUI.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).showHide();
     }
-
+    
+    /**
+     * Engine's main game loop. 
+     * @param tpf time per frame (elapsed time since the last frame)
+     */
     @Override
-    public void update(float tpf) {
-        // TEST Second floor sensor
-        if (isPlayerInsideFactory) {
-            if (secondFloorSensor.getOverlappingCount() > 1) // NOTE: getOverlappingCount() has a value of 1 by default
-                System.out.println("Character is on second floor.");
-        }
-        
-        if (!topViewEnabled)
-            updatePlayerPosition();
-        
-        simpleUpdateLocal(); // Legacy code
+    public void update(float tpf) {    
+        updatePlayerPosition();
+        updateGameDataAndLogic();
     }
     
     public void updatePlayerPosition() {
+        if (!isPlayerInsideFactory || topViewEnabled)
+            return;
+
         camDir = cam.getDirection().clone().multLocal(playerSpeed);
         camLeft = cam.getLeft().clone().multLocal(playerSpeed);
         
@@ -514,16 +588,14 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         if (lookDown)
             rotateCamera(Params.rotationSpeed, cam.getLeft());
-
-        if (isPlayerInsideFactory) {
-            player.setWalkDirection(walkDirection); // walk!
-            cam.setLocation(player.getPhysicsLocation());
-            
-            if ((Math.abs(System.currentTimeMillis() - Params.tempTime)/1000.00) > 0.5) {
-                Params.tempTime = System.currentTimeMillis();
-                Vector3f newPosition = cam.getLocation();
-                checkNarratorMessages(newPosition);
-            }
+        
+        player.setWalkDirection(walkDirection); // walk!
+        cam.setLocation(player.getPhysicsLocation());
+        
+        if ((Math.abs(System.currentTimeMillis() - Params.tempTime)/1000.00) > 0.5) {
+            Params.tempTime = System.currentTimeMillis();
+            Vector3f newPosition = cam.getLocation();
+            checkNarratorMessages(newPosition);
         }
     }
     
@@ -566,35 +638,42 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         Params.oldPosition.set(newPosition.getX(), newPosition.getY(), newPosition.getZ());
     }
     
-    public void simpleUpdateLocal() {
+    public void updateGameDataAndLogic() {
         //Added by Chris
-        if (!this.getLayerScreenController().getPauseStatus() && gameSounds.machineSoundPlaying()) {
+        if (!this.getLayerScreenController().getPauseStatus() && gameSounds.machineSoundPlaying())
             this.gameSounds.pauseSound(Sounds.MachineWorking);
-        }
-        if (!isPlayerInsideFactory) {
+        
+        if (!isPlayerInsideFactory)
             return;
-        }
-        if (currentSystemStatus.equals(Status.Busy)) {
+        
+        if (currentSystemStatus.equals(Status.Busy))
             currentSystemTime += (double) ((System.currentTimeMillis() - currentTempSystemTime) / 1000.0);
-        }
+        
         updateGraphicElementsArray();
+
         if (gameData.getCurrentTimeWithFactor() - timeToUpdateSlots >= Params.timeToUpdateSlotsMinutes) {
             timeToUpdateSlots = gameData.getCurrentTimeWithFactor();
             executeThreadToUpdateSlots();
         }
+
         if ((System.currentTimeMillis() / 1000) - initialRealSystemTime >= Params.timeToSaveLogSeconds) {
             gameData.updatePlayerLog();
             initialRealSystemTime = System.currentTimeMillis() / 1000;
         }
+
         if ((System.currentTimeMillis() / 1000) - currentIdleSystemTime >= Params.timeToCloseGameSeconds) {
             showPopupAttemptingToCloseGame();
             updateLastActivitySystemTime();
         }
+
         if ((System.currentTimeMillis() / 1000) - currentWindowRefreshSystemTime >= gameData.getCurrentGame().getTimeFactor() * Params.timeUnitsToRefresh) {
             gameData.updateControlsWindows();
             currentWindowRefreshSystemTime = System.currentTimeMillis() / 1000;
         }
-        manageDashboard();
+
+        // Update dashboard data
+        niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardScreenController.class).updateData();
+
         currentTempSystemTime = System.currentTimeMillis();
         gameData.getCurrentGame().setCurrentTime(currentSystemTime);
         getLayerScreenController().setCurrentGameTime(gameData.getCurrentTimeGame());
@@ -615,8 +694,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         }
     }
 
-    private void manageDashboard() {
-        niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardScreenController.class).updateData();
+    private void toggleDashBoard() {
         if (showHideDashboard) {
             if (isDashboardVisible) {
                 niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").hide();
@@ -624,7 +702,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             } else {
                 niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").show();
                 isDashboardVisible = true;
-
             }
             showHideDashboard = false;
         }
@@ -706,82 +783,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 //        if (channel == shootingChannel) {
 //            channel.setAnim("Walk");
 //        }
-    }
-    
-    private void createLightBulb() {
-        ColorRGBA color = ColorRGBA.White;
-        lamp2 = new PointLight();
-        lamp2.setPosition(new Vector3f(40, 200, 150));
-        lamp2.setColor(color);
-        lamp2.setRadius(lamp2.getRadius()/20);
-        rootNode.addLight(lamp2);
-        
-        lamp3 = new PointLight();
-        lamp3.setPosition(new Vector3f(43.50383f, 80.081642f, -310.90753f));
-        lamp3.setColor(color);
-        lamp3.setRadius(lamp2.getRadius());
-        rootNode.addLight(lamp3);
-    }
-
-    private void createShootable() {
-        shootables = new Node("Shootables");
-        rootNode.attachChild(shootables);
-    }
-    
-    private void createTerrain() {
-        E_Terrain tempTerrain = gameData.getMapTerrain();
-
-        /* Factory */
-        // ----------
-        world = (Node) assetManager.loadModel("Models/World28/World28.j3o");
-        world.getChild("Machine vibration Empty").removeFromParent();
-        world.setLocalScale(250.0f, 250.0f, 250.0f);
-        world.setLocalTranslation(-9.0f, 0.0f, 82.0f);
-        // ----------
-        
-        /* Factory's Collision Shape */
-        // ----------
-        CollisionShape worldShape = CollisionShapeFactory.createMeshShape(world);
-        worldRigid = new RigidBodyControl(worldShape, 0);
-        world.addControl(worldRigid);
-        rootNode.attachChild(world);
-        bulletAppState.getPhysicsSpace().add(worldRigid);
-        // ----------
-
-        /* TEST: Adding a sensor to the second floor (see simpleUpdate() method to see it in action) */
-        // ----------
-        secondFloorSensor = new GhostControl(new BoxCollisionShape(new Vector3f(90, 5, 25)));
-        world.getChild("Mesani Floor").addControl(secondFloorSensor);
-        bulletAppState.getPhysicsSpace().add(secondFloorSensor);
-        bulletAppState.setDebugEnabled(false); // set to true so you can see the invisible physics engine
-        // ----------
-
-        /* First-person Player */
-        // ----------
-        CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(0.4f, 24.5f, 1);
-        // Use deprecated CharacterControl until BetterCharacterControl is updated
-        player = new CharacterControl(capsuleShape, 0.05f);
-        player.setJumpSpeed(45);
-        player.setFallSpeed(120);
-        player.setGravity(Params.playerGravity);
-        player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
-        cam.setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
-        flyCam.setRotationSpeed(1.9499999f);
-        player.setViewDirection(new Vector3f(0, 0, 1));
-        bulletAppState.getPhysicsSpace().add(player);
-        // ----------
-
-        //blocked zones
-        Map<Integer, E_TerrainReserved> tempBlockedZones = tempTerrain.getArrZones();
-        for (E_TerrainReserved tempBlockedZone : tempBlockedZones.values()) {
-            setTerrainMap(tempBlockedZone.getLocationX(), tempBlockedZone.getLocationZ(), tempBlockedZone.getWidth(), tempBlockedZone.getLength(), true);
-        }
-        
-        boolean isToonFilterSupported = Params.renderer.equalsIgnoreCase(Params.supportedRenderer);
-        if (isToonFilterSupported)
-            loadToonFilter(); 
-
-        createLightBulb();
     }
 
     private void createGrid(int iniX, int iniZ, int sizeW, int sizeL) {
@@ -1068,7 +1069,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
     }
     
-    private void handleTopView() {
+    private void toggleTopView() {
         
         if (Params.topViewAvailable && !topViewEnabled) {
             topViewEnabled = true;
