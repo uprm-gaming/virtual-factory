@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.virtualfactory.screen.menu.components;
 
 import com.virtualfactory.screen.menu.MenuScreenController;
@@ -25,6 +21,7 @@ import com.virtualfactory.utils.GameStatus;
 import com.virtualfactory.utils.Params;
 import java.util.ArrayList;
 import java.util.Properties;
+
 /**
  *
  * @author David
@@ -83,19 +80,18 @@ public class NewGame1MenuController implements Controller {
         arrGames = this.gameEngine.getGameData().loadGamesOfAPlayer(gameEngine.getGameData().getPlayer().getIdPlayer());
         E_Game game;
         listBoxGames.clear();
+        
         for (int i=0; i<arrGames.size(); i++){
             game = arrGames.get(i);
             listBoxGames.addItem(new ListBoxMessages_NewGame1(nifty, String.valueOf(i+1), game.getGameName(), 
                     game.getGameCategory().toString(), game.getGameStatus().toString(), game.getYourBestScore(),
                     game.getGameBestScore(), game.getAttemptNumbers()));
         }
-        if (listBoxGames.getItems().size() > 0) {
-            listBoxGames.selectItemByIndex(0);
-        }
-        updateListBoxClicked();
         
-        if (!gameEngine.isExecuteGame()) {
-        }
+        if (listBoxGames.getItems().size() > 0)
+            listBoxGames.selectItemByIndex(0);
+        
+        updateListBoxClicked();
     }
 
 
@@ -184,9 +180,7 @@ public class NewGame1MenuController implements Controller {
         ((Label)screen.findNiftyControl("gameSelectedStatus", Label.class)).setText("");
         Element currentElement = screen.findElementByName("dialogNewGameStage1Menu");
         currentElement.hideWithoutEffect();
-//        if (nifty.getScreen("layerScreen").isRunning())
-//            nifty.update();
-        
+
         nifty.gotoScreen("layerScreen");
         nifty.executeEndOfFrameElementActions();
         this.gameEngine.playGame(arrGames.get(listBoxGames.getFocusItemIndex()),true);

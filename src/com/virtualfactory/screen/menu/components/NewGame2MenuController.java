@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.virtualfactory.screen.menu.components;
 
 import com.virtualfactory.screen.menu.MenuScreenController;
@@ -19,6 +15,7 @@ import com.virtualfactory.app.GameEngine;
 import com.virtualfactory.entity.E_Game;
 import java.util.ArrayList;
 import java.util.Properties;
+
 /**
  *
  * @author David

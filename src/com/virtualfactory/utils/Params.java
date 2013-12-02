@@ -1,7 +1,7 @@
 package com.virtualfactory.utils;
 
 import com.jme3.math.Vector3f;
-import com.virtualfactory.narrator.NarratorAppState;
+import com.virtualfactory.narrator.Narrator;
 
 public class Params {
     
@@ -25,7 +25,7 @@ public class Params {
             + "F1: turn on/off the full screen";
     
     //-------Narator state and specs---------
-    public static NarratorAppState gameNarrator = null;
+    public static Narrator gameNarrator = null;
     public static final float SECOND_FLOOR_Y_POS = 57;
     public static long tempTime = 0;
     public static Vector3f oldPosition = new Vector3f(51.68367f, 59.064148f, -292.67755f);

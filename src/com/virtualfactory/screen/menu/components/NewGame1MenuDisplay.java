@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.virtualfactory.screen.menu.components;
 
 import com.virtualfactory.utils.CommonBuilders;
@@ -22,7 +18,6 @@ import de.lessvoid.nifty.controls.listbox.builder.ListBoxBuilder;
 public class NewGame1MenuDisplay {
     public static final String NAME = "NewGameStage1MenuDisplay";
     private static CommonBuilders builders = new CommonBuilders();
-    //private static final NewGame1MenuController newGameMenuController = new NewGame1MenuController();
     
     public static void register(final Nifty nifty) {
         new ControlDefinitionBuilder("customListBox_NewGameStage1") {{
