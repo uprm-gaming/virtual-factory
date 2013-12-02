@@ -508,6 +508,35 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         createLightBulb();
     }
 
+    private void loadToonFilter() {
+        FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
+        CartoonEdgeFilter toonFilter = new CartoonEdgeFilter();
+        toonFilter.setEdgeWidth(1.0f);
+        fpp.addFilter(toonFilter);
+        jmonkeyApp.getViewPort().addProcessor(fpp);
+        //transformToCartoon(rootNode);
+    }
+
+    public void transformToCartoon(Spatial spatial) {
+        if (spatial instanceof Node) {
+            Node n = (Node) spatial;
+            
+            for (Spatial child : n.getChildren())
+                transformToCartoon(child);
+
+        } else if (spatial instanceof Geometry) {
+            Geometry g = (Geometry) spatial;
+            
+            Material newCartoonishMat = new Material(assetManager, "ShaderBlow/MatDefs/LightBlow.j3md");
+    
+            newCartoonishMat.setTexture("ColorRamp", assetManager.loadTexture("Textures/toon.png"));
+
+            newCartoonishMat.setBoolean("Toon", true);
+
+            g.setMaterial(newCartoonishMat);
+        }
+    }
+
     private void createLightBulb() {
         ColorRGBA color = ColorRGBA.White;
         lamp2 = new PointLight();
@@ -958,7 +987,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         model.setName(TypeElements.MACHINE + String.valueOf(machine.getIdMachine()));
         model.setLocalTranslation(new Vector3f(machine.getCurrentLocationX(), 0.5f, machine.getCurrentLocationZ()));
         rootNode.attachChild(model);
-        // I cannot add an animation because my MACHINES does not support animation!!!
+        // I cannot add an animation because my MACHINES do not support animation!!!
         machine.setModelCharacter(model);
         machine.setAssetManager(assetManager);
         machine.setRootNode(rootNode);
@@ -1025,35 +1054,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             }
         } else {
             terrainMap.setUnit(locX, locZ, valuePixel);
-        }
-    }
-
-    private void loadToonFilter() {
-        FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
-        CartoonEdgeFilter toonFilter = new CartoonEdgeFilter();
-        toonFilter.setEdgeWidth(1.0f);
-        fpp.addFilter(toonFilter);
-        jmonkeyApp.getViewPort().addProcessor(fpp);
-        //transformToCartoon(rootNode);
-    }
-
-    public void transformToCartoon(Spatial spatial) {
-        if (spatial instanceof Node) {
-            Node n = (Node) spatial;
-            
-            for (Spatial child : n.getChildren())
-                transformToCartoon(child);
-
-        } else if (spatial instanceof Geometry) {
-            Geometry g = (Geometry) spatial;
-            
-            Material newCartoonishMat = new Material(assetManager, "ShaderBlow/MatDefs/LightBlow.j3md");
-    
-            newCartoonishMat.setTexture("ColorRamp", assetManager.loadTexture("Textures/toon.png"));
-
-            newCartoonishMat.setBoolean("Toon", true);
-
-            g.setMaterial(newCartoonishMat);
         }
     }
     
