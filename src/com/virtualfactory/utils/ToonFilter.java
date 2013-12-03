@@ -40,6 +40,8 @@ public class ToonFilter
         FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
         CartoonEdgeFilter edgeFilter = new CartoonEdgeFilter();
         edgeFilter.setEdgeWidth(1.0f);
+        edgeFilter.setEdgeIntensity(1.0f);
+        edgeFilter.setNormalThreshold(0.8f);
         fpp.addFilter(edgeFilter);
         viewPort.addProcessor(fpp);
     }
