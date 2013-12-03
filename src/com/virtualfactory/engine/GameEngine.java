@@ -26,8 +26,6 @@ import com.jme3.light.*;
 import com.jme3.material.Material;
 import com.jme3.math.*;
 import com.jme3.niftygui.NiftyJmeDisplay;
-import com.jme3.post.FilterPostProcessor;
-import com.jme3.post.filters.CartoonEdgeFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.*;
@@ -116,10 +114,12 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private long currentDashboardTime;
 
     public SimpleApplication jmonkeyApp;
+    private Node guiNode;
     private Node rootNode;
     private InputManager inputManager;
     private FlyByCamera flyCam;
     private Camera cam;
+    private ViewPort viewPort;
     private ViewPort guiViewPort;
     private CharacterControl player;
     private GhostControl secondFloorSensor;
@@ -143,8 +143,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private PointLight lamp2, lamp3;
     private AssetManager assetManager;
     private AppStateManager stateManager;
-    private ViewPort viewPort;
-  
+    
     @Override
     public void initialize(AppStateManager manager, Application application) {
         Params.tempTime = System.currentTimeMillis();
@@ -169,7 +168,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         else
             niftyGUI.gotoScreen("start");
 
-        Params.gameNarrator = new Narrator(stateManager, assetManager, jmonkeyApp.getGuiNode());
+        Params.gameNarrator = new Narrator(stateManager, assetManager, guiNode);
     }
     
     private void loadJmonkeyAppResources() {
@@ -183,6 +182,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         cam = jmonkeyApp.getCamera();
         viewPort = jmonkeyApp.getViewPort();
         guiViewPort = jmonkeyApp.getGuiViewPort();
+        guiNode = jmonkeyApp.getGuiNode();
         rootNode = jmonkeyApp.getRootNode();
     }
 
@@ -383,7 +383,10 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         rootNode.detachAllChildren();
         resetPhysicsEngine();
         System.gc(); 
+        
         terrainMap = new TerrainMap();
+        shootables = new Node("Shootables");
+        rootNode.attachChild(shootables);
     }
 
     private void resetPhysicsEngine() {
@@ -414,7 +417,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
 
     private void loadElementsToDisplay(GameType gameType) {
-        createShootable();
         createTerrain();
        
         arrOperatorsWalksTo = new ArrayList<>();
@@ -447,11 +449,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
             flyCam.setMoveSpeed(100);
         }
-    }
-
-    private void createShootable() {
-        shootables = new Node("Shootables");
-        rootNode.attachChild(shootables);
     }
     
     private void createTerrain() {
@@ -555,7 +552,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
     
     /**
-     * Engine's main game loop. 
+     * Engine's main game loop. It runs every frame.
      * @param tpf time per frame (elapsed time since the last frame)
      */
     @Override

@@ -42,10 +42,10 @@ public class Narrator extends AbstractAppState
         guiNode.attachChild(narratorText);
     }
 
-    public void talk(String dialogue, int seconds)
+    public void talk(String dialogue, int secondsBeforeHiding)
     {
         textStartTime = System.currentTimeMillis();
-        secondsToWait = seconds;
+        secondsToWait = secondsBeforeHiding;
         talk(dialogue);
     }
     
@@ -55,7 +55,7 @@ public class Narrator extends AbstractAppState
         playAudioFile(audioPathFile);
     }
     
-    private void talk(String dialogue)
+    public void talk(String dialogue)
     {
         narratorText.setText(dialogue);
 
