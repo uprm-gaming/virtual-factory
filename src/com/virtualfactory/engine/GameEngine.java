@@ -143,6 +143,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private PointLight lamp2, lamp3;
     private AssetManager assetManager;
     private AppStateManager stateManager;
+    private ViewPort viewPort;
   
     @Override
     public void initialize(AppStateManager manager, Application application) {
@@ -180,6 +181,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         inputManager = jmonkeyApp.getInputManager();
         flyCam = jmonkeyApp.getFlyByCamera();
         cam = jmonkeyApp.getCamera();
+        viewPort = jmonkeyApp.getViewPort();
         guiViewPort = jmonkeyApp.getGuiViewPort();
         rootNode = jmonkeyApp.getRootNode();
     }
@@ -500,41 +502,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         for (E_TerrainReserved tempBlockedZone : tempBlockedZones.values()) {
             setTerrainMap(tempBlockedZone.getLocationX(), tempBlockedZone.getLocationZ(), tempBlockedZone.getWidth(), tempBlockedZone.getLength(), true);
         }
-        
-        boolean isToonFilterSupported = Params.renderer.equalsIgnoreCase(Params.supportedRenderer);
-        if (isToonFilterSupported)
-            loadToonFilter(); 
+
+        if (Params.renderer.equalsIgnoreCase(Params.supportedRenderer))
+            new ToonFilter(assetManager, viewPort).applyToScene(rootNode);
 
         createLightBulb();
-    }
-
-    private void loadToonFilter() {
-        FilterPostProcessor fpp = new FilterPostProcessor(assetManager);
-        CartoonEdgeFilter toonFilter = new CartoonEdgeFilter();
-        toonFilter.setEdgeWidth(1.0f);
-        fpp.addFilter(toonFilter);
-        jmonkeyApp.getViewPort().addProcessor(fpp);
-        //transformToCartoon(rootNode);
-    }
-
-    public void transformToCartoon(Spatial spatial) {
-        if (spatial instanceof Node) {
-            Node n = (Node) spatial;
-            
-            for (Spatial child : n.getChildren())
-                transformToCartoon(child);
-
-        } else if (spatial instanceof Geometry) {
-            Geometry g = (Geometry) spatial;
-            
-            Material newCartoonishMat = new Material(assetManager, "ShaderBlow/MatDefs/LightBlow.j3md");
-    
-            newCartoonishMat.setTexture("ColorRamp", assetManager.loadTexture("Textures/toon.png"));
-
-            newCartoonishMat.setBoolean("Toon", true);
-
-            g.setMaterial(newCartoonishMat);
-        }
     }
 
     private void createLightBulb() {
@@ -600,6 +572,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         camLeft = cam.getLeft().clone().multLocal(playerSpeed);
         
         walkDirection.set(0, 0, 0); // reset walkDirection vector
+        
         if (forward)
             walkDirection.addLocal(camDir);
         
