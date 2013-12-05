@@ -201,7 +201,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         updateCursorIcon(0);
 
-        deleteDefaultControls(); // TODO: Pepe, it is ideal to replace this method with inputManager.clearMappings(), but there is one issue
+        deleteDefaultControls(); // TODO: Abner, no usé inputManager.clearMappings(); pq no queremos eliminar todos los mappings, causa problemas.
 
         //inputManager.clearMappings();
 
@@ -456,7 +456,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         /* Factory */
         // ----------
-        world = (Node) assetManager.loadModel("Models/World28/World28.j3o");
+        world = (Node) assetManager.loadModel("Models/World3_v4c/World3_v4c.j3o");
         world.getChild("Machine vibration Empty").removeFromParent();
         world.setLocalScale(250.0f, 250.0f, 250.0f);
         world.setLocalTranslation(-9.0f, 0.0f, 82.0f);
@@ -1088,7 +1088,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                 System.out.println(closest.getDistance());
             }
             
-            if (closest.getDistance() > 60f) {
+            if (closest.getDistance() > 60f && !topViewEnabled) {
                 return;
             }
             
