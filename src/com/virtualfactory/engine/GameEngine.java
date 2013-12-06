@@ -457,6 +457,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     
     private void createTerrain() {
         E_Terrain tempTerrain = gameData.getMapTerrain();
+        
+        flyCam.setMoveSpeed(100);
 
         /* Factory */
         // ----------
@@ -475,7 +477,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         bulletAppState.getPhysicsSpace().add(worldRigid);
         // ----------
 
-        /* TEST: Adding a sensor to the second floor (see simpleUpdate() method to see it in action) */
+        /* TEST: Adding a sensor to the second floor */
         // ----------
         secondFloorSensor = new GhostControl(new BoxCollisionShape(new Vector3f(90, 5, 25)));
         world.getChild("Mesani Floor").addControl(secondFloorSensor);
