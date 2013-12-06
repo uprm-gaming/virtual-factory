@@ -114,6 +114,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private long currentDashboardTime;
 
     public SimpleApplication jmonkeyApp;
+    private AppStateManager stateManager;
+    private AssetManager assetManager;
     private Node guiNode;
     private Node rootNode;
     private InputManager inputManager;
@@ -130,6 +132,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private boolean moveRight = false;
     private boolean lookUp = false;
     private boolean lookDown = false;
+    
+    private boolean topViewEnabled = false;
+    private boolean isDebugCamEnabled = false;
 
     private float playerSpeed = 1.3f;
     
@@ -138,11 +143,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     
     private Vector3f walkDirection = new Vector3f(0, 0, 0);
 
-    private boolean topViewEnabled = false;
-
     private PointLight lamp2, lamp3;
-    private AssetManager assetManager;
-    private AppStateManager stateManager;
     
     @Override
     public void initialize(AppStateManager manager, Application application) {
@@ -201,9 +202,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         updateCursorIcon(0);
 
-        deleteDefaultControls(); // TODO: Abner, no usé inputManager.clearMappings(); pq no queremos eliminar todos los mappings, causa problemas.
-
-        //inputManager.clearMappings();
+        deleteDefaultControls();
 
         String[] mappings = {"Forward", "Backward", 
                              "Move Left", "Move Right", 
@@ -211,7 +210,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                              "Jump", "Picking", 
                              "Toggle Dashboard", "Toggle Top View", 
                              "Toggle Full Screen", "Debug Position",
-                             "Mouse Picking"};
+                             "Debug Cam", "Mouse Picking"};
         
         Trigger[] triggers = {new KeyTrigger(KeyInput.KEY_W), new KeyTrigger(KeyInput.KEY_S), 
                               new KeyTrigger(KeyInput.KEY_A), new KeyTrigger(KeyInput.KEY_D), 
@@ -219,7 +218,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                               new KeyTrigger(KeyInput.KEY_SPACE), new KeyTrigger(KeyInput.KEY_LSHIFT), 
                               new KeyTrigger(KeyInput.KEY_RSHIFT), new KeyTrigger(KeyInput.KEY_T), 
                               new KeyTrigger(KeyInput.KEY_F1), new KeyTrigger(KeyInput.KEY_H),
-                              new MouseButtonTrigger(MouseInput.BUTTON_LEFT)};
+                              new KeyTrigger(KeyInput.KEY_0), new MouseButtonTrigger(MouseInput.BUTTON_LEFT)};
         
         for (int i = 0; i < mappings.length; i++) {
             inputManager.addMapping(mappings[i], triggers[i]);
@@ -287,6 +286,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                     lookDown = keyPressed;
                     break;
                     
+                case "Jump":
+                    if (!keyPressed)
+                        player.jump();
+                    break;
+                    
                 case "Picking": case "Mouse Picking":
                     if (!keyPressed)
                         handlePickedObject(name);
@@ -299,20 +303,20 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                     }
                     break;
                     
+                case "Toggle Top View":
+                    if (!keyPressed)
+                        toggleTopView();
+                    break;
+                    
                 case "Debug Position":
                     if (!keyPressed)
                         System.out.println("\n\nDesired direction is: " + cam.getDirection() + "\nUp: " 
                                            + cam.getUp() + "\nFrustrum top : " + cam.getFrustumTop());
                     break;
-                    
-                case "Toggle Top View":
+                
+                case "Debug Cam":
                     if (!keyPressed)
-                        toggleTopView();
-                    break;
-
-                case "Jump":
-                    if (!keyPressed)
-                        player.jump();
+                        isDebugCamEnabled = !isDebugCamEnabled;
                     break;
 
                 default:
@@ -556,8 +560,10 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
      * @param tpf time per frame (elapsed time since the last frame)
      */
     @Override
-    public void update(float tpf) {    
-        updatePlayerPosition();
+    public void update(float tpf) {
+        if (!isDebugCamEnabled)
+            updatePlayerPosition();
+        
         updateGameDataAndLogic();
     }
     
