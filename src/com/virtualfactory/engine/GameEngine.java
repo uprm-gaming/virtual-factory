@@ -45,6 +45,7 @@ import com.virtualfactory.simpack.*;
 import com.virtualfactory.strategy.ManageEvents;
 import com.virtualfactory.threads.*;
 import com.virtualfactory.utils.*;
+import de.lessvoid.nifty.tools.SizeValue;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -132,9 +133,12 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private boolean moveRight = false;
     private boolean lookUp = false;
     private boolean lookDown = false;
+    private boolean lookLeft = false;
+    private boolean lookRight = false;
     
     private boolean topViewEnabled = false;
     private boolean isDebugCamEnabled = false;
+    private int viewNumber = 0;
 
     private float playerSpeed = 1.3f;
     
@@ -207,6 +211,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         String[] mappings = {"Forward", "Backward", 
                              "Move Left", "Move Right", 
                              "Look Up", "Look Down", 
+                             "Look Left", "Look Right", 
                              "Jump", "Picking", 
                              "Toggle Dashboard", "Toggle Top View", 
                              "Toggle Full Screen", "Debug Position",
@@ -215,9 +220,10 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         Trigger[] triggers = {new KeyTrigger(KeyInput.KEY_W), new KeyTrigger(KeyInput.KEY_S), 
                               new KeyTrigger(KeyInput.KEY_A), new KeyTrigger(KeyInput.KEY_D), 
                               new KeyTrigger(KeyInput.KEY_UP), new KeyTrigger(KeyInput.KEY_DOWN), 
+                              new KeyTrigger(KeyInput.KEY_LEFT), new KeyTrigger(KeyInput.KEY_RIGHT), 
                               new KeyTrigger(KeyInput.KEY_SPACE), new KeyTrigger(KeyInput.KEY_LSHIFT), 
                               new KeyTrigger(KeyInput.KEY_RSHIFT), new KeyTrigger(KeyInput.KEY_T), 
-                              new KeyTrigger(KeyInput.KEY_F1), new KeyTrigger(KeyInput.KEY_H),
+                              new KeyTrigger(KeyInput.KEY_F1), new KeyTrigger(KeyInput.KEY_P),
                               new KeyTrigger(KeyInput.KEY_0), new MouseButtonTrigger(MouseInput.BUTTON_LEFT)};
         
         for (int i = 0; i < mappings.length; i++) {
@@ -244,9 +250,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         inputManager.deleteMapping("FLYCAM_ZoomOut");
         inputManager.deleteMapping("FLYCAM_Up");
         inputManager.deleteMapping("FLYCAM_Down");
+        inputManager.deleteMapping("FLYCAM_Left");
+        inputManager.deleteMapping("FLYCAM_Right");
 
-        inputManager.deleteTrigger("FLYCAM_Left", new MouseAxisTrigger(MouseInput.AXIS_X, true));
-        inputManager.deleteTrigger("FLYCAM_Right", new MouseAxisTrigger(MouseInput.AXIS_X, false));
         inputManager.deleteTrigger("FLYCAM_RotateDrag", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
     }
     
@@ -286,6 +292,14 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                     lookDown = keyPressed;
                     break;
                     
+                case "Look Left":
+                    lookLeft = keyPressed;
+                    break;
+                
+                case "Look Right":
+                    lookRight = keyPressed;
+                    break;
+                    
                 case "Jump":
                     if (!keyPressed)
                         player.jump();
@@ -310,8 +324,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                     
                 case "Debug Position":
                     if (!keyPressed)
-                        System.out.println("\n\nDesired direction is: " + cam.getDirection() + "\nUp: " 
-                                           + cam.getUp() + "\nFrustrum top : " + cam.getFrustumTop());
+                        System.out.println(""
+                                + "\n\nlocation: " + cam.getLocation()
+                                + "\nleft: " + cam.getLeft() 
+                                + "\nup: " + cam.getUp()
+                                + "\ndirection: " + cam.getDirection());
                     break;
                 
                 case "Debug Cam":
@@ -379,8 +396,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         isPlayerInsideFactory = true;
         
-        Params.gameNarrator.talk("Press 'T' for a top view of the factory. This is a really long test just to see if the"
-                + " test wraps around and does not continue to the infinite and beyond. Change this with a better intro message in the future.", 15);
+        Params.gameNarrator.talk("Welcome to Virtual Factory!\nPress 'T' for a top view of the factory.", 15);
     }
 
     private void flushPreviousGame() {
@@ -450,8 +466,13 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         if (topViewEnabled) {
             topViewEnabled = false;
+            viewNumber = 0;
             cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
             flyCam.setMoveSpeed(100);
+            Params.camMaxX = Params.playerMaxX;
+            Params.camMinX = Params.playerMinX;
+            Params.camMaxY = Params.playerMaxY;
+            Params.camMinY = Params.playerMinY;
         }
     }
     
@@ -563,19 +584,34 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
      */
     @Override
     public void update(float tpf) {
-        if (!isDebugCamEnabled)
-            updatePlayerPosition();
         
+        updatePlayerPosition();
         updateGameDataAndLogic();
     }
     
     public void updatePlayerPosition() {
-        if (!isPlayerInsideFactory || topViewEnabled)
+        
+        if (!isPlayerInsideFactory)
             return;
 
+        if (lookUp)
+            rotateCamera(-Params.rotationSpeed, cam.getLeft());
+
+        if (lookDown)
+            rotateCamera(Params.rotationSpeed, cam.getLeft());
+        
+        if (lookLeft)
+            rotateCamera(Params.rotationSpeed, new Vector3f(0,1,0));
+
+        if (lookRight)
+            rotateCamera(-Params.rotationSpeed, new Vector3f(0,1,0));
+        
+        if (topViewEnabled || isDebugCamEnabled) 
+            return;
+        
         camDir = cam.getDirection().clone().multLocal(playerSpeed);
         camLeft = cam.getLeft().clone().multLocal(playerSpeed);
-        
+
         walkDirection.set(0, 0, 0); // reset walkDirection vector
         
         if (forward)
@@ -590,12 +626,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         if (moveRight)
             walkDirection.addLocal(camLeft.negate());
         
-        if (lookUp)
-            rotateCamera(-Params.rotationSpeed, cam.getLeft());
-
-        if (lookDown)
-            rotateCamera(Params.rotationSpeed, cam.getLeft());
-        
         player.setWalkDirection(walkDirection); // walk!
         cam.setLocation(player.getPhysicsLocation());
         
@@ -608,6 +638,10 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     
      private void rotateCamera(float value, Vector3f axis){    
         Matrix3f mat = new Matrix3f();
+        
+        if (topViewEnabled)
+            value = value*0.3f;
+        
         mat.fromAngleNormalAxis(flyCam.getRotationSpeed() * value, axis);
         
         Vector3f tempUp = cam.getUp();
@@ -618,8 +652,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         mat.mult(tempLeft, tempLeft);
         mat.mult(tempDir, tempDir);
         
-        if (tempDir.getY() > Params.camMaxY ||
-                tempDir.getY() < Params.camMinY)
+        if (tempDir.getX() > Params.camMaxX || tempDir.getX() < Params.camMinX
+                || tempDir.getY() > Params.camMaxY || tempDir.getY() < Params.camMinY)
             return;
             
         Quaternion q = new Quaternion();
@@ -1041,26 +1075,93 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         if (jmonkeyApp.getContext().getSettings().isFullscreen()) {
             settings.setFullscreen(false);
             settings.setResolution(1280, 720);
+            Params.screenHeight = 720;
         }
+        else {
+            Params.screenHeight = settings.getHeight();
+        }
+        
+        updateInterfacePosition();
         jmonkeyApp.setSettings(settings);
         jmonkeyApp.restart();
 
     }
     
+    private void updateInterfacePosition() {        
+        
+        int yPos = Params.screenHeight - (720 - 700);
+        niftyGUI.getScreen("layerScreen").findElementByName("OrderLabel").setConstraintY(new SizeValue(yPos + "px"));
+        niftyGUI.getScreen("layerScreen").findElementByName("OverallLabel").setConstraintY(new SizeValue(yPos + "px"));
+        niftyGUI.getScreen("layerScreen").findElementByName("LogLabel").setConstraintY(new SizeValue(yPos + "px"));
+
+        yPos = Params.screenHeight - (720 - 488);
+        niftyGUI.getScreen("layerScreen").findElementByName("winOrderControl").setConstraintY(new SizeValue(yPos + "px"));
+        niftyGUI.getScreen("layerScreen").findElementByName("winGameLogControl").setConstraintY(new SizeValue(yPos + "px"));
+        niftyGUI.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).refresh(isPlayerInsideFactory);
+        
+    }
+    
     private void toggleTopView() {
         
-        if (Params.topViewAvailable && !topViewEnabled) {
+        if (Params.topViewAvailable && viewNumber != 5) {
             topViewEnabled = true;
-            Params.camAxesLeft = cam.getLeft();
-            Params.camAxesUp = cam.getUp();
-            Params.camAxesDir = cam.getDirection();
-            cam.setLocation(new Vector3f(210.75597f, 191.22467f, -111.45984f));
-            cam.setAxes(new Vector3f(0.006238699f, 0.0011283755f, 0.9999799f), 
-                    new Vector3f(-0.7573153f, 0.6530373f, 0.0039878786f), new Vector3f(-0.6530197f, -0.75732493f, 0.004928589f));
+            
+            switch(viewNumber) {
+                case 0:
+                    Params.camAxesLeft = cam.getLeft();
+                    Params.camAxesUp = cam.getUp();
+                    Params.camAxesDir = cam.getDirection();
+                    Params.flyCamRotationSpeed = flyCam.getRotationSpeed();
+                    
+                    cam.setLocation(new Vector3f(210.75597f, 191.22467f, -111.45984f));
+                    cam.setAxes(new Vector3f(0.006238699f, 0.0011283755f, 0.9999799f),
+                            new Vector3f(-0.7573153f, 0.6530373f, 0.0039878786f),
+                            new Vector3f(-0.6530197f, -0.75732493f, 0.004928589f));
+                    break;
+                    
+                case 1:
+                    
+                    Params.camMaxY = Params.securityCamsMaxY;
+                    Params.camMinY = Params.securityCamsMinY;
+                    Params.camMaxX = Params.cam1MaxX;
+                    Params.camMinX = Params.cam1MinX;
+//                    Params.camMaxZ = Params.cam1MaxX;
+//                    Params.camMinZ = Params.cam1MinX;
+                    cam.setLocation(new Vector3f(138.94714f, 74.204185f, -118.346085f));
+                    cam.setAxes(new Vector3f(-0.004745364f, 0.0011234581f, 0.99998814f),
+                            new Vector3f(-0.69315696f, 0.720775f, -0.0040991306f),
+                            new Vector3f(-0.720771f, -0.69316816f, -0.0026416779f));
+                    break;
+                    
+                case 2:
+                    Params.camMaxX = Params.playerMaxX;
+                    Params.camMinX = Params.playerMinX;
+                    cam.setLocation(new Vector3f(51.046055f, 68.38866f, 122.49132f));
+                    cam.setAxes(new Vector3f(-0.99999726f, 0.0011223818f, -0.0020553162f),
+                            new Vector3f(0.0017144564f, 0.94873714f, -0.31606156f),
+                            new Vector3f(0.0015952132f, -0.31606424f, -0.94873655f));
+                    break;
+                    
+                case 3:
+                    cam.setLocation(new Vector3f(-37.94872f, 71.8763f, -118.55907f));
+                    cam.setAxes(new Vector3f(-0.0045000315f, 0.0011213869f, -0.9999892f),
+                            new Vector3f(0.4902432f, 0.8715848f, -0.0012287796f),
+                            new Vector3f(0.871574f, -0.49024346f, -0.004471898f));
+                    break;
+                    
+                case 4:
+                    cam.setLocation(new Vector3f(51.636513f, 108.492805f, -360.26437f));
+                    cam.setAxes(new Vector3f(0.9999567f, 0.0011224102f, 0.009237098f),
+                            new Vector3f(-0.0052102236f, 0.890025f, 0.4558819f),
+                            new Vector3f(-0.0077095614f, -0.45591027f, 0.88999236f));
+                    break;
+            }
+            
+            viewNumber = (viewNumber + 1)%6;
             flyCam.setMoveSpeed(0);
-            Params.flyCamRotationSpeed = flyCam.getRotationSpeed();
-            flyCam.setRotationSpeed(0);
+//            flyCam.setRotationSpeed(0);
             world.getChild("Beams-Metal").setCullHint(Spatial.CullHint.Always);
+            
         }
         else if (Params.topViewAvailable && topViewEnabled) {
             topViewEnabled = false;
@@ -1068,6 +1169,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             flyCam.setMoveSpeed(100);
             flyCam.setRotationSpeed(Params.flyCamRotationSpeed);
             world.getChild("Beams-Metal").setCullHint(Spatial.CullHint.Never);
+            viewNumber = (viewNumber + 1)%6;
+            Params.camMaxX = Params.playerMaxX;
+            Params.camMinX = Params.playerMinX;
+            Params.camMaxY = Params.playerMaxY;
+            Params.camMinY = Params.playerMinY;
         }
         
     }

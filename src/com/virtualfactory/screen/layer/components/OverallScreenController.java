@@ -54,7 +54,6 @@ public class OverallScreenController implements Controller {
     private final CommonBuilders common = new CommonBuilders();
     private String sizePreviousImage = "35px";
     private boolean isUpdating = false;
-//    private int number = 0;
     
     @Override
     public void bind(
@@ -444,7 +443,7 @@ public class OverallScreenController implements Controller {
     }
     
     private void updateLocation(){
-        int initialY = 488;
+        int initialY = Params.screenHeight - (720 - 488);//nifty.getScreen("layerScreen").findElementByName("winOverallControl").getY();
         int yOperators = 60;
         int yMachines = 120;
         int yOthers = 60;
@@ -466,7 +465,21 @@ public class OverallScreenController implements Controller {
     public void ShowWindow(){
         nifty.getScreen("layerScreen").findElementByName("winOverallControl").show();
         nifty.getScreen("layerScreen").findElementByName("OverallLabel").hide();
-
-
+    }
+    
+    public void refresh(boolean bool) {
+        
+        
+        if (bool) {
+            if (isExpanded_OperatorCosts)
+                clickToOperatorCosts();
+            if (isExpanded_MachineEquipmentCosts)
+                clickToMachineEquipmentCosts();
+            if (isExpanded_OtherCosts)
+                clickToOtherCosts();
+            int h = Params.screenHeight - (720 - 488);
+            nifty.getScreen("layerScreen").findElementByName("winOverallControl").setConstraintY(new SizeValue(h + "px"));
+        }
+        
     }
 }

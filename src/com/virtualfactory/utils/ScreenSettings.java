@@ -79,6 +79,7 @@ public class ScreenSettings {
         gameScreen.setWidth(chosenScreenMode.getWidth());
         gameScreen.setHeight(chosenScreenMode.getHeight());
         gameScreen.setFrequency(chosenScreenMode.getRefreshRate());
+        Params.fullScreenHeight = chosenScreenMode.getHeight();
     }
     
     private void makeItStandardScreen() {

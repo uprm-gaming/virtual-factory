@@ -12,7 +12,8 @@ public class Params {
     public static String renderer = "";
     public static final String supportedRenderer = "LWJGL-OpenGL2";
     public static int screenHeight = 0;
-    
+    public static int fullScreenHeight = 0;
+
     public static final String ControlsDescription = ""
             + "A: move left\n\n"
             + "D: move right\n\n"
@@ -32,14 +33,30 @@ public class Params {
     //-------End of Narator state and specs-----
     
     public static boolean topViewAvailable = true;
+    public static int viewNumber = 0;
     public static final float playerGravity = 120;
     public static float flyCamRotationSpeed = 0;
     public static Vector3f camAxesLeft = null;
     public static Vector3f camAxesUp = null;
     public static Vector3f camAxesDir = null;
     public static float rotationSpeed = 0.01f;
+    public static float camMaxX = 100f;
+    public static float camMinX = -100f;
     public static float camMaxY = 0.65f;
     public static float camMinY = -0.65f;
+    public static final float playerMaxX = 100f;
+    public static final float playerMinX = -100f;
+    public static final float playerMaxY = 0.65f;
+    public static final float playerMinY = -0.65f;
+    public static final float playerMaxZ = 100f;
+    public static final float playerMinZ = -100f;
+    public static final float cam1MaxX = 0f;
+    public static final float cam1MinX = -100f;//-0.92f;
+    public static final float cam1MaxZ = 100f;//-0.30f;
+    public static final float cam1MinZ = -100f;//-0.92f;
+    public static final float securityCamsMaxY = -0.32f;
+    public static final float securityCamsMinY = -0.92f;
+    
 
     
     
