@@ -6,6 +6,7 @@ import com.virtualfactory.screen.intro.IntroScreen;
 import com.virtualfactory.screen.menu.*;
 import com.virtualfactory.data.GameData;
 import com.jme3.animation.AnimChannel;
+import com.jme3.post.filters.FadeFilter;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
 import com.jme3.app.Application;
@@ -13,6 +14,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.*;
 import com.jme3.bullet.control.*;
@@ -26,6 +28,7 @@ import com.jme3.light.*;
 import com.jme3.material.Material;
 import com.jme3.math.*;
 import com.jme3.niftygui.NiftyJmeDisplay;
+import com.jme3.post.FilterPostProcessor;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.*;
@@ -125,7 +128,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private ViewPort viewPort;
     private ViewPort guiViewPort;
     private CharacterControl player;
-    private GhostControl secondFloorSensor;
+    private GhostControl topStairsSensor;
     
     private boolean forward = false;
     private boolean backward = false;
@@ -148,6 +151,12 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private Vector3f walkDirection = new Vector3f(0, 0, 0);
 
     private PointLight lamp2, lamp3;
+    private boolean isPlayerTouchingSensor;
+    private boolean firstTime;
+    private FadeFilter filter;
+    private FadeFilter transitionFilter;
+    private FilterPostProcessor fpp;
+    private GhostControl bottomStairsSensor;
     
     @Override
     public void initialize(AppStateManager manager, Application application) {
@@ -396,7 +405,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         isLevelStarted = true;
         
-        Params.gameNarrator.talk("Welcome to Virtual Factory!\nPress 'T' for a top view of the factory.", 15);
+        Params.gameNarrator.talk("Welcome to Virtual Factory!\nPress 'T' for a top view of the factory.", 5);
     }
 
     private void flushPreviousGame() {
@@ -477,6 +486,12 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
     
     private void createTerrain() {
+        fpp = new FilterPostProcessor(assetManager);
+        transitionFilter = new FadeFilter(1.5f);
+        fpp.addFilter(transitionFilter);
+        viewPort.addProcessor(fpp); // FIX ME: For some reason, after adding fpp to the jMonkey viewPort, everything goes black when leaving full screen.
+                                    // It even happens with the traditional Fade Filter (not using my own custom Transition Filter).
+
         E_Terrain tempTerrain = gameData.getMapTerrain();
         
         flyCam.setMoveSpeed(100);
@@ -498,13 +513,13 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         bulletAppState.getPhysicsSpace().add(worldRigid);
         // ----------
 
-        /* TEST: Adding a sensor to the second floor */
-        // ----------
-        secondFloorSensor = new GhostControl(new BoxCollisionShape(new Vector3f(90, 5, 25)));
-        world.getChild("Mesani Floor").addControl(secondFloorSensor);
-        bulletAppState.getPhysicsSpace().add(secondFloorSensor);
-        bulletAppState.setDebugEnabled(false); // set to true so you can see the invisible physics engine
-        // ----------
+        topStairsSensor = new GhostControl(new BoxCollisionShape(new Vector3f(15, 10, 5)));
+        Vector3f sensorLocation = new Vector3f(134.05f, 59.06f, -285.02f);
+        enableSensor(topStairsSensor, sensorLocation);
+        
+        bottomStairsSensor = new GhostControl(new BoxCollisionShape(new Vector3f(15, 10, 5)));
+        sensorLocation = new Vector3f(107.42f, 12.67f, -284.9f);
+        enableSensor(bottomStairsSensor, sensorLocation);
 
         /* First-person Player */
         // ----------
@@ -547,6 +562,20 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         lamp3.setRadius(lamp2.getRadius());
         rootNode.addLight(lamp3);
     }
+    
+    private void enableSensor(GhostControl sensor, Vector3f location) {
+        Box b = new Box(1, 1, 1);
+        Geometry boxGeometry = new Geometry("sensor box", b);
+        boxGeometry.setLocalTranslation(location);
+        
+        Material boxMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        boxMat.setColor("Color", ColorRGBA.Yellow);
+        boxGeometry.setMaterial(boxMat);
+        
+        boxGeometry.addControl(sensor);
+        bulletAppState.getPhysicsSpace().add(sensor);
+        bulletAppState.setDebugEnabled(false); // set to true so you can see the invisible physics engine
+    }
 
     private void enableLayerScreen() {
         //show static windows
@@ -584,7 +613,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
      */
     @Override
     public void update(float tpf) {
-        
         updatePlayerPosition();
         updateGameDataAndLogic();
     }
@@ -593,6 +621,12 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         
         if (!isLevelStarted)
             return;
+        
+        if (topStairsSensor.getOverlappingCount() > 1) 
+            handleTransition();
+        
+        if (bottomStairsSensor.getOverlappingCount() > 1)
+            handleTransition();
 
         if (lookUp)
             rotateCamera(-Params.rotationSpeed, cam.getLeft());
@@ -636,6 +670,36 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         }
     }
     
+    private void handleTransition() {
+        boolean isPlayerUpstairs = topStairsSensor.getOverlappingCount() > 1;
+        boolean isTransitionStarted = transitionFilter.getValue() < 1;
+        
+        if (!isTransitionStarted) {
+            playerSpeed = 0;
+            transitionFilter.fadeOut();
+
+            AudioNode footsteps;
+            footsteps = new AudioNode(assetManager, isPlayerUpstairs ? "Sounds/footsteps1.wav" : "Sounds/footsteps2.wav", false);
+            footsteps.setPositional(false);
+            footsteps.play();
+        }
+        
+        boolean isTransitionComplete = transitionFilter.getValue() <= 0;
+        
+        if (isTransitionComplete) {
+            if (isPlayerUpstairs) {
+                player.warp(new Vector3f(121.2937f, 12.65f, -309.41315f));
+                cam.setRotation(new Quaternion(0.04508071f, -0.4710204f, 0.02474963f, 0.8806219f));
+            } 
+            else {
+                player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
+                cam.setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
+            }
+            transitionFilter.fadeIn();
+            playerSpeed = 1.3f;
+        }
+    }
+    
      private void rotateCamera(float value, Vector3f axis){    
         Matrix3f mat = new Matrix3f();
         
@@ -670,7 +734,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             Params.topViewAvailable = false;
             if (newPosition.getY() > Params.SECOND_FLOOR_Y_POS) {
                 Params.topViewAvailable = true;
-                Params.gameNarrator.talk("Second Floor.\nPress 'T' for a top view of the factory.", 5);
+                Params.gameNarrator.talk("Second Floor.\nPress 'T' for a top view of the factory.", "Sounds/Narrator/instructions.wav");
             }
             else {
                 Params.topViewAvailable = false;
