@@ -77,7 +77,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     CharacterControl character_Disp;
     private GameData gameData;
     private ManageEvents manageEvents;
-    private boolean isPlayerInsideFactory;
+    private boolean isLevelStarted;
     private MenuScreenController menuScreenC;
     private LayerScreenController layerScreenC;
     private Node world;
@@ -263,7 +263,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             if (name.equals("Toggle Full Screen") && !keyPressed)
                 changeScreenSize();
             
-            if (!isPlayerInsideFactory) {
+            if (!isLevelStarted) {
                 return;
             }
             
@@ -394,7 +394,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         updateCursorIcon(0);
 
-        isPlayerInsideFactory = true;
+        isLevelStarted = true;
         
         Params.gameNarrator.talk("Welcome to Virtual Factory!\nPress 'T' for a top view of the factory.", 15);
     }
@@ -483,7 +483,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         /* Factory */
         // ----------
-        world = (Node) assetManager.loadModel("Models/World3_v4c/World3_v4c.j3o");
+        world = (Node) assetManager.loadModel("Models/World28/World28.j3o");
         world.getChild("Machine vibration Empty").removeFromParent();
         world.setLocalScale(250.0f, 250.0f, 250.0f);
         world.setLocalTranslation(-9.0f, 0.0f, 82.0f);
@@ -591,7 +591,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     
     public void updatePlayerPosition() {
         
-        if (!isPlayerInsideFactory)
+        if (!isLevelStarted)
             return;
 
         if (lookUp)
@@ -684,7 +684,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         if (!this.getLayerScreenController().getPauseStatus() && gameSounds.machineSoundPlaying())
             this.gameSounds.pauseSound(Sounds.MachineWorking);
         
-        if (!isPlayerInsideFactory)
+        if (!isLevelStarted)
             return;
         
         if (currentSystemStatus.equals(Status.Busy))
@@ -1097,7 +1097,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         yPos = Params.screenHeight - (720 - 488);
         niftyGUI.getScreen("layerScreen").findElementByName("winOrderControl").setConstraintY(new SizeValue(yPos + "px"));
         niftyGUI.getScreen("layerScreen").findElementByName("winGameLogControl").setConstraintY(new SizeValue(yPos + "px"));
-        niftyGUI.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).refresh(isPlayerInsideFactory);
+        niftyGUI.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).refresh(isLevelStarted);
         
     }
     
@@ -1314,11 +1314,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
 
     public boolean isExecuteGame() {
-        return isPlayerInsideFactory;
+        return isLevelStarted;
     }
 
-    public void setExecuteGame(boolean isPlayerInsideFactory) {
-        this.isPlayerInsideFactory = isPlayerInsideFactory;
+    public void setExecuteGame(boolean isLevelStarted) {
+        this.isLevelStarted = isLevelStarted;
     }
 
     public ManageEvents getManageEvents() {
