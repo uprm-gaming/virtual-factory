@@ -4,11 +4,11 @@ import com.jme3.math.Vector3f;
 import com.virtualfactory.narrator.Narrator;
 
 public class Params {
-    
+
     public static final boolean DEBUG_ON = true;
     public static final boolean BUILD_FOR_MAC_APP = false;
     public static final boolean BUILD_FOR_TESTING_SESSION = false;
-    
+
     public static String renderer = "";
     public static final String supportedRenderer = "LWJGL-OpenGL2";
     public static int screenHeight = 0;
@@ -24,14 +24,7 @@ public class Params {
             + "Left-Shift:  select an object\n\n"
             + "Right-Shift: open/close the dashboard\n\n"
             + "F1: turn on/off the full screen";
-    
-    //-------Narator state and specs---------
-    public static Narrator gameNarrator = null;
-    public static final float SECOND_FLOOR_Y_POS = 57;
-    public static long tempTime = 0;
-    public static Vector3f oldPosition = new Vector3f(51.68367f, 59.064148f, -292.67755f);
-    //-------End of Narator state and specs-----
-    
+
     public static boolean topViewAvailable = true;
     public static int viewNumber = 0;
     public static final float playerGravity = 120;
@@ -56,10 +49,10 @@ public class Params {
     public static final float cam1MinZ = -100f;//-0.92f;
     public static final float securityCamsMaxY = -0.32f;
     public static final float securityCamsMinY = -0.92f;
-    
 
-    
-    
+
+
+
     //-Virtual Factory 1.0 params
     public static int maxTime = 60;
     public static int maxLoadQuantity = 100;
@@ -102,9 +95,9 @@ public class Params {
     public static float percentageLoading = 0.0f;
     public static float percentageQuote = 0.0f;
     public static double percentageToShowWarningMachineEquipment = 0.90;
-    
+
     public static String selectDatabase = "remote";
-    
+
     public static String localhostUser = "root";
     public static String localhostPass = "admin";
     public static String localhostServer = "localhost";
@@ -122,7 +115,7 @@ public class Params {
     public static int timeToUpdateSlotsMinutes = 120;//minutes
     public static double timeToShowDashboard = 0.5;//seconds
     public static double timeToHideDashboard = 0.5;//seconds
-    
+
     public static String setupDescription = " Please setup the game step by step:";
     public static String setupResources = "1. Setup resources (workers, machines, and equipment)";
     public static String setupStorage = "2. Allocate storages (slots per storage)";

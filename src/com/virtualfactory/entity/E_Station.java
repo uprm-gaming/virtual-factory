@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.virtualfactory.entity;
 
 import com.jme3.math.ColorRGBA;
@@ -25,10 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- *
- * 
- */
 public class E_Station {
     private int idStation;
     private String stationDescription;
@@ -80,7 +72,7 @@ public class E_Station {
     public void setDefaultValue(double defaultValue) {
         this.defaultValue = defaultValue;
     }
-    
+
     public E_Station(int idStation, String stationDescription, int stationLocationX, int stationLocationY,
             double sizeW, double sizeL, double priceForPurchase, int inputPaletteCapacity, int outputPaletteCapacity,
             Status status, Owner owner) {
@@ -131,7 +123,7 @@ public class E_Station {
     public void setTempSelectedSlots(int tempSelectedSlots) {
         this.tempSelectedSlots = tempSelectedSlots;
     }
-    
+
     public void initializeMatrix()
     {
         int noMatrixWidth = (int)sizeW/Params.standardBucketWidthLength;
@@ -141,7 +133,7 @@ public class E_Station {
             for (int j=0;j<noMatrixLength;j++)
                 matrix[i][j] = 0;
     }
-    
+
     public void initializeSlots(){
         int noMatrixWidth = (int)sizeW/Params.standardBucketWidthLength;
         int noMatrixLength = (int)sizeL/Params.standardBucketWidthLength;
@@ -169,11 +161,11 @@ public class E_Station {
             }
         }
     }
-    
+
     public Map<Integer, E_Slot> getMapSlots() {
         return mapSlots;
     }
-    
+
     public void updateSlots(){
         int noMatrixWidth = (int)sizeW/Params.standardBucketWidthLength;
         int noMatrixLength = (int)sizeL/Params.standardBucketWidthLength;
@@ -188,7 +180,7 @@ public class E_Station {
                         }
                     }else{
                         return;
-                    }                
+                    }
                 }
             }
         }else{
@@ -203,12 +195,12 @@ public class E_Station {
                         }
                     }else{
                         return;
-                    }                
+                    }
                 }
             }
         }
     }
-    
+
 //    private void updateSlotsToRelease(int posI, int posJ){
 //        if (numberSlotsToRelease > 0){
 //            if (matrixValue[posI][posJ].getSlotStatus().equals(SlotStatus.Free)){
@@ -217,7 +209,7 @@ public class E_Station {
 //            }
 //        }
 //    }
-    
+
     public int getTotalWorkingTimeBySlots(){
         int noMatrixWidth = (int)sizeW/Params.standardBucketWidthLength;
         int noMatrixLength = (int)sizeL/Params.standardBucketWidthLength;
@@ -229,11 +221,11 @@ public class E_Station {
         }
         return accumulatedWorkingTimeBySlots;
     }
-    
+
     public double getTotalCostBySlots(){
         return (getTotalWorkingTimeBySlots()/60.0)*costPerHour;
     }
-    
+
     public Pair<Integer,Integer> reserveParkingZone()
     {
         int noMatrixWidth = (int)sizeW/Params.standardBucketWidthLength;
@@ -241,10 +233,10 @@ public class E_Station {
         for (int j=0;j<noMatrixLength;j++){
             matrix[noMatrixWidth-1][j] = 1;
             numberSlotsForParking++;
-        }            
+        }
         return new Pair<Integer, Integer>((int)(stationLocationX + sizeW/2.0 - Params.standardBucketWidthLength/2.0), stationLocationY);
     }
-    
+
     public Pair<Integer,Integer> getParkingZone()
     {
         Pair<Integer,Integer> parkingZone = null;
@@ -257,7 +249,7 @@ public class E_Station {
                 matrix[noMatrixWidth-1][j] = 2;
                 foundZone = true;
                 break;
-            }            
+            }
         }
         if (foundZone){
             int initialX = (int)(stationLocationX - sizeW/2.0 + Params.standardBucketWidthLength/2.0);
@@ -266,7 +258,7 @@ public class E_Station {
         }
         return parkingZone;
     }
-    
+
     public void releaseParkingZone(int locationZ)
     {
         int initialZ = (int)(stationLocationY - sizeL/2.0 + Params.standardBucketWidthLength/2.0);
@@ -274,7 +266,7 @@ public class E_Station {
         int indexZ = (locationZ - initialZ)/Params.standardBucketWidthLength;
         matrix[noMatrixWidth-1][indexZ] = 1;
     }
-    
+
     public void reserveParkingZone(int locationZ)
     {
         int initialZ = (int)(stationLocationY - sizeL/2.0 + Params.standardBucketWidthLength/2.0);
@@ -282,7 +274,7 @@ public class E_Station {
         int indexZ = (locationZ - initialZ)/Params.standardBucketWidthLength;
         matrix[noMatrixWidth-1][indexZ] = 2;
     }
-    
+
     public void updateBucketsPosition()
     {
         //FIX ME: there is missing controlling in case there is no space to locate the 'bucket'
@@ -303,12 +295,12 @@ public class E_Station {
                         }
                     if (foundFreeZone)
                         break;
-                }    
+                }
             }
         }
 //        printLocations();
     }
-    
+
     public Pair<Pair<Pair<Integer,Integer>,Pair<Integer,Integer>>,Pair<Integer,Integer>> getLocationInMatrix(int tempSizeW, int tempSizeL)
     {
         //Pair<Pair<Pair<Integer,Integer>,Pair<Integer,Integer>>,Pair<Integer,Integer>> result = new Pair<Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>, Pair<Integer, Integer>>(new Pair<Pair<Integer, Integer>, Pair<Integer, Integer>>(new Pair<Integer, Integer>(1, 2), new Pair<Integer, Integer>(3, 4)), new Pair<Integer, Integer>(5, 6))
@@ -355,7 +347,7 @@ public class E_Station {
         }else
             return null;
     }
-    
+
     public void releaseLocation(int iniX, int iniZ, int endX, int endZ){
 //        System.out.println("iniX:" + iniX + " iniZ:" + iniZ + " endX:" + endX + " endZ:" + endZ);
         for (int m=iniX; m<=endX; m++)
@@ -363,7 +355,7 @@ public class E_Station {
                 matrix[m][n] = 0;
 //        printLocations();
     }
-    
+
     public Pair<Pair<Integer,Integer>,Pair<Integer,Integer>> getAvailableSlot(String partDescription){
         //FirstPair:  first: i position, second: j position
         //SecondPair: first: IdPart, second: Quantity
@@ -384,14 +376,14 @@ public class E_Station {
                 }
         return availableSlot;
     }
-    
+
     private void releaseSlot(int posI, int posJ){
         if (!matrix[posI][posJ].equals(0)){
             matrix[posI][posJ] = 0;
             matrixValue[posI][posJ].setSlotStatus(SlotStatus.Free);
         }
     }
-    
+
     public void addItemsInSlotDynamically(Pair<Pair<Integer,Integer>,Pair<Integer,Integer>> slotSelected, double timeToFinish, boolean isAdding, boolean isZeroItems, int quantity, int idStrategy){
         Geometry part = (Geometry)gameEngine.jmonkeyApp.getRootNode().getChild(TypeElements.STATION.toString() + idStation + "_" + TypeElements.PART.toString() + slotSelected.getFirst().getFirst() + "_" + slotSelected.getFirst().getSecond());
         if (part != null && quantity > 0){
@@ -415,7 +407,7 @@ public class E_Station {
             System.out.println("ERROR PartSlot:" + TypeElements.PART.toString() + slotSelected.getFirst().getFirst() + "_" + slotSelected.getFirst().getSecond() + " -isAdding:" + isAdding + " -isZeroItems:" + isZeroItems + " -Quantity:" + quantity + " -availableQuantity:" + slotSelected.getSecond().getSecond());
         }
     }
-    
+
     public void removeItemsInSlotDynamically(int idPart, int quantity, double timeToFinish){
         int noMatrixWidth = (int)sizeW/Params.standardBucketWidthLength;
         int noMatrixLength = (int)sizeL/Params.standardBucketWidthLength;
@@ -467,7 +459,7 @@ public class E_Station {
     public void setGameEngine(GameEngine gameEngine) {
         this.gameEngine = gameEngine;
     }
-    
+
     public StationType getStationType() {
         return stationType;
     }
@@ -590,12 +582,12 @@ public class E_Station {
             tempBucket.setCostPerHour(costPerHour);
         }
     }
-    
-    
+
+
     /**Looks inside this Station the output bucket used to hold parts of the given id.
      * @param partId - the unique identification of a part.
      * @return reference to output bucket holding the specified parts or null if there
-     *  is no output bucket in the station designated to the partId given. 
+     *  is no output bucket in the station designated to the partId given.
      */
     public E_Bucket outBucketWith(int partId) {
 //        for(E_Bucket bucket : arrBuckets){
@@ -608,11 +600,11 @@ public class E_Station {
         }
 	return null;
     }
-	
+
     /**Looks inside this Station the input bucket used to hold parts of the given id.
      * @param partId - the unique identification of a part.
      * @return reference to input bucket that holds the specified parts or null if there
-     *  is no input bucket in the station designated to the partId given. 
+     *  is no input bucket in the station designated to the partId given.
      */
     public E_Bucket inBucketWith(int partId) {
 //	for(E_Bucket bucket : arrBuckets){
@@ -626,8 +618,8 @@ public class E_Station {
 	return null;
     }
 
-    /**Looks for the bucket being used in both directions(input and output), or input only 
-     *  that holds parts of the given id. For each bucket, the method will first check 
+    /**Looks for the bucket being used in both directions(input and output), or input only
+     *  that holds parts of the given id. For each bucket, the method will first check
      *  if bucket.direction == 'Both' and then if bucket.direction == 'Input'.
      * @param partId - the unique identification of a part.
      * @return reference to the bucket holding the specified parts or null if there
@@ -646,9 +638,9 @@ public class E_Station {
 	return null;
     }
 
-    
-    /**Looks for the bucket being used in both directions(input and output), or output only 
-     *  that holds parts of the given id. For each bucket, the method will first check 
+
+    /**Looks for the bucket being used in both directions(input and output), or output only
+     *  that holds parts of the given id. For each bucket, the method will first check
      *  if bucket.direction == 'Both' and then if bucket.direction == 'Output'.
      * @param partId - the unique identification of a part.
      * @return reference to the bucket holding the specified parts or null if there
@@ -666,7 +658,7 @@ public class E_Station {
         }
 	return null;
     }
-    
+
     public void updatePartsInBucket(int partId){
         for (Pair<ArrayList<Integer>,E_Bucket> bucketFixed : arrBucketsFixed){
             if (bucketFixed.getSecond().getIdPart() == partId){
@@ -691,7 +683,7 @@ public class E_Station {
             }
         }
     }
-    
+
     public void updateBucketsArray(){
         arrBucketsFixed = new ArrayList<Pair<ArrayList<Integer>, E_Bucket>>();
         for (E_Bucket bucket : arrBuckets){
@@ -715,7 +707,7 @@ public class E_Station {
                 newBucket.setDirection(bucket.getDirection());
                 arrBucketsFixed.add(new Pair(newArrBucketsId, newBucket));
             }
-            newArrBucketsId.add(bucket.getIdBucket());            
+            newArrBucketsId.add(bucket.getIdBucket());
             if (bucket.getState().equals(ObjectState.Active)){
                 newBucket.setCapacity(newBucket.getCapacity() + bucket.getCapacity());
                 newBucket.setSize(newBucket.getSize() + bucket.getSize());
@@ -724,7 +716,7 @@ public class E_Station {
             }
         }
     }
-    
+
     public void updateBucketsArrayState(E_Bucket bucket){
         for (Pair<ArrayList<Integer>,E_Bucket> bucketFixed : arrBucketsFixed){
             if (bucketFixed.getFirst().contains(bucket.getIdBucket())){
