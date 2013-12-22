@@ -174,8 +174,8 @@ public class OverallScreenController implements Controller {
             totalCostOperators += operator.updateAndGetEarnedMoney();
         for (E_Machine machine : gameEngine.getGameData().getMapUserMachineByOperation().values())
             totalCostMachines += machine.getAccumulatedCost();
-        for (E_Machine machine : gameEngine.getGameData().getMapUserMachineByTransport().values())
-            totalCostEquipment += machine.getAccumulatedCost();
+        for (E_Machine equipment : gameEngine.getGameData().getMapUserMachineByTransport().values())
+            totalCostEquipment += equipment.getAccumulatedCost();
         for (E_Station station : gameEngine.getGameData().getMapUserStation().values()){
             if (station.getStationType().equals(StationType.StorageRM) || station.getStationType().equals(StationType.StorageIG) || station.getStationType().equals(StationType.StorageFG)){
                 totalCostStations += station.getTotalCostBySlots();
@@ -190,12 +190,12 @@ public class OverallScreenController implements Controller {
         
         currentMoney = initialMoney - totalCostOperators - totalHireOperators - totalFireOperators - totalOverHead
                 - totalCostMachines - totalPurchaseMachines - totalPreventiveMaintenanceMachine + totalSaleMachines 
-                - totalCostEquipment - totalPurchaseEquipment - totalPreventiveMaintenanceEquipment + totalSaleEquipment
+                - totalPurchaseEquipment - totalPreventiveMaintenanceEquipment + totalSaleEquipment
                 - totalCostStations - totalCostPurchases + totalIncomeShips;
         gameEngine.getGameData().getCurrentGame().setCurrentMoney(Utils.formatValue2Dec(currentMoney));
         
         totalExpenditures = totalCostOperators + totalFireOperators + totalHireOperators + totalCostMachines + totalPurchaseMachines +
-                totalPreventiveMaintenanceMachine + totalCostEquipment + totalPurchaseEquipment + totalPreventiveMaintenanceEquipment + 
+                totalPreventiveMaintenanceMachine  + totalPurchaseEquipment + totalPreventiveMaintenanceEquipment + 
                 totalCostStations + totalCostPurchases + totalOverHead;
         totalIncomes = totalSaleMachines + totalSaleEquipment + totalIncomeShips;
         totalProfit = totalIncomes - totalExpenditures;
@@ -209,7 +209,6 @@ public class OverallScreenController implements Controller {
                 ((Label)screen.findNiftyControl("costMachineValue_WOvC", Label.class)).setText("(" + Utils.formatValue2DecToString(totalCostMachines) + ")");
                 ((Label)screen.findNiftyControl("purchaseMachineValue_WOvC", Label.class)).setText("(" + Utils.formatValue2DecToString(totalPurchaseMachines) + ")");
                 ((Label)screen.findNiftyControl("preventiveMaintenanceMachineValue_WOvC", Label.class)).setText("(" + Utils.formatValue2DecToString(totalPreventiveMaintenanceMachine) + ")");
-                ((Label)screen.findNiftyControl("costEquipmentValue_WOvC", Label.class)).setText("(" + Utils.formatValue2DecToString(totalCostEquipment) + ")");
                 ((Label)screen.findNiftyControl("purchaseEquipmentValue_WOvC", Label.class)).setText("(" + Utils.formatValue2DecToString(totalPurchaseEquipment) + ")");
                 ((Label)screen.findNiftyControl("preventiveMaintenanceEquipmentValue_WOvC", Label.class)).setText("(" + Utils.formatValue2DecToString(totalPreventiveMaintenanceEquipment) + ")");
             }
@@ -220,7 +219,7 @@ public class OverallScreenController implements Controller {
             }
             
             ((Label)screen.findNiftyControl("operatorCostsValue_WOvC", Label.class)).setText("(" + Utils.formatValue2DecToString(totalCostOperators+totalHireOperators+totalFireOperators) + ")");
-            ((Label)screen.findNiftyControl("machineEquipmentCostsValue_WOvC", Label.class)).setText("(" + Utils.formatValue2DecToString(totalCostMachines+totalPurchaseMachines+totalPreventiveMaintenanceMachine+totalCostEquipment+totalPurchaseEquipment+totalPreventiveMaintenanceEquipment) + ")");
+            ((Label)screen.findNiftyControl("machineEquipmentCostsValue_WOvC", Label.class)).setText("(" + Utils.formatValue2DecToString(totalCostMachines+totalPurchaseMachines+totalPreventiveMaintenanceMachine+totalPurchaseEquipment+totalPreventiveMaintenanceEquipment) + ")");
             ((Label)screen.findNiftyControl("otherCostsValue_WOvC", Label.class)).setText("(" + Utils.formatValue2DecToString(totalOverHead+totalCostStations+totalCostPurchases) + ")");
             
             ((Label)screen.findNiftyControl("saleMachineValue_WOvC", Label.class)).setText(Utils.formatValue2DecToString(totalSaleMachines));
@@ -373,13 +372,6 @@ public class OverallScreenController implements Controller {
                 control(new LabelBuilder("preventiveMaintenanceMachine_WOvC","Machine Prev.Maint.:"){{   width("160px");  height("20px");  textHAlign(overall_label);  }});  panel(common.hspacer("5px"));
                 control(new LabelBuilder("preventiveMaintenanceMachineValueSign_WOvC",Params.moneySign){{   width(Params.moneySignSizeField);  height("20px"); textHAlignCenter(); }});
                 control(new LabelBuilder("preventiveMaintenanceMachineValue_WOvC","_"){{   width("70px");  height("20px"); textHAlign(overall_value); }});
-            }}.build(nifty, screen, screen.findElementByName(panelName));
-            new PanelBuilder(){{
-                childLayoutHorizontal();
-                panel(common.hspacer(sizePreviousImage));
-                control(new LabelBuilder("costEquipment_WOvC","Equipment Cost/Hour:"){{   width("160px");  height("20px");  textHAlign(overall_label);  }});  panel(common.hspacer("5px"));
-                control(new LabelBuilder("costEquipmentValueSign_WOvC",Params.moneySign){{   width(Params.moneySignSizeField);  height("20px"); textHAlignCenter(); }});
-                control(new LabelBuilder("costEquipmentValue_WOvC","_"){{   width("70px");  height("20px"); textHAlign(overall_value); }});
             }}.build(nifty, screen, screen.findElementByName(panelName));
             new PanelBuilder(){{
                 childLayoutHorizontal();
