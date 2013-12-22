@@ -37,6 +37,8 @@ public class Params {
     public static float camMinX = -100f;
     public static float camMaxY = 0.65f;
     public static float camMinY = -0.65f;
+    public static float camMaxZ = 100f;
+    public static float camMinZ = -100f;
     public static final float playerMaxX = 100f;
     public static final float playerMinX = -100f;
     public static final float playerMaxY = 0.65f;
