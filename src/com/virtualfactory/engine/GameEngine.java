@@ -674,6 +674,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         player.setWalkDirection(walkDirection); // walk!
         cam.setLocation(player.getPhysicsLocation());
+        
+        if (isPlayerUpstairs && player.getPhysicsLocation().getY() < 58.0f)
+            player.warp(new Vector3f(player.getPhysicsLocation().getX(), 58.0f, player.getPhysicsLocation().getZ()));
+        else if (player.getPhysicsLocation().getY() < 12.65f)
+            player.warp(new Vector3f(player.getPhysicsLocation().getX(), 12.65f, player.getPhysicsLocation().getZ()));
     }
 
     private void handleTransition() {
