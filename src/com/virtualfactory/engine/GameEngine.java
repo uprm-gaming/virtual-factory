@@ -550,7 +550,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
     
     private void createSkyBox() {
-        String path = "Textures/SkyBox/";
+        String path = "Textures/Skybox/";
         
         Texture west = assetManager.loadTexture(path + "skyLeft.jpg");
         Texture east = assetManager.loadTexture(path + "skyRight.jpg");
