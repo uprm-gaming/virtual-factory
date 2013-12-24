@@ -156,10 +156,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private boolean isPlayerTouchingSensor;
     private boolean firstTime;
     private FadeFilter filter;
-    private FadeFilter transitionFilter;
+    private FadeFilter fadeFilter;
     private FilterPostProcessor fpp;
     private GhostControl bottomStairsSensor;
     private Narrator gameNarrator;
+    private boolean isPlayerUpstairs = true;
 
     @Override
     public void initialize(AppStateManager manager, Application application) {
@@ -328,7 +329,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                     break;
 
                 case "Toggle Top View":
-                    if (!keyPressed)
+                    if (!keyPressed && isPlayerUpstairs)
                         toggleTopView();
                     break;
 
@@ -490,8 +491,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
     private void createTerrain() {
         fpp = new FilterPostProcessor(assetManager);
-        transitionFilter = new FadeFilter(1.5f);
-        fpp.addFilter(transitionFilter);
+        fadeFilter = new FadeFilter(1.5f);
+        fpp.addFilter(fadeFilter);
         viewPort.addProcessor(fpp); // FIX ME: For some reason, after adding fpp to the jMonkey viewPort, everything goes black when leaving full screen.
                                     // It even happens with the traditional Fade Filter (not using my own custom Transition Filter).
 
@@ -636,10 +637,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         if (!isLevelStarted)
             return;
 
-        if (topStairsSensor.getOverlappingCount() > 1)
-            handleTransition();
-
-        if (bottomStairsSensor.getOverlappingCount() > 1)
+        if (topStairsSensor.getOverlappingCount() > 1 || bottomStairsSensor.getOverlappingCount() > 1)
             handleTransition();
 
         if (lookUp)
@@ -679,12 +677,12 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
 
     private void handleTransition() {
-        boolean isPlayerUpstairs = topStairsSensor.getOverlappingCount() > 1;
-        boolean isTransitionStarted = transitionFilter.getValue() < 1;
+        isPlayerUpstairs = topStairsSensor.getOverlappingCount() > 1;
+        boolean isFadeEffectStarted = fadeFilter.getValue() < 1;
 
-        if (!isTransitionStarted) {
+        if (!isFadeEffectStarted) {
             playerSpeed = 0;
-            transitionFilter.fadeOut();
+            fadeFilter.fadeOut();
 
             AudioNode footsteps;
             footsteps = new AudioNode(assetManager, isPlayerUpstairs ? "Sounds/footsteps1.wav" : "Sounds/footsteps2.wav", false);
@@ -692,19 +690,21 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             footsteps.play();
         }
 
-        boolean isTransitionComplete = transitionFilter.getValue() <= 0;
+        boolean isFadeEffectFinished = fadeFilter.getValue() <= 0;
 
-        if (isTransitionComplete) {
+        if (isFadeEffectFinished) {
             if (isPlayerUpstairs) {
                 player.warp(new Vector3f(121.2937f, 12.65f, -309.41315f));
                 cam.setRotation(new Quaternion(0.04508071f, -0.4710204f, 0.02474963f, 0.8806219f));
+                isPlayerUpstairs = false;
             }
             else {
                 player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
                 cam.setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
                 gameNarrator.talk("Second Floor.\nPress 'T' for a top view of the factory.", "Sounds/Narrator/instructions.wav");
+                isPlayerUpstairs = true;
             }
-            transitionFilter.fadeIn();
+            fadeFilter.fadeIn();
             playerSpeed = 1.3f;
         }
     }
