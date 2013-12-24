@@ -497,8 +497,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         /* Factory */
         // ----------
-        world = (Node) assetManager.loadModel("Models/World28/World28.j3o");
-        world.getChild("Machine vibration Empty").removeFromParent();
+        world = (Node) assetManager.loadModel("Models/factory.j3o");
         world.setLocalScale(250.0f, 250.0f, 250.0f);
         world.setLocalTranslation(-9.0f, 0.0f, 82.0f);
         // ----------
