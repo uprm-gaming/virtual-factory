@@ -505,15 +505,10 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         world = (Node) assetManager.loadModel("Models/factory.j3o");
         world.setLocalScale(250.0f, 250.0f, 250.0f);
         world.setLocalTranslation(-9.0f, 0.0f, 82.0f);
-        // ----------
-        
-        /* Factory's Collision Shape */
-        // ----------
-        CollisionShape worldShape = CollisionShapeFactory.createMeshShape(world);
-        worldRigid = new RigidBodyControl(worldShape, 0);
-        world.addControl(worldRigid);
         rootNode.attachChild(world);
-        bulletAppState.getPhysicsSpace().add(worldRigid);
+        RigidBodyControl rigidBody = new RigidBodyControl(0);
+        world.addControl(rigidBody);
+        bulletAppState.getPhysicsSpace().add(rigidBody);
         // ----------
         
         Node grass = (Node) assetManager.loadModel("Models/grass.j3o");
