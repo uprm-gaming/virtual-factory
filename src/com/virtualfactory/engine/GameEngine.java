@@ -537,9 +537,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         for (E_TerrainReserved tempBlockedZone : tempBlockedZones.values()) {
             setTerrainMap(tempBlockedZone.getLocationX(), tempBlockedZone.getLocationZ(), tempBlockedZone.getWidth(), tempBlockedZone.getLength(), true);
         }
-
+  
         if (Params.renderer.equalsIgnoreCase(Params.supportedRenderer))
-            new ToonFilter(assetManager, viewPort).applyToScene(rootNode);
+            //new ToonFilter(assetManager, viewPort).applyToScene(rootNode);
 
         createLightBulb();
     }
