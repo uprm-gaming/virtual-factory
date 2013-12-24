@@ -481,6 +481,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             Params.camMinX = Params.playerMinX;
             Params.camMaxY = Params.playerMaxY;
             Params.camMinY = Params.playerMinY;
+            Params.camMaxZ = Params.playerMaxZ;
+            Params.camMinZ = Params.playerMinZ;
         }
     }
 
@@ -497,7 +499,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         /* Factory */
         // ----------
-        world = (Node) assetManager.loadModel("Models/factory.j3o");
+        world = (Node) assetManager.loadModel("Models/WorldV2/World3_v2.j3o");
+        world.getChild("Machine vibration Empty").removeFromParent();
         world.setLocalScale(250.0f, 250.0f, 250.0f);
         world.setLocalTranslation(-9.0f, 0.0f, 82.0f);
         // ----------
@@ -537,9 +540,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         for (E_TerrainReserved tempBlockedZone : tempBlockedZones.values()) {
             setTerrainMap(tempBlockedZone.getLocationX(), tempBlockedZone.getLocationZ(), tempBlockedZone.getWidth(), tempBlockedZone.getLength(), true);
         }
-  
+
         if (Params.renderer.equalsIgnoreCase(Params.supportedRenderer))
-            //new ToonFilter(assetManager, viewPort).applyToScene(rootNode);
+            new ToonFilter(assetManager, viewPort).applyToScene(rootNode);
 
         createLightBulb();
     }
@@ -708,7 +711,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         mat.mult(tempDir, tempDir);
 
         if (tempDir.getX() > Params.camMaxX || tempDir.getX() < Params.camMinX
-                || tempDir.getY() > Params.camMaxY || tempDir.getY() < Params.camMinY)
+                || tempDir.getY() > Params.camMaxY || tempDir.getY() < Params.camMinY
+                || tempDir.getZ() > Params.camMaxZ || tempDir.getZ() < Params.camMinZ)
             return;
 
         Quaternion q = new Quaternion();
@@ -1175,13 +1179,19 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                 case 2:
                     Params.camMaxX = Params.playerMaxX;
                     Params.camMinX = Params.playerMinX;
-                    cam.setLocation(new Vector3f(51.046055f, 68.38866f, 122.49132f));
-                    cam.setAxes(new Vector3f(-0.99999726f, 0.0011223818f, -0.0020553162f),
-                            new Vector3f(0.0017144564f, 0.94873714f, -0.31606156f),
-                            new Vector3f(0.0015952132f, -0.31606424f, -0.94873655f));
+                    Params.camMaxZ = 0;
+                    Params.camMinZ = -100;
+                    cam.setLocation(new Vector3f(50.173473f, 78.43454f, 112.47995f));
+                    cam.setAxes(new Vector3f(-0.9999976f, 0.0011224343f, 0.0018219932f),
+                            new Vector3f(0f, 0.8618528f, -0.5071584f),
+                            new Vector3f(-0.002139542f, -0.5071572f, -0.86185086f));
                     break;
 
                 case 3:
+                    Params.camMaxX = 100f;
+                    Params.camMinX = 0f;
+                    Params.camMaxZ = Params.playerMaxZ;
+                    Params.camMinZ = Params.playerMinZ;
                     cam.setLocation(new Vector3f(-37.94872f, 71.8763f, -118.55907f));
                     cam.setAxes(new Vector3f(-0.0045000315f, 0.0011213869f, -0.9999892f),
                             new Vector3f(0.4902432f, 0.8715848f, -0.0012287796f),
@@ -1189,10 +1199,14 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                     break;
 
                 case 4:
-                    cam.setLocation(new Vector3f(51.636513f, 108.492805f, -360.26437f));
-                    cam.setAxes(new Vector3f(0.9999567f, 0.0011224102f, 0.009237098f),
-                            new Vector3f(-0.0052102236f, 0.890025f, 0.4558819f),
-                            new Vector3f(-0.0077095614f, -0.45591027f, 0.88999236f));
+                    Params.camMaxX = Params.playerMaxX;
+                    Params.camMinX = Params.playerMinX;
+                    Params.camMaxZ = 100f;
+                    Params.camMinZ = 0f;
+                    cam.setLocation(new Vector3f(54.01033f, 79.31754f, -347.24677f));
+                    cam.setAxes(new Vector3f(0.99922884f, 0.0011243783f, 0.039248988f),
+                            new Vector3f(-0.019561216f, 0.8809709f, 0.47276595f),
+                            new Vector3f(-0.034045644f, -0.47316912f, 0.8803135f));
                     break;
             }
 
@@ -1213,6 +1227,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             Params.camMinX = Params.playerMinX;
             Params.camMaxY = Params.playerMaxY;
             Params.camMinY = Params.playerMinY;
+            Params.camMaxZ = Params.playerMaxZ;
+            Params.camMinZ = Params.playerMinZ;
+            
         }
 
     }
