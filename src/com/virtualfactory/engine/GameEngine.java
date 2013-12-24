@@ -506,7 +506,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         world.setLocalScale(250.0f, 250.0f, 250.0f);
         world.setLocalTranslation(-9.0f, 0.0f, 82.0f);
         // ----------
-
+        
         /* Factory's Collision Shape */
         // ----------
         CollisionShape worldShape = CollisionShapeFactory.createMeshShape(world);
@@ -515,6 +515,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         rootNode.attachChild(world);
         bulletAppState.getPhysicsSpace().add(worldRigid);
         // ----------
+        
+        Node grass = (Node) assetManager.loadModel("Models/Grass.mesh.xml");
+        grass.setLocalScale(250.0f, 250.0f, 250.0f);
+        grass.setLocalTranslation(-9.0f, 0.0f, 82.0f);
+        rootNode.attachChild(grass);
 
         topStairsSensor = new GhostControl(new BoxCollisionShape(new Vector3f(15, 10, 5)));
         Vector3f sensorLocation = new Vector3f(134.05f, 59.06f, -285.02f);
