@@ -36,6 +36,8 @@ import com.jme3.scene.debug.Grid;
 import com.jme3.scene.shape.*;
 import com.jme3.scene.shape.Line;
 import com.jme3.system.AppSettings;
+import com.jme3.texture.Texture;
+import com.jme3.util.SkyFactory;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import com.virtualfactory.entity.*;
@@ -499,8 +501,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         /* Factory */
         // ----------
-        world = (Node) assetManager.loadModel("Models/WorldV2/World3_v2.j3o");
-        world.getChild("Machine vibration Empty").removeFromParent();
+        world = (Node) assetManager.loadModel("Models/factory.j3o");
         world.setLocalScale(250.0f, 250.0f, 250.0f);
         world.setLocalTranslation(-9.0f, 0.0f, 82.0f);
         // ----------
@@ -544,7 +545,24 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         if (Params.renderer.equalsIgnoreCase(Params.supportedRenderer))
             new ToonFilter(assetManager, viewPort).applyToScene(rootNode);
 
+        createSkyBox();
         createLightBulb();
+    }
+    
+    private void createSkyBox() {
+        String path = "Textures/SkyBox/";
+        
+        Texture west = assetManager.loadTexture(path + "skyLeft.jpg");
+        Texture east = assetManager.loadTexture(path + "skyRight.jpg");
+        Texture north = assetManager.loadTexture(path + "skyFront.jpg");
+        Texture south = assetManager.loadTexture(path + "skyBack.jpg");
+        Texture top = assetManager.loadTexture(path + "skyTop.jpg");
+        Texture bottom = assetManager.loadTexture(path + "skyDown.jpg");
+        
+        Spatial skyBox = SkyFactory.createSky(assetManager, west, east, north, 
+                                                            south, top, bottom);
+        
+        rootNode.attachChild(skyBox);
     }
 
     private void createLightBulb() {
