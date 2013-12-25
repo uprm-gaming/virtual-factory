@@ -1,5 +1,6 @@
 package com.virtualfactory.engine;
 
+import com.virtualfactory.utils.InvisibleWall;
 import com.virtualfactory.screen.layer.*;
 import com.virtualfactory.screen.other.Popups;
 import com.virtualfactory.screen.intro.IntroScreen;
@@ -153,9 +154,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private Vector3f walkDirection = new Vector3f(0, 0, 0);
 
     private PointLight lamp2, lamp3;
-    private boolean isPlayerTouchingSensor;
     private boolean firstTime = true;
-    private FadeFilter filter;
     private FadeFilter fadeFilter;
     private FilterPostProcessor fpp;
     private GhostControl bottomStairsSensor;
@@ -515,6 +514,10 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         grass.setLocalScale(250.0f, 250.0f, 250.0f);
         grass.setLocalTranslation(-9.0f, 0.0f, 82.0f);
         rootNode.attachChild(grass);
+        
+        createSkyBox();
+        createLightBulb();
+        createInvisibleWalls();
 
         topStairsSensor = new GhostControl(new BoxCollisionShape(new Vector3f(15, 10, 5)));
         Vector3f sensorLocation = new Vector3f(134.05f, 59.06f, -285.02f);
@@ -523,7 +526,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         bottomStairsSensor = new GhostControl(new BoxCollisionShape(new Vector3f(15, 10, 5)));
         sensorLocation = new Vector3f(107.42f, 12.67f, -284.9f);
         enableSensor(bottomStairsSensor, sensorLocation);
-
+        
         /* First-person Player */
         // ----------
         player = new CharacterControl(new CapsuleCollisionShape(0.4f, 24.5f, 1), 0.05f);
@@ -542,9 +545,43 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         for (E_TerrainReserved tempBlockedZone : tempBlockedZones.values()) {
             setTerrainMap(tempBlockedZone.getLocationX(), tempBlockedZone.getLocationZ(), tempBlockedZone.getWidth(), tempBlockedZone.getLength(), true);
         }
+    }
+    
+    private void createInvisibleWalls()
+    {
+        String[] wallNames = {"bottom right wall", 
+                              "bottom left wall", 
+                              "bottom front wall",
+                              "bottom back wall", 
+                              "upper right wall", 
+                              "upper left wall",
+                              "upper front wall", 
+                              "upper back wall"};
         
-        createSkyBox();
-        createLightBulb();
+        Vector3f[] sizes = {new Vector3f(0.6f, 0.6f, 23.600018f),
+                            new Vector3f(1.4000001f, 0.6f, 23.600018f),
+                            new Vector3f(9.399996f, 1.0f, 1.0f),
+                            new Vector3f(9.399996f, 1.0f, 0.6f),
+                            new Vector3f(0.40000004f, 1.0f, 3.4000006f),
+                            new Vector3f(0.40000004f, 1.0f, 3.0000005f),
+                            new Vector3f(7.599997f, 1.0f, 0.20000003f),
+                            new Vector3f(9.599996f, 1.0f, 0.40000004f)};
+        
+        Vector3f[] locations = {new Vector3f(-37.600044f, 5.850006f, -117.43932f),
+                                new Vector3f(137.1993f, 5.850006f, -117.43932f),
+                                new Vector3f(50.80012f, 9.999995f, 106.9995f),
+                                new Vector3f(50.60012f, 9.999995f, -346.80283f),
+                                new Vector3f(-40.543167f, 56.8007f, -318.2905f),
+                                new Vector3f(140.85591f, 56.8007f, -322.69077f),
+                                new Vector3f(31.656963f, 56.8007f, -289.88876f),
+                                new Vector3f(50.433777f, 56.38947f, -350.81924f)};
+        
+        for (int i = 0; i < wallNames.length; i++)
+        {
+            Geometry invisibleWall = new InvisibleWall(bulletAppState, sizes[i], locations[i]);
+            invisibleWall.setName(wallNames[i]);
+            rootNode.attachChild(invisibleWall);
+        }
     }
     
     private void createSkyBox() {
@@ -593,7 +630,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         boxGeometry.addControl(sensor);
         bulletAppState.getPhysicsSpace().add(sensor);
-        bulletAppState.setDebugEnabled(false); // set to true so you can see the invisible physics engine
     }
 
     private void enableLayerScreen() {
