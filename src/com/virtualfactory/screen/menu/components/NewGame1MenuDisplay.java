@@ -199,8 +199,9 @@ public class NewGame1MenuDisplay {
                         this.style("nifty-listbox2");
                         displayItems(4);
                         selectionModeSingle();
+                        optionalVerticalScrollbar();
                         hideHorizontalScrollbar();
-                        hideVerticalScrollbar();
+//                        hideVerticalScrollbar();
                         width("600px");
                         control(new ControlBuilder("customListBox_NewGameStage1"){{
                             controller("de.lessvoid.nifty.controls.listbox.ListBoxItemController");
