@@ -154,7 +154,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
     private PointLight lamp2, lamp3;
     private boolean isPlayerTouchingSensor;
-    private boolean firstTime;
+    private boolean firstTime = true;
     private FadeFilter filter;
     private FadeFilter fadeFilter;
     private FilterPostProcessor fpp;
@@ -564,6 +564,10 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
 
     private void createLightBulb() {
+        if (!firstTime)
+            return;
+        
+        firstTime = false;
         ColorRGBA color = ColorRGBA.White;
         lamp2 = new PointLight();
         lamp2.setPosition(new Vector3f(40, 200, 150));
