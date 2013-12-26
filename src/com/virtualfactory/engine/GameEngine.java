@@ -317,7 +317,15 @@ public class GameEngine extends AbstractAppState {
     }
 
     private void loadElementsToDisplay(GameType gameType) {
-        createTerrain();
+        stateManager.attach(new FactoryRunningState(bulletAppState));
+        
+        E_Terrain tempTerrain = gameData.getMapTerrain();
+
+        //blocked zones
+        Map<Integer, E_TerrainReserved> tempBlockedZones = tempTerrain.getArrZones();
+        for (E_TerrainReserved tempBlockedZone : tempBlockedZones.values()) {
+            setTerrainMap(tempBlockedZone.getLocationX(), tempBlockedZone.getLocationZ(), tempBlockedZone.getWidth(), tempBlockedZone.getLength(), true);
+        }
 
         arrOperatorsWalksTo = new ArrayList<>();
         arrOperatorsMachinesMovingTo = new ArrayList<>();
@@ -355,18 +363,6 @@ public class GameEngine extends AbstractAppState {
             Params.camMinY = Params.playerMinY;
             Params.camMaxZ = Params.playerMaxZ;
             Params.camMinZ = Params.playerMinZ;
-        }
-    }
-
-    private void createTerrain() {
-        stateManager.attach(new FactoryRunningState(bulletAppState));
-        
-        E_Terrain tempTerrain = gameData.getMapTerrain();
-
-        //blocked zones
-        Map<Integer, E_TerrainReserved> tempBlockedZones = tempTerrain.getArrZones();
-        for (E_TerrainReserved tempBlockedZone : tempBlockedZones.values()) {
-            setTerrainMap(tempBlockedZone.getLocationX(), tempBlockedZone.getLocationZ(), tempBlockedZone.getWidth(), tempBlockedZone.getLength(), true);
         }
     }
 
@@ -612,7 +608,6 @@ public class GameEngine extends AbstractAppState {
         stationRigid = new RigidBodyControl(new MeshCollisionShape(stationBox), 0);
         stationGeo.addControl(stationRigid);
         bulletAppState.getPhysicsSpace().add(stationRigid);
-        //to be shootable
         shootables.attachChild(stationGeo);
         if (station.getStationType().toString().toUpperCase().contains("Storage".toUpperCase())) {
             //create grid, only in Storages
@@ -702,7 +697,6 @@ public class GameEngine extends AbstractAppState {
         if (!machine.getMachineMaterial().equals("")) {
             model.setMaterial(assetManager.loadMaterial(machine.getMachineMaterial()));
         }
-        //model.setMaterial(assetManager.loadMaterial("Models/Machine/machine1.material"));
         model.setLocalScale(0.2f);
         model.setName(TypeElements.MACHINE + String.valueOf(machine.getIdMachine()));
         model.setLocalTranslation(new Vector3f(machine.getCurrentLocationX(), 0.5f, machine.getCurrentLocationZ()));
@@ -791,11 +785,9 @@ public class GameEngine extends AbstractAppState {
         updateInterfacePosition();
         jmonkeyApp.setSettings(settings);
         jmonkeyApp.restart();
-
     }
 
     private void updateInterfacePosition() {
-
         int yPos = Params.screenHeight - (720 - 700);
         niftyGUI.getScreen("layerScreen").findElementByName("OrderLabel").setConstraintY(new SizeValue(yPos + "px"));
         niftyGUI.getScreen("layerScreen").findElementByName("OverallLabel").setConstraintY(new SizeValue(yPos + "px"));
@@ -980,10 +972,6 @@ public class GameEngine extends AbstractAppState {
         return currentTempSystemTime;
     }
 
-    public void setCurrentTempSystemTime(long currentTempSystemTime) {
-        this.currentTempSystemTime = currentTempSystemTime;
-    }
-
     public double getCurrentSystemTime() {
         return currentSystemTime;
     }
@@ -996,16 +984,8 @@ public class GameEngine extends AbstractAppState {
         return arrStationAnimations;
     }
 
-    public void setArrStationAnimations(ArrayList<StationAnimation> arrStationAnimations) {
-        this.arrStationAnimations = arrStationAnimations;
-    }
-
     public Nifty getNifty() {
         return niftyGUI;
-    }
-
-    public void setNifty(Nifty nifty) {
-        this.niftyGUI = nifty;
     }
 
     public int getInitialGameId() {
