@@ -19,7 +19,6 @@ import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.*;
 import com.jme3.bullet.control.*;
-import com.jme3.bullet.util.CollisionShapeFactory;
 import com.jme3.collision.CollisionResult;
 import com.jme3.collision.CollisionResults;
 import com.jme3.cursors.plugins.JmeCursor;
@@ -117,8 +116,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private GameSounds gameSounds;
     private ArrayList<Pair<GameSounds, Sounds>> arrGameSounds;
     private boolean isDashboardVisible = false;
-    private boolean showHideDashboard = false;
-    private long currentDashboardTime;
 
     public SimpleApplication jmonkeyApp;
     private AppStateManager stateManager;
@@ -322,10 +319,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                     break;
 
                 case "Toggle Dashboard":
-                    if (!keyPressed) {
-                        showHideDashboard = true;
+                    if (!keyPressed)
                         toggleDashBoard();
-                    }
                     break;
 
                 case "Toggle Top View":
@@ -651,7 +646,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         initialRealSystemTime = System.currentTimeMillis() / 1000;
         currentIdleSystemTime = System.currentTimeMillis() / 1000;
         currentWindowRefreshSystemTime = System.currentTimeMillis() / 1000;
-        currentDashboardTime = 0;
         timeToUpdateSlots = gameData.getCurrentTimeWithFactor();
         getLayerScreenController().hideCurrentControlsWindow();
         getLayerScreenController().showHideDynamicButtons(0);
@@ -839,15 +833,12 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
 
     private void toggleDashBoard() {
-        if (showHideDashboard) {
-            if (isDashboardVisible) {
-                niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").hide();
-                isDashboardVisible = false;
-            } else {
-                niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").show();
-                isDashboardVisible = true;
-            }
-            showHideDashboard = false;
+        if (isDashboardVisible) {
+             niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").hide();
+             isDashboardVisible = false;
+        } else {
+            niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").show();
+            isDashboardVisible = true;
         }
     }
 
