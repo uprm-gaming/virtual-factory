@@ -496,7 +496,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         /* Factory */
         // ----------
-        world = (Node) assetManager.loadModel("Models/factory.j3o");
+        world = (Node) assetManager.loadModel("Models/Factory/oldFactory.j3o");
         world.setLocalScale(250.0f, 250.0f, 250.0f);
         world.setLocalTranslation(-9.0f, 0.0f, 82.0f);
         rootNode.attachChild(world);
@@ -505,7 +505,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         bulletAppState.getPhysicsSpace().add(rigidBody);
         // ----------
         
-        Node grass = (Node) assetManager.loadModel("Models/grass.j3o");
+        Node grass = (Node) assetManager.loadModel("Models/Factory/grass.j3o");
         grass.setLocalScale(250.0f, 250.0f, 250.0f);
         grass.setLocalTranslation(-9.0f, 0.0f, 82.0f);
         rootNode.attachChild(grass);
