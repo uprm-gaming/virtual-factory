@@ -153,8 +153,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
     private Vector3f walkDirection = new Vector3f(0, 0, 0);
 
-    private PointLight lamp2, lamp3;
-    private boolean firstTime = true;
+    private PointLight lamp1;
+    private PointLight lamp2;
+    private boolean isLightingEnabled;
     private FadeFilter fadeFilter;
     private FilterPostProcessor fpp;
     private GhostControl bottomStairsSensor;
@@ -492,8 +493,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         fpp = new FilterPostProcessor(assetManager);
         fadeFilter = new FadeFilter(1.5f);
         fpp.addFilter(fadeFilter);
-        viewPort.addProcessor(fpp); // FIX ME: For some reason, after adding fpp to the jMonkey viewPort, everything goes black when leaving full screen.
-                                    // It even happens with the traditional Fade Filter (not using my own custom Transition Filter).
+        viewPort.addProcessor(fpp);
 
         E_Terrain tempTerrain = gameData.getMapTerrain();
 
@@ -516,7 +516,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         rootNode.attachChild(grass);
         
         createSkyBox();
-        createLightBulb();
+        createLighting();
         createInvisibleWalls();
 
         topStairsSensor = new GhostControl(new BoxCollisionShape(new Vector3f(15, 10, 5)));
@@ -600,23 +600,23 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         rootNode.attachChild(skyBox);
     }
 
-    private void createLightBulb() {
-        if (!firstTime)
+    private void createLighting() {
+        if (isLightingEnabled)
             return;
         
-        firstTime = false;
+        isLightingEnabled = true;
         ColorRGBA color = ColorRGBA.White;
-        lamp2 = new PointLight();
-        lamp2.setPosition(new Vector3f(40, 200, 150));
-        lamp2.setColor(color);
-        lamp2.setRadius(lamp2.getRadius()/20);
-        rootNode.addLight(lamp2);
+        lamp1 = new PointLight();
+        lamp1.setPosition(new Vector3f(40, 200, 150));
+        lamp1.setColor(color);
+        lamp1.setRadius(lamp1.getRadius()/20);
+        rootNode.addLight(lamp1);
 
-        lamp3 = new PointLight();
-        lamp3.setPosition(new Vector3f(43.50383f, 80.081642f, -310.90753f));
-        lamp3.setColor(color);
-        lamp3.setRadius(lamp2.getRadius());
-        rootNode.addLight(lamp3);
+        lamp2 = new PointLight();
+        lamp2.setPosition(new Vector3f(43.50383f, 80.081642f, -310.90753f));
+        lamp2.setColor(color);
+        lamp2.setRadius(lamp1.getRadius());
+        rootNode.addLight(lamp2);
     }
 
     private void enableSensor(GhostControl sensor, Vector3f location) {
