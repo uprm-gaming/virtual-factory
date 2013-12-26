@@ -42,7 +42,7 @@ import com.virtualfactory.utils.Params;
  * This is an app state (http://hub.jmonkeyengine.org/wiki/doku.php/jme3:advanced:application_states).
  * 
  * When this state is attached by the game engine, initialize() will create
- * and animate the game virtualFactory, and update() keeps track of player movement.
+ * and animate the factory , and update() keeps track of player movement.
  * 
  * @author Abner Coimbre
  */
