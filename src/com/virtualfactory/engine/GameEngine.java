@@ -60,6 +60,7 @@ public class GameEngine extends AbstractAppState {
     private boolean isLevelStarted;
     private MenuScreenController menuScreenC;
     private LayerScreenController layerScreenC;
+    private Node world;
     private RigidBodyControl bucketRigid;
     private Box bucketBox;
     private Material bucketMaterial;
