@@ -1,21 +1,16 @@
 package com.virtualfactory.engine;
 
-import com.virtualfactory.utils.InvisibleWall;
 import com.virtualfactory.screen.layer.*;
 import com.virtualfactory.screen.other.Popups;
 import com.virtualfactory.screen.intro.IntroScreen;
 import com.virtualfactory.screen.menu.*;
 import com.virtualfactory.data.GameData;
-import com.jme3.animation.AnimChannel;
-import com.jme3.post.filters.FadeFilter;
 import com.jme3.animation.AnimControl;
-import com.jme3.animation.AnimEventListener;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
-import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.*;
 import com.jme3.bullet.control.*;
@@ -24,11 +19,9 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.cursors.plugins.JmeCursor;
 import com.jme3.input.*;
 import com.jme3.input.controls.*;
-import com.jme3.light.*;
 import com.jme3.material.Material;
 import com.jme3.math.*;
 import com.jme3.niftygui.NiftyJmeDisplay;
-import com.jme3.post.FilterPostProcessor;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.*;
@@ -36,8 +29,7 @@ import com.jme3.scene.debug.Grid;
 import com.jme3.scene.shape.*;
 import com.jme3.scene.shape.Line;
 import com.jme3.system.AppSettings;
-import com.jme3.texture.Texture;
-import com.jme3.util.SkyFactory;
+import com.virtualfactory.engine.states.FactoryRunningState;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import com.virtualfactory.entity.*;
@@ -55,30 +47,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
-public class GameEngine extends AbstractAppState implements AnimEventListener {
+public class GameEngine extends AbstractAppState {
 
     protected BulletAppState bulletAppState;
-    /* Terrain */
-    RigidBodyControl terrainPhysicsNode;
-    /* Materials */
-    Material matTerrain;
-    Material matWire;
-    Material matCharacter;
-    /* Character */
-    ArrayList<CharacterControl> arrCharacter;
-    ArrayList<CharacterControl> arrCharacter2;
-    ArrayList<CharacterControl> arrCharacter3;
-    ArrayList<CharacterControl> arrCharacter4;
     Node model;
+    Material matCharacter;
     float angle;
-    /* Camera */
-    boolean left = false, right = false, up = false, down = false;
-    ChaseCamera chaseCam;
-    /* Animation */
-    AnimControl animationControl;
-    ArrayList<AnimControl> arrAnimationControl;
     float cont = 0;
-    AnimChannel animationChannel_Disp;
     CharacterControl character_Disp;
     private GameData gameData;
     private ManageEvents manageEvents;
@@ -92,7 +67,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private RigidBodyControl stationRigid;
     private Box stationBox;
     private Material stationMaterial;
-    private RigidBodyControl partRigid;
     private Box partBox;
     private Material partMaterial;
     private ArrayList<DispOperatorWalksTo> arrOperatorsWalksTo;
@@ -124,39 +98,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private InputManager inputManager;
     private FlyByCamera flyCam;
     private Camera cam;
-    private ViewPort viewPort;
     private ViewPort guiViewPort;
-    private CharacterControl player;
-    private GhostControl topStairsSensor;
 
-    private boolean forward = false;
-    private boolean backward = false;
-    private boolean moveLeft = false;
-    private boolean moveRight = false;
-    private boolean lookUp = false;
-    private boolean lookDown = false;
-    private boolean lookLeft = false;
-    private boolean lookRight = false;
-
-    private boolean topViewEnabled = false;
-    private boolean isDebugCamEnabled = false;
-    private int viewNumber = 0;
-
-    private float playerSpeed = 1.3f;
-
-    private Vector3f camDir;
-    private Vector3f camLeft;
-
-    private Vector3f walkDirection = new Vector3f(0, 0, 0);
-
-    private PointLight lamp1;
-    private PointLight lamp2;
-    private boolean isLightingEnabled;
-    private FadeFilter fadeFilter;
-    private FilterPostProcessor fpp;
-    private GhostControl bottomStairsSensor;
     private Narrator gameNarrator;
-    private boolean isPlayerUpstairs = true;
 
     @Override
     public void initialize(AppStateManager manager, Application application) {
@@ -193,7 +137,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         inputManager = jmonkeyApp.getInputManager();
         flyCam = jmonkeyApp.getFlyByCamera();
         cam = jmonkeyApp.getCamera();
-        viewPort = jmonkeyApp.getViewPort();
         guiViewPort = jmonkeyApp.getGuiViewPort();
         guiNode = jmonkeyApp.getGuiNode();
         rootNode = jmonkeyApp.getRootNode();
@@ -216,23 +159,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
 
         deleteDefaultControls();
 
-        String[] mappings = {"Forward", "Backward",
-                             "Move Left", "Move Right",
-                             "Look Up", "Look Down",
-                             "Look Left", "Look Right",
-                             "Jump", "Picking",
-                             "Toggle Dashboard", "Toggle Top View",
-                             "Toggle Full Screen", "Debug Position",
-                             "Debug Cam", "Mouse Picking"};
+        String[] mappings = {"Picking", "Toggle Dashboard", 
+                             "Toggle Full Screen", "Mouse Picking"};
 
-        Trigger[] triggers = {new KeyTrigger(KeyInput.KEY_W), new KeyTrigger(KeyInput.KEY_S),
-                              new KeyTrigger(KeyInput.KEY_A), new KeyTrigger(KeyInput.KEY_D),
-                              new KeyTrigger(KeyInput.KEY_UP), new KeyTrigger(KeyInput.KEY_DOWN),
-                              new KeyTrigger(KeyInput.KEY_LEFT), new KeyTrigger(KeyInput.KEY_RIGHT),
-                              new KeyTrigger(KeyInput.KEY_SPACE), new KeyTrigger(KeyInput.KEY_LSHIFT),
-                              new KeyTrigger(KeyInput.KEY_RSHIFT), new KeyTrigger(KeyInput.KEY_T),
-                              new KeyTrigger(KeyInput.KEY_F1), new KeyTrigger(KeyInput.KEY_P),
-                              new KeyTrigger(KeyInput.KEY_0), new MouseButtonTrigger(MouseInput.BUTTON_LEFT)};
+        Trigger[] triggers = {new KeyTrigger(KeyInput.KEY_LSHIFT), new KeyTrigger(KeyInput.KEY_RSHIFT),
+                              new KeyTrigger(KeyInput.KEY_F1), new MouseButtonTrigger(MouseInput.BUTTON_LEFT)};
 
         for (int i = 0; i < mappings.length; i++) {
             inputManager.addMapping(mappings[i], triggers[i]);
@@ -275,43 +206,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                 return;
 
             switch (name) {
-                case "Forward":
-                    forward = keyPressed;
-                    break;
-
-                case "Backward":
-                    backward = keyPressed;
-                    break;
-
-                case "Move Left":
-                    moveLeft = keyPressed;
-                    break;
-
-                case "Move Right":
-                    moveRight = keyPressed;
-                    break;
-
-                case "Look Up":
-                    lookUp = keyPressed;
-                    break;
-
-                case "Look Down":
-                    lookDown = keyPressed;
-                    break;
-
-                case "Look Left":
-                    lookLeft = keyPressed;
-                    break;
-
-                case "Look Right":
-                    lookRight = keyPressed;
-                    break;
-
-                case "Jump":
-                    if (!keyPressed)
-                        player.jump();
-                    break;
-
                 case "Picking": case "Mouse Picking":
                     if (!keyPressed)
                         handlePickedObject(name);
@@ -320,25 +214,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                 case "Toggle Dashboard":
                     if (!keyPressed)
                         toggleDashBoard();
-                    break;
-
-                case "Toggle Top View":
-                    if (!keyPressed && isPlayerUpstairs)
-                        toggleTopView();
-                    break;
-
-                case "Debug Position":
-                    if (!keyPressed)
-                        System.out.println(""
-                                + "\n\nlocation: " + cam.getLocation()
-                                + "\nleft: " + cam.getLeft()
-                                + "\nup: " + cam.getUp()
-                                + "\ndirection: " + cam.getDirection());
-                    break;
-
-                case "Debug Cam":
-                    if (!keyPressed)
-                        isDebugCamEnabled = !isDebugCamEnabled;
                     break;
 
                 default:
@@ -442,7 +317,15 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     }
 
     private void loadElementsToDisplay(GameType gameType) {
-        createTerrain();
+        stateManager.attach(new FactoryRunningState(bulletAppState));
+        
+        E_Terrain tempTerrain = gameData.getMapTerrain();
+
+        //blocked zones
+        Map<Integer, E_TerrainReserved> tempBlockedZones = tempTerrain.getArrZones();
+        for (E_TerrainReserved tempBlockedZone : tempBlockedZones.values()) {
+            setTerrainMap(tempBlockedZone.getLocationX(), tempBlockedZone.getLocationZ(), tempBlockedZone.getWidth(), tempBlockedZone.getLength(), true);
+        }
 
         arrOperatorsWalksTo = new ArrayList<>();
         arrOperatorsMachinesMovingTo = new ArrayList<>();
@@ -469,9 +352,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         }
         createShowSpotObject();
 
-        if (topViewEnabled) {
-            topViewEnabled = false;
-            viewNumber = 0;
+        if (stateManager.getState(FactoryRunningState.class).isTopViewEnabled()) {
+            stateManager.getState(FactoryRunningState.class).setTopViewEnabled(false);
+            stateManager.getState(FactoryRunningState.class).setViewNumber(0);
             cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
             flyCam.setMoveSpeed(100);
             Params.camMaxX = Params.playerMaxX;
@@ -481,149 +364,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             Params.camMaxZ = Params.playerMaxZ;
             Params.camMinZ = Params.playerMinZ;
         }
-    }
-
-    private void createTerrain() {
-        fpp = new FilterPostProcessor(assetManager);
-        fadeFilter = new FadeFilter(1.5f);
-        fpp.addFilter(fadeFilter);
-        viewPort.addProcessor(fpp);
-
-        E_Terrain tempTerrain = gameData.getMapTerrain();
-
-        flyCam.setMoveSpeed(100);
-
-        /* Factory */
-        // ----------
-        world = (Node) assetManager.loadModel("Models/Factory/oldFactory.j3o");
-        world.setLocalScale(250.0f, 250.0f, 250.0f);
-        world.setLocalTranslation(-9.0f, 0.0f, 82.0f);
-        rootNode.attachChild(world);
-        RigidBodyControl rigidBody = new RigidBodyControl(0);
-        world.addControl(rigidBody);
-        bulletAppState.getPhysicsSpace().add(rigidBody);
-        // ----------
-        
-        Node grass = (Node) assetManager.loadModel("Models/grass.j3o");
-        grass.setLocalScale(250.0f, 250.0f, 250.0f);
-        grass.setLocalTranslation(-9.0f, 0.0f, 82.0f);
-        rootNode.attachChild(grass);
-        
-        createSkyBox();
-        createLighting();
-        createInvisibleWalls();
-
-        topStairsSensor = new GhostControl(new BoxCollisionShape(new Vector3f(15, 10, 5)));
-        Vector3f sensorLocation = new Vector3f(134.05f, 59.06f, -285.02f);
-        enableSensor(topStairsSensor, sensorLocation);
-
-        bottomStairsSensor = new GhostControl(new BoxCollisionShape(new Vector3f(15, 10, 5)));
-        sensorLocation = new Vector3f(107.42f, 12.67f, -284.9f);
-        enableSensor(bottomStairsSensor, sensorLocation);
-        
-        /* First-person Player */
-        // ----------
-        player = new CharacterControl(new CapsuleCollisionShape(0.4f, 24.5f, 1), 0.05f);
-        player.setJumpSpeed(45);
-        player.setFallSpeed(120);
-        player.setGravity(Params.playerGravity);
-        player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
-        cam.setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
-        flyCam.setRotationSpeed(1.9499999f);
-        player.setViewDirection(new Vector3f(0, 0, 1));
-        bulletAppState.getPhysicsSpace().add(player);
-        // ----------
-
-        //blocked zones
-        Map<Integer, E_TerrainReserved> tempBlockedZones = tempTerrain.getArrZones();
-        for (E_TerrainReserved tempBlockedZone : tempBlockedZones.values()) {
-            setTerrainMap(tempBlockedZone.getLocationX(), tempBlockedZone.getLocationZ(), tempBlockedZone.getWidth(), tempBlockedZone.getLength(), true);
-        }
-    }
-    
-    private void createInvisibleWalls()
-    {
-        String[] wallNames = {"bottom right wall", 
-                              "bottom left wall", 
-                              "bottom front wall",
-                              "bottom back wall", 
-                              "upper right wall", 
-                              "upper left wall",
-                              "upper front wall", 
-                              "upper back wall"};
-        
-        Vector3f[] sizes = {new Vector3f(0.6f, 0.6f, 23.600018f),
-                            new Vector3f(1.4000001f, 0.6f, 23.600018f),
-                            new Vector3f(9.399996f, 1.0f, 1.0f),
-                            new Vector3f(9.399996f, 1.0f, 0.6f),
-                            new Vector3f(0.40000004f, 1.0f, 3.4000006f),
-                            new Vector3f(0.40000004f, 1.0f, 3.0000005f),
-                            new Vector3f(7.599997f, 1.0f, 0.20000003f),
-                            new Vector3f(9.599996f, 1.0f, 0.40000004f)};
-        
-        Vector3f[] locations = {new Vector3f(-37.600044f, 5.850006f, -117.43932f),
-                                new Vector3f(137.1993f, 5.850006f, -117.43932f),
-                                new Vector3f(50.80012f, 9.999995f, 106.9995f),
-                                new Vector3f(50.60012f, 9.999995f, -346.80283f),
-                                new Vector3f(-40.543167f, 56.8007f, -318.2905f),
-                                new Vector3f(140.85591f, 56.8007f, -322.69077f),
-                                new Vector3f(31.656963f, 56.8007f, -289.88876f),
-                                new Vector3f(50.433777f, 56.38947f, -350.81924f)};
-        
-        for (int i = 0; i < wallNames.length; i++)
-        {
-            Geometry invisibleWall = new InvisibleWall(bulletAppState, sizes[i], locations[i]);
-            invisibleWall.setName(wallNames[i]);
-            rootNode.attachChild(invisibleWall);
-        }
-    }
-    
-    private void createSkyBox() {
-        String path = "Textures/Skybox/";
-        
-        Texture west = assetManager.loadTexture(path + "skyLeft.jpg");
-        Texture east = assetManager.loadTexture(path + "skyRight.jpg");
-        Texture north = assetManager.loadTexture(path + "skyFront.jpg");
-        Texture south = assetManager.loadTexture(path + "skyBack.jpg");
-        Texture top = assetManager.loadTexture(path + "skyTop.jpg");
-        Texture bottom = assetManager.loadTexture(path + "skyDown.jpg");
-        
-        Spatial skyBox = SkyFactory.createSky(assetManager, west, east, north, 
-                                                            south, top, bottom);
-        
-        rootNode.attachChild(skyBox);
-    }
-
-    private void createLighting() {
-        if (isLightingEnabled)
-            return;
-        
-        isLightingEnabled = true;
-        ColorRGBA color = ColorRGBA.White;
-        lamp1 = new PointLight();
-        lamp1.setPosition(new Vector3f(40, 200, 150));
-        lamp1.setColor(color);
-        lamp1.setRadius(lamp1.getRadius()/20);
-        rootNode.addLight(lamp1);
-
-        lamp2 = new PointLight();
-        lamp2.setPosition(new Vector3f(43.50383f, 80.081642f, -310.90753f));
-        lamp2.setColor(color);
-        lamp2.setRadius(lamp1.getRadius());
-        rootNode.addLight(lamp2);
-    }
-
-    private void enableSensor(GhostControl sensor, Vector3f location) {
-        Box b = new Box(1, 1, 1);
-        Geometry boxGeometry = new Geometry("sensor box", b);
-        boxGeometry.setLocalTranslation(location);
-
-        Material boxMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        boxMat.setColor("Color", ColorRGBA.Yellow);
-        boxGeometry.setMaterial(boxMat);
-
-        boxGeometry.addControl(sensor);
-        bulletAppState.getPhysicsSpace().add(sensor);
     }
 
     private void enableLayerScreen() {
@@ -654,129 +394,13 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).HideWindow();
         niftyGUI.getScreen("layerScreen").findElementByName("winGLC_Element").getControl(GameLogScreenController.class).showHide();
     }
-
-    /**
-     * Engine's main game loop. It runs every frame.
-     * @param tpf time per frame (elapsed time since the last frame)
-     */
+    
     @Override
     public void update(float tpf) {
-        updatePlayerPosition();
         updateGameDataAndLogic();
     }
 
-    public void updatePlayerPosition() {
-
-        if (!isLevelStarted)
-            return;
-
-        if (topStairsSensor.getOverlappingCount() > 1 || bottomStairsSensor.getOverlappingCount() > 1)
-            handleTransition();
-
-        if (lookUp)
-            rotateCamera(-Params.rotationSpeed, cam.getLeft());
-
-        if (lookDown)
-            rotateCamera(Params.rotationSpeed, cam.getLeft());
-
-        if (lookLeft)
-            rotateCamera(Params.rotationSpeed, new Vector3f(0,1,0));
-
-        if (lookRight)
-            rotateCamera(-Params.rotationSpeed, new Vector3f(0,1,0));
-
-        if (topViewEnabled || isDebugCamEnabled)
-            return;
-
-        camDir = cam.getDirection().clone().multLocal(playerSpeed);
-        camLeft = cam.getLeft().clone().multLocal(playerSpeed);
-
-        walkDirection.set(0, 0, 0); // reset walkDirection vector
-
-        if (forward)
-            walkDirection.addLocal(camDir);
-
-        if (backward)
-            walkDirection.addLocal(camDir.negate());
-
-        if (moveLeft)
-            walkDirection.addLocal(camLeft);
-
-        if (moveRight)
-            walkDirection.addLocal(camLeft.negate());
-
-        player.setWalkDirection(walkDirection); // walk!
-        cam.setLocation(player.getPhysicsLocation());
-        
-        if (isPlayerUpstairs && player.getPhysicsLocation().getY() < 58.0f)
-            player.warp(new Vector3f(player.getPhysicsLocation().getX(), 58.0f, player.getPhysicsLocation().getZ()));
-        else if (player.getPhysicsLocation().getY() < 12.65f)
-            player.warp(new Vector3f(player.getPhysicsLocation().getX(), 12.65f, player.getPhysicsLocation().getZ()));
-    }
-
-    private void handleTransition() {
-        isPlayerUpstairs = topStairsSensor.getOverlappingCount() > 1;
-        boolean isFadeEffectStarted = fadeFilter.getValue() < 1;
-
-        if (!isFadeEffectStarted) {
-            playerSpeed = 0;
-            fadeFilter.fadeOut();
-
-            AudioNode footsteps;
-            footsteps = new AudioNode(assetManager, isPlayerUpstairs ? "Sounds/footsteps1.wav" : "Sounds/footsteps2.wav", false);
-            footsteps.setPositional(false);
-            footsteps.play();
-        }
-
-        boolean isFadeEffectFinished = fadeFilter.getValue() <= 0;
-
-        if (isFadeEffectFinished) {
-            if (isPlayerUpstairs) {
-                player.warp(new Vector3f(121.2937f, 12.65f, -309.41315f));
-                cam.setRotation(new Quaternion(0.04508071f, -0.4710204f, 0.02474963f, 0.8806219f));
-                isPlayerUpstairs = false;
-            }
-            else {
-                player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
-                cam.setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
-                gameNarrator.talk("Second Floor.\nPress 'T' for a top view of the factory.", "Sounds/Narrator/instructions.wav");
-                isPlayerUpstairs = true;
-            }
-            fadeFilter.fadeIn();
-            playerSpeed = 1.3f;
-        }
-    }
-
-     private void rotateCamera(float value, Vector3f axis){
-        Matrix3f mat = new Matrix3f();
-
-        if (topViewEnabled)
-            value = value*0.3f;
-
-        mat.fromAngleNormalAxis(flyCam.getRotationSpeed() * value, axis);
-
-        Vector3f tempUp = cam.getUp();
-        Vector3f tempLeft = cam.getLeft();
-        Vector3f tempDir = cam.getDirection();
-
-        mat.mult(tempUp, tempUp);
-        mat.mult(tempLeft, tempLeft);
-        mat.mult(tempDir, tempDir);
-
-        if (tempDir.getX() > Params.camMaxX || tempDir.getX() < Params.camMinX
-                || tempDir.getY() > Params.camMaxY || tempDir.getY() < Params.camMinY
-                || tempDir.getZ() > Params.camMaxZ || tempDir.getZ() < Params.camMinZ)
-            return;
-
-        Quaternion q = new Quaternion();
-        q.fromAxes(tempLeft, tempUp, tempDir);
-        q.normalizeLocal();
-
-        cam.setAxes(q);
-    }
-
     public void updateGameDataAndLogic() {
-        //Added by Chris
         if (!this.getLayerScreenController().getPauseStatus() && gameSounds.machineSoundPlaying())
             this.gameSounds.pauseSound(Sounds.MachineWorking);
 
@@ -819,7 +443,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             if (nextEvent.getId() == Params.startEvent) {
                 gameData.manageMachineStates();
                 manageEvents.executeEvent();
-                //it happens each TIME-UNIT
                 Sim.schedule(new SimEvent(Sim.time() + getLayerScreenController().getTimeFactor(), Params.startEvent));
                 niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").getControl(DashboardScreenController.class).updateQuantityPeopleStatus(gameData.getNoUserOperator(Status.Busy), gameData.getNoUserOperator(Status.Idle));
             } else {
@@ -882,14 +505,11 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             SimEvent tempEvent = arrEvents.next();
             TOKEN tempToken = tempEvent.getToken();
             double oldTime = tempEvent.getTime();
-            //System.out.println("UPDATE: token:" + tempToken + " attribute0:" + tempToken.getAttribute(0) + " - attribute1:" + tempToken.getAttribute(1) + " - tempEvent:" + tempEvent.getId());
             if (tempToken.getAttribute(1) != 0) {
                 tempEvent.setTime((oldTime - currentSystemTime) * getLayerScreenController().getTimeFactor() / tempToken.getAttribute(1) + currentSystemTime);
-//                System.out.println("CHANGED TIME - attritube0:" + tempToken.getAttribute(0) + " - Time:" + currentSystemTime + " - EndTime:" + tempEvent.getTime() + " - OldEndTime:" + oldTime + " - OldFactorTime:" + tempToken.getAttribute(1) + " - NewFactorTime:" + getLayerScreenController().getTimeFactor());
                 if (tempToken.getAttribute(2) == Params.simpackPurchase && tempToken.getAttribute(0) == gameData.getCurrentPurchaseId()) {
                     gameData.setNextPurchaseDueDate((int) ((tempEvent.getTime() - currentSystemTime) * getLayerScreenController().getTimeFactorForSpeed()));
                     getLayerScreenController().setNextPurchaseDueDate(gameData.convertTimeUnistToHourMinute(gameData.getNextPurchaseDueDate()));
-                    //System.out.println("PURCHASE MISSING REAL_TIME:" + (tempEvent.getTime()-currentSystemTime) + " - GAME_TIME:" + (tempEvent.getTime()-currentSystemTime)*getLayerScreenController().getTimeFactorForSpeed() + " - CLOCK_TIME:" + gameData.getNextPurchaseDueDate());
                 }
                 tempToken.setAttribute(1, getLayerScreenController().getTimeFactor());
             }
@@ -909,14 +529,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                 tempElements2.remove();
             }
         }
-        //System.out.println("SystemTime:" + currentSystemTime + " - UPDATE GRAPHIC ELEMENT ARRAY");
-    }
-
-    @Override
-    public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
-//        if (channel == shootingChannel) {
-//            channel.setAnim("Walk");
-//        }
     }
 
     private void createGrid(int iniX, int iniZ, int sizeW, int sizeL) {
@@ -996,7 +608,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         stationRigid = new RigidBodyControl(new MeshCollisionShape(stationBox), 0);
         stationGeo.addControl(stationRigid);
         bulletAppState.getPhysicsSpace().add(stationRigid);
-        //to be shootable
         shootables.attachChild(stationGeo);
         if (station.getStationType().toString().toUpperCase().contains("Storage".toUpperCase())) {
             //create grid, only in Storages
@@ -1044,7 +655,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             part.setMesh(partBox);
         }
         part.setLocalTranslation(new Vector3f((float) bucket.getCurrentLocationX(), 1.5f + (float) bucket.getSize() / 2.0f, (float) bucket.getCurrentLocationZ()));
-        //System.out.println("Part loc:" + part.getLocalTranslation() + " - station:" + bucket.getIdStation() + " " + bucket.getCurrentLocationX() + "," + bucket.getCurrentLocationZ());
     }
 
     public void operatorWalksTo(E_Operator operator, int posX, int posZ) {
@@ -1087,7 +697,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         if (!machine.getMachineMaterial().equals("")) {
             model.setMaterial(assetManager.loadMaterial(machine.getMachineMaterial()));
         }
-        //model.setMaterial(assetManager.loadMaterial("Models/Machine/machine1.material"));
         model.setLocalScale(0.2f);
         model.setName(TypeElements.MACHINE + String.valueOf(machine.getIdMachine()));
         model.setLocalTranslation(new Vector3f(machine.getCurrentLocationX(), 0.5f, machine.getCurrentLocationZ()));
@@ -1129,7 +738,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         character_Disp.setPhysicsLocation(new Vector3f(operator.getCurrentLocationX(), Params.standardLocationY, operator.getCurrentLocationZ()));
         rootNode.attachChild(model);
         bulletAppState.getPhysicsSpace().add(character_Disp);
-        model.getControl(AnimControl.class).addListener(this);
         operator.setCharacter(character_Disp);
         operator.setAnimationChannel(model.getControl(AnimControl.class).createChannel());
         operator.setModelCharacter(model);
@@ -1177,11 +785,9 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         updateInterfacePosition();
         jmonkeyApp.setSettings(settings);
         jmonkeyApp.restart();
-
     }
 
     private void updateInterfacePosition() {
-
         int yPos = Params.screenHeight - (720 - 700);
         niftyGUI.getScreen("layerScreen").findElementByName("OrderLabel").setConstraintY(new SizeValue(yPos + "px"));
         niftyGUI.getScreen("layerScreen").findElementByName("OverallLabel").setConstraintY(new SizeValue(yPos + "px"));
@@ -1191,96 +797,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         niftyGUI.getScreen("layerScreen").findElementByName("winOrderControl").setConstraintY(new SizeValue(yPos + "px"));
         niftyGUI.getScreen("layerScreen").findElementByName("winGameLogControl").setConstraintY(new SizeValue(yPos + "px"));
         niftyGUI.getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).refresh(isLevelStarted);
-
-    }
-
-    private void toggleTopView() {
-
-        if (Params.topViewAvailable && viewNumber != 5) {
-            topViewEnabled = true;
-
-            switch(viewNumber) {
-                case 0:
-                    Params.camAxesLeft = cam.getLeft();
-                    Params.camAxesUp = cam.getUp();
-                    Params.camAxesDir = cam.getDirection();
-                    Params.flyCamRotationSpeed = flyCam.getRotationSpeed();
-
-                    cam.setLocation(new Vector3f(210.75597f, 191.22467f, -111.45984f));
-                    cam.setAxes(new Vector3f(0.006238699f, 0.0011283755f, 0.9999799f),
-                            new Vector3f(-0.7573153f, 0.6530373f, 0.0039878786f),
-                            new Vector3f(-0.6530197f, -0.75732493f, 0.004928589f));
-                    break;
-
-                case 1:
-
-                    Params.camMaxY = Params.securityCamsMaxY;
-                    Params.camMinY = Params.securityCamsMinY;
-                    Params.camMaxX = Params.cam1MaxX;
-                    Params.camMinX = Params.cam1MinX;
-//                    Params.camMaxZ = Params.cam1MaxX;
-//                    Params.camMinZ = Params.cam1MinX;
-                    cam.setLocation(new Vector3f(138.94714f, 74.204185f, -118.346085f));
-                    cam.setAxes(new Vector3f(-0.004745364f, 0.0011234581f, 0.99998814f),
-                            new Vector3f(-0.69315696f, 0.720775f, -0.0040991306f),
-                            new Vector3f(-0.720771f, -0.69316816f, -0.0026416779f));
-                    break;
-
-                case 2:
-                    Params.camMaxX = Params.playerMaxX;
-                    Params.camMinX = Params.playerMinX;
-                    Params.camMaxZ = 0;
-                    Params.camMinZ = -100;
-                    cam.setLocation(new Vector3f(50.173473f, 78.43454f, 112.47995f));
-                    cam.setAxes(new Vector3f(-0.9999976f, 0.0011224343f, 0.0018219932f),
-                            new Vector3f(0f, 0.8618528f, -0.5071584f),
-                            new Vector3f(-0.002139542f, -0.5071572f, -0.86185086f));
-                    break;
-
-                case 3:
-                    Params.camMaxX = 100f;
-                    Params.camMinX = 0f;
-                    Params.camMaxZ = Params.playerMaxZ;
-                    Params.camMinZ = Params.playerMinZ;
-                    cam.setLocation(new Vector3f(-37.94872f, 71.8763f, -118.55907f));
-                    cam.setAxes(new Vector3f(-0.0045000315f, 0.0011213869f, -0.9999892f),
-                            new Vector3f(0.4902432f, 0.8715848f, -0.0012287796f),
-                            new Vector3f(0.871574f, -0.49024346f, -0.004471898f));
-                    break;
-
-                case 4:
-                    Params.camMaxX = Params.playerMaxX;
-                    Params.camMinX = Params.playerMinX;
-                    Params.camMaxZ = 100f;
-                    Params.camMinZ = 0f;
-                    cam.setLocation(new Vector3f(54.01033f, 79.31754f, -347.24677f));
-                    cam.setAxes(new Vector3f(0.99922884f, 0.0011243783f, 0.039248988f),
-                            new Vector3f(-0.019561216f, 0.8809709f, 0.47276595f),
-                            new Vector3f(-0.034045644f, -0.47316912f, 0.8803135f));
-                    break;
-            }
-
-            viewNumber = (viewNumber + 1)%6;
-            flyCam.setMoveSpeed(0);
-//            flyCam.setRotationSpeed(0);
-            world.getChild("Beams-Metal").setCullHint(Spatial.CullHint.Always);
-
-        }
-        else if (Params.topViewAvailable && topViewEnabled) {
-            topViewEnabled = false;
-            cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
-            flyCam.setMoveSpeed(100);
-            flyCam.setRotationSpeed(Params.flyCamRotationSpeed);
-            world.getChild("Beams-Metal").setCullHint(Spatial.CullHint.Never);
-            viewNumber = (viewNumber + 1)%6;
-            Params.camMaxX = Params.playerMaxX;
-            Params.camMinX = Params.playerMinX;
-            Params.camMaxY = Params.playerMaxY;
-            Params.camMinY = Params.playerMinY;
-            Params.camMaxZ = Params.playerMaxZ;
-            Params.camMinZ = Params.playerMinZ;
-            
-        }
 
     }
 
@@ -1308,7 +824,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                 System.out.println(closest.getDistance());
             }
 
-            if (closest.getDistance() > 60f && !topViewEnabled) {
+            if (closest.getDistance() > 60f && !stateManager.getState(FactoryRunningState.class).isTopViewEnabled()) {
                 return;
             }
 
@@ -1351,12 +867,7 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
             getLayerScreenController().setCurrentOptionselected("windowMachine");
         }
     }
-
-    @Override
-    public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
+    
     public void updateAnimations() {
         if (arrStationAnimations.size() > 0) {
             for (StationAnimation tempStationAnim : arrStationAnimations) {
@@ -1369,8 +880,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
                 stationAnimation.setIsZeroItems(tempStationAnim.isIsZeroItems());
                 stationAnimation.setQuantity(tempStationAnim.getQuantity());
                 stationAnimation.setIdStrategy(tempStationAnim.getIdStrategy());
-//                if (tempStationAnim.getIdStrategy() != -1)
-//                    ((TransportStrategy)getManageEvents().getEvent(tempStationAnim.getIdStrategy())).getArrStationAnimation().add(stationAnimation);
                 stationAnimation.start();
             }
         }
@@ -1463,10 +972,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         return currentTempSystemTime;
     }
 
-    public void setCurrentTempSystemTime(long currentTempSystemTime) {
-        this.currentTempSystemTime = currentTempSystemTime;
-    }
-
     public double getCurrentSystemTime() {
         return currentSystemTime;
     }
@@ -1479,16 +984,8 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
         return arrStationAnimations;
     }
 
-    public void setArrStationAnimations(ArrayList<StationAnimation> arrStationAnimations) {
-        this.arrStationAnimations = arrStationAnimations;
-    }
-
     public Nifty getNifty() {
         return niftyGUI;
-    }
-
-    public void setNifty(Nifty nifty) {
-        this.niftyGUI = nifty;
     }
 
     public int getInitialGameId() {
