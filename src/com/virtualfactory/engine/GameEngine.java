@@ -86,7 +86,6 @@ public class GameEngine extends AbstractAppState implements AnimEventListener {
     private MenuScreenController menuScreenC;
     private LayerScreenController layerScreenC;
     private Node world;
-    private RigidBodyControl worldRigid;
     private RigidBodyControl bucketRigid;
     private Box bucketBox;
     private Material bucketMaterial;
