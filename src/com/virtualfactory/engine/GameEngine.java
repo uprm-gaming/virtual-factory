@@ -455,13 +455,12 @@ public class GameEngine extends AbstractAppState {
     }
 
     private void toggleDashBoard() {
-        if (isDashboardVisible) {
-             niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").hide();
-             isDashboardVisible = false;
-        } else {
+        if (isDashboardVisible)
+            niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").hide();
+        else
             niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").show();
-            isDashboardVisible = true;
-        }
+        
+        isDashboardVisible = !isDashboardVisible;
     }
 
     public GameSounds getGameSounds() {
