@@ -1,4 +1,4 @@
-package com.virtualfactory.engine.states;
+package com.virtualfactory.engine;
 
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
@@ -46,7 +46,7 @@ import com.virtualfactory.utils.Params;
  * 
  * @author Abner Coimbre
  */
-public class FactoryRunningState extends AbstractAppState
+public class GameRunningState extends AbstractAppState
 {
     private AppStateManager stateManager;
     private SimpleApplication app;
@@ -86,7 +86,7 @@ public class FactoryRunningState extends AbstractAppState
     private PointLight lamp2;
     private int viewNumber;
     
-    public FactoryRunningState(BulletAppState bulletAppState)
+    public GameRunningState(BulletAppState bulletAppState)
     {
         this.bulletAppState = bulletAppState;
     }

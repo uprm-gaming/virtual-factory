@@ -29,7 +29,6 @@ import com.jme3.scene.debug.Grid;
 import com.jme3.scene.shape.*;
 import com.jme3.scene.shape.Line;
 import com.jme3.system.AppSettings;
-import com.virtualfactory.engine.states.FactoryRunningState;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import com.virtualfactory.entity.*;
@@ -317,7 +316,7 @@ public class GameEngine extends AbstractAppState {
     }
 
     private void loadElementsToDisplay(GameType gameType) {
-        stateManager.attach(new FactoryRunningState(bulletAppState));
+        stateManager.attach(new GameRunningState(bulletAppState));
         
         E_Terrain tempTerrain = gameData.getMapTerrain();
 
@@ -352,9 +351,9 @@ public class GameEngine extends AbstractAppState {
         }
         createShowSpotObject();
 
-        if (stateManager.getState(FactoryRunningState.class).isTopViewEnabled()) {
-            stateManager.getState(FactoryRunningState.class).setTopViewEnabled(false);
-            stateManager.getState(FactoryRunningState.class).setViewNumber(0);
+        if (stateManager.getState(GameRunningState.class).isTopViewEnabled()) {
+            stateManager.getState(GameRunningState.class).setTopViewEnabled(false);
+            stateManager.getState(GameRunningState.class).setViewNumber(0);
             cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
             flyCam.setMoveSpeed(100);
             Params.camMaxX = Params.playerMaxX;
@@ -823,7 +822,7 @@ public class GameEngine extends AbstractAppState {
                 System.out.println(closest.getDistance());
             }
 
-            if (closest.getDistance() > 60f && !stateManager.getState(FactoryRunningState.class).isTopViewEnabled()) {
+            if (closest.getDistance() > 60f && !stateManager.getState(GameRunningState.class).isTopViewEnabled()) {
                 return;
             }
 
