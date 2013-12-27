@@ -41,17 +41,19 @@ import com.virtualfactory.utils.Params;
 /**
  * This is an app state (http://hub.jmonkeyengine.org/wiki/doku.php/jme3:advanced:application_states).
  * 
- * When this state is attached by the game engine, initialize() will create
- * and animate the factory , and update() keeps track of player movement.
+ * When this state is attached by the game engine (see the loadElementsToDisplay() method), initialize() will 
+ * create and animate the factory , and update() keeps track of player movement.
  * 
  * @author Abner Coimbre
  */
 public class GameRunningState extends AbstractAppState
 {
-    private AppStateManager stateManager;
     private SimpleApplication app;
+    private AssetManager assetManager;
     private InputManager inputManager;
+    private Node rootNode;
     private Camera cam;
+    private FlyByCamera flyCam;  
     
     private boolean moveForward;
     private boolean moveBackward;
@@ -61,30 +63,33 @@ public class GameRunningState extends AbstractAppState
     private boolean lookDown;
     private boolean lookLeft;
     private boolean lookRight;
-    private boolean isDebugCamEnabled;
     
+    private boolean isDebugCamEnabled;
+    private boolean isTopViewEnabled;
+    private boolean isLightingEnabled;
+    
+    private boolean isPlayerUpstairs = true;       
     private float playerSpeed = 1.3f;
+    
     private Vector3f camDir;
     private Vector3f camLeft;
     private Vector3f walkDirection = new Vector3f(0, 0, 0);
-    private boolean isTopViewEnabled;
-    private AssetManager assetManager;
+    
     private FilterPostProcessor fpp;
     private FadeFilter fadeFilter;
     private ViewPort viewPort;
     private Node factory;
-    private Node rootNode;
-    private FlyByCamera flyCam;
+    
     private final BulletAppState bulletAppState;
     private CharacterControl player;
     private GhostControl topStairsSensor;
     private GhostControl bottomStairsSensor;
-    private boolean isPlayerUpstairs = true;
-    private Narrator gameNarrator;
-    private boolean isLightingEnabled;
+    
     private PointLight lamp1;
     private PointLight lamp2;
     private int viewNumber;
+    
+    private Narrator gameNarrator;
     
     public GameRunningState(BulletAppState bulletAppState)
     {
@@ -95,9 +100,8 @@ public class GameRunningState extends AbstractAppState
     public void initialize(AppStateManager stateManager, Application app)
     {
         super.initialize(stateManager, app);
-        this.stateManager = stateManager;
+        
         this.app = (SimpleApplication) app;
-
         this.assetManager = this.app.getAssetManager();
         this.inputManager = this.app.getInputManager();
         this.viewPort = this.app.getViewPort();
@@ -106,7 +110,8 @@ public class GameRunningState extends AbstractAppState
         this.cam = this.app.getCamera();
         
         createFactory();
-        loadControls();
+        
+        loadPlayerKeyControls();
         
         gameNarrator = new Narrator(stateManager, assetManager, this.app.getGuiNode());
     }
@@ -162,7 +167,7 @@ public class GameRunningState extends AbstractAppState
         // ----------
     }
 
-    private void loadControls()
+    private void loadPlayerKeyControls()
     {
         String[] mappings = {"move forward", "move backward",
                              "move left", "move right",
