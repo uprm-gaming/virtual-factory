@@ -122,7 +122,7 @@ public class FactoryRunningState extends AbstractAppState
 
         /* Factory */
         // ----------
-        factory = (Node) assetManager.loadModel("Models/Factory/oldFactory.j3o");
+        factory = (Node) assetManager.loadModel("Models/factory.j3o");
         factory.setLocalScale(250.0f, 250.0f, 250.0f);
         factory.setLocalTranslation(-9.0f, 0.0f, 82.0f);
         rootNode.attachChild(factory);
