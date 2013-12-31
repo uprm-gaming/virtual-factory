@@ -1,5 +1,6 @@
 package com.virtualfactory.engine;
 
+import com.virtualfactory.utils.Sensor;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
@@ -7,7 +8,6 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.GhostControl;
@@ -36,6 +36,7 @@ import com.jme3.util.SkyFactory;
 import com.virtualfactory.narrator.Narrator;
 import com.virtualfactory.utils.InvisibleWall;
 import com.virtualfactory.utils.Params;
+import java.util.HashMap;
 
 
 /**
@@ -82,14 +83,14 @@ public class GameRunningState extends AbstractAppState
     
     private final BulletAppState bulletAppState;
     private CharacterControl player;
-    private GhostControl topStairsSensor;
-    private GhostControl bottomStairsSensor;
     
     private PointLight lamp1;
     private PointLight lamp2;
     private int viewNumber;
     
     private Narrator gameNarrator;
+    
+    private HashMap<String, Sensor> factorySensors;
     
     public GameRunningState(BulletAppState bulletAppState)
     {
@@ -144,14 +145,7 @@ public class GameRunningState extends AbstractAppState
         createSkyBox();
         createLighting();
         createInvisibleWalls();
-
-        topStairsSensor = new GhostControl(new BoxCollisionShape(new Vector3f(15, 10, 5)));
-        Vector3f sensorLocation = new Vector3f(134.05f, 59.06f, -285.02f);
-        enableSensor(topStairsSensor, sensorLocation);
-
-        bottomStairsSensor = new GhostControl(new BoxCollisionShape(new Vector3f(15, 10, 5)));
-        sensorLocation = new Vector3f(107.42f, 12.67f, -284.9f);
-        enableSensor(bottomStairsSensor, sensorLocation);
+        createSensors();
         
         /* First-person Player */
         // ----------
@@ -264,7 +258,7 @@ public class GameRunningState extends AbstractAppState
         if (!isLevelStarted)
             return; */
 
-        if (topStairsSensor.getOverlappingCount() > 1 || bottomStairsSensor.getOverlappingCount() > 1)
+        if (factorySensors.get("top stairs").isPlayerInRange() || factorySensors.get("bottom stairs").isPlayerInRange())
             handleTransition();
 
         if (lookUp)
@@ -309,7 +303,7 @@ public class GameRunningState extends AbstractAppState
     }
     
     private void handleTransition() {
-        isPlayerUpstairs = topStairsSensor.getOverlappingCount() > 1;
+        isPlayerUpstairs = factorySensors.get("top stairs").isPlayerInRange();
         boolean isFadeEffectStarted = fadeFilter.getValue() < 1;
 
         if (!isFadeEffectStarted) {
@@ -411,19 +405,19 @@ public class GameRunningState extends AbstractAppState
             rootNode.attachChild(invisibleWall);
         }
     }
-
-    private void enableSensor(GhostControl sensor, Vector3f location) 
+    
+    private void createSensors()
     {
-        Box b = new Box(1, 1, 1);
-        Geometry boxGeometry = new Geometry("sensor box", b);
-        boxGeometry.setLocalTranslation(location);
-
-        Material boxMat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        boxMat.setColor("Color", ColorRGBA.Yellow);
-        boxGeometry.setMaterial(boxMat);
-
-        boxGeometry.addControl(sensor);
-        bulletAppState.getPhysicsSpace().add(sensor);
+        String[] sensorNames = {"top stairs", "bottom stairs"};
+        
+        Vector3f[] sizes = {new Vector3f(15, 10, 5), new Vector3f(15, 10, 5)};
+        
+        Vector3f[] locations = {new Vector3f(134.05f, 59.06f, -285.02f), new Vector3f(107.42f, 12.67f, -284.9f)};
+        
+        factorySensors = new HashMap<>();
+        
+        for (int i = 0; i < sensorNames.length; i++)
+            factorySensors.put(sensorNames[i], new Sensor(sizes[i], locations[i], bulletAppState));
     }
 
     private void rotateCamera(float value, Vector3f axis) 
