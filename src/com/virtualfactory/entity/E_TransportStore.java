@@ -1,10 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.virtualfactory.entity;
-
-import com.virtualfactory.utils.TypeActivity;
 
 /**
  *
