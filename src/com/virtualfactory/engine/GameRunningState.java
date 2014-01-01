@@ -410,14 +410,14 @@ public class GameRunningState extends AbstractAppState
     {
         String[] sensorNames = {"top stairs", "bottom stairs"};
         
-        Vector3f[] sizes = {new Vector3f(15, 10, 5), new Vector3f(15, 10, 5)};
+        Vector3f[] sensorSizes = {new Vector3f(15, 10, 5), new Vector3f(15, 10, 5)};
         
-        Vector3f[] locations = {new Vector3f(134.05f, 59.06f, -285.02f), new Vector3f(107.42f, 12.67f, -284.9f)};
+        Vector3f[] sensorLocations = {new Vector3f(134.05f, 59.06f, -285.02f), new Vector3f(107.42f, 12.67f, -284.9f)};
         
         factorySensors = new HashMap<>();
         
         for (int i = 0; i < sensorNames.length; i++)
-            factorySensors.put(sensorNames[i], new Sensor(sizes[i], locations[i], bulletAppState));
+            factorySensors.put(sensorNames[i], new Sensor(sensorSizes[i], sensorLocations[i], bulletAppState));
     }
 
     private void rotateCamera(float value, Vector3f axis) 
