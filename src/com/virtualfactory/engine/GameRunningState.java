@@ -16,7 +16,9 @@ import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.light.AmbientLight;
 import com.jme3.light.PointLight;
+import com.jme3.post.filters.PosterizationFilter;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
@@ -88,6 +90,7 @@ public class GameRunningState extends AbstractAppState
     private Narrator gameNarrator;
     
     private HashMap<String, Sensor> factorySensors;
+    private AmbientLight ambient;
     
     public GameRunningState(BulletAppState bulletAppState)
     {
@@ -140,8 +143,11 @@ public class GameRunningState extends AbstractAppState
         rootNode.attachChild(grass);
         
         createSkyBox();
+        
         createLighting();
+        
         createInvisibleWalls();
+        
         createSensors();
         
         /* First-person Player */
@@ -270,8 +276,13 @@ public class GameRunningState extends AbstractAppState
         if (lookRight)
             rotateCamera(-Params.rotationSpeed, new Vector3f(0,1,0));
 
-        if (isTopViewEnabled || isDebugCamEnabled)
+        if (isTopViewEnabled || isDebugCamEnabled) {
+            if (fadeFilter.getValue() <= 0) {
+                fadeFilter.fadeIn();
+                // TODO: Change the ambient color
+            }
             return;
+        }
 
         camDir = cam.getDirection().clone().multLocal(playerSpeed);
         camLeft = cam.getLeft().clone().multLocal(playerSpeed);
@@ -300,7 +311,11 @@ public class GameRunningState extends AbstractAppState
     }
     
     private void handleTransition() {
+        if (fadeFilter.getDuration() < 1.5f)
+            fadeFilter.setDuration(1.5f);
+        
         isPlayerUpstairs = factorySensors.get("top stairs").isPlayerInRange();
+        
         boolean isFadeEffectStarted = fadeFilter.getValue() < 1;
 
         if (!isFadeEffectStarted) {
@@ -365,6 +380,11 @@ public class GameRunningState extends AbstractAppState
         lamp2.setColor(color);
         lamp2.setRadius(lamp1.getRadius());
         rootNode.addLight(lamp2);
+        
+        /* Atmosphere */
+        ambient = new AmbientLight();
+        ambient.setColor(ColorRGBA.DarkGray.mult(1.8f));
+        rootNode.addLight(ambient);
     }
 
     private void createInvisibleWalls() {
@@ -450,7 +470,19 @@ public class GameRunningState extends AbstractAppState
     {
         if (Params.topViewAvailable && viewNumber != 5) {
             isTopViewEnabled = true;
-
+            
+            if (fadeFilter.getDuration() > 0.25f)
+                fadeFilter.setDuration(0.25f);
+            
+            if (viewNumber != 0)
+                fadeFilter.fadeOut();  
+            
+            AudioNode camera;
+            camera = new AudioNode(assetManager, "Sounds/camera.wav", false);
+            camera.setPositional(false);
+            camera.setPitch(1.3f);
+            camera.play();
+            
             switch(viewNumber) {
                 case 0:
                     Params.camAxesLeft = cam.getLeft();
@@ -465,7 +497,9 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 1:
-
+                    changeOutsideWorldColor(ColorRGBA.Brown);
+                    changeLampColor(ColorRGBA.Brown);
+                    
                     Params.camMaxY = Params.securityCamsMaxY;
                     Params.camMinY = Params.securityCamsMinY;
                     Params.camMaxX = Params.cam1MaxX;
@@ -479,6 +513,9 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 2:
+                    changeOutsideWorldColor(ColorRGBA.Blue);
+                    changeLampColor(ColorRGBA.Blue);
+                    
                     Params.camMaxX = Params.playerMaxX;
                     Params.camMinX = Params.playerMinX;
                     Params.camMaxZ = 0;
@@ -490,6 +527,9 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 3:
+                    changeOutsideWorldColor(ColorRGBA.DarkGray);
+                    changeLampColor(ColorRGBA.DarkGray);
+                    
                     Params.camMaxX = 100f;
                     Params.camMinX = 0f;
                     Params.camMaxZ = Params.playerMaxZ;
@@ -501,6 +541,9 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 4:
+                    changeOutsideWorldColor(ColorRGBA.Pink);
+                    changeLampColor(ColorRGBA.Pink);
+                    
                     Params.camMaxX = Params.playerMaxX;
                     Params.camMinX = Params.playerMinX;
                     Params.camMaxZ = 100f;
@@ -512,13 +555,16 @@ public class GameRunningState extends AbstractAppState
                     break;
             }
 
-            viewNumber = (viewNumber + 1)%6;
+            viewNumber = (viewNumber + 1) % 6;
             flyCam.setMoveSpeed(0);
 //            flyCam.setRotationSpeed(0);
             factory.getChild("Beams-Metal").setCullHint(Spatial.CullHint.Always);
 
         }
         else if (Params.topViewAvailable && isTopViewEnabled) {
+            changeOutsideWorldColor(ColorRGBA.DarkGray);
+            lamp1.setColor(ColorRGBA.White);
+            lamp2.setColor(ColorRGBA.White);
             isTopViewEnabled = false;
             cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
             flyCam.setMoveSpeed(100);
@@ -530,8 +576,19 @@ public class GameRunningState extends AbstractAppState
             Params.camMaxY = Params.playerMaxY;
             Params.camMinY = Params.playerMinY;
             Params.camMaxZ = Params.playerMaxZ;
-            Params.camMinZ = Params.playerMinZ;         
+            Params.camMinZ = Params.playerMinZ;
         }
+    }
+    
+    public void changeOutsideWorldColor(ColorRGBA color) 
+    {
+        ambient.setColor(color.mult(5f));
+    }
+    
+    public void changeLampColor(ColorRGBA color)
+    {
+        lamp1.setColor(color);
+        lamp2.setColor(color);
     }
     
     public boolean isTopViewEnabled()
