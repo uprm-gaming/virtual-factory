@@ -485,6 +485,8 @@ public class GameRunningState extends AbstractAppState
             
             switch(viewNumber) {
                 case 0:
+                    changeOutsideWorldColor(ColorRGBA.Brown);
+                    changeLampColor(ColorRGBA.Brown);
                     Params.camAxesLeft = cam.getLeft();
                     Params.camAxesUp = cam.getUp();
                     Params.camAxesDir = cam.getDirection();
@@ -497,8 +499,8 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 1:
-                    changeOutsideWorldColor(ColorRGBA.Brown);
-                    changeLampColor(ColorRGBA.Brown);
+                    changeOutsideWorldColor(ColorRGBA.DarkGray);
+                    changeLampColor(ColorRGBA.DarkGray);
                     
                     Params.camMaxY = Params.securityCamsMaxY;
                     Params.camMinY = Params.securityCamsMinY;
@@ -513,8 +515,8 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 2:
-                    changeOutsideWorldColor(ColorRGBA.Blue);
-                    changeLampColor(ColorRGBA.Blue);
+                    changeOutsideWorldColor(ColorRGBA.Magenta);
+                    changeLampColor(ColorRGBA.Magenta);
                     
                     Params.camMaxX = Params.playerMaxX;
                     Params.camMinX = Params.playerMinX;
@@ -527,8 +529,8 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 3:
-                    changeOutsideWorldColor(ColorRGBA.DarkGray);
-                    changeLampColor(ColorRGBA.DarkGray);
+                    changeOutsideWorldColor(ColorRGBA.Orange);
+                    changeLampColor(ColorRGBA.Orange);
                     
                     Params.camMaxX = 100f;
                     Params.camMinX = 0f;
@@ -582,7 +584,7 @@ public class GameRunningState extends AbstractAppState
     
     public void changeOutsideWorldColor(ColorRGBA color) 
     {
-        ambient.setColor(color.mult(5f));
+        ambient.setColor(color.mult(3f));
     }
     
     public void changeLampColor(ColorRGBA color)
