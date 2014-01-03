@@ -485,6 +485,15 @@ public class GameRunningState extends AbstractAppState
         cam.setAxes(q);
     }
     
+    private void playSoundEffect(String pathToAudioFile)
+    {
+        AudioNode sfx;
+        sfx = new AudioNode(assetManager, pathToAudioFile, false);
+        sfx.setPositional(false);
+        sfx.setPitch(1.3f);
+        sfx.play();
+    }
+    
     private void toggleTopView() 
     {
         if (Params.topViewAvailable && viewNumber != 5) {
@@ -493,17 +502,15 @@ public class GameRunningState extends AbstractAppState
             if (fadeFilter.getDuration() > 0.25f)
                 fadeFilter.setDuration(0.25f);
             
-            if (viewNumber != 0)
-                fadeFilter.fadeOut();  
-            
+            if (viewNumber == 0) {
+                playSoundEffect("Sounds/enteredTopView.wav");
+            } else {
+                fadeFilter.fadeOut();
+                playSoundEffect("Sounds/cameraSwitch.wav");
+            }
+
             if (videoCamGUI.isDisabled())
                 videoCamGUI.enable();
-
-            AudioNode camera;
-            camera = new AudioNode(assetManager, "Sounds/camera.wav", false);
-            camera.setPositional(false);
-            camera.setPitch(1.3f);
-            camera.play();
             
             switch(viewNumber) {
                 case 0:
@@ -597,6 +604,7 @@ public class GameRunningState extends AbstractAppState
         }
         else if (Params.topViewAvailable && isTopViewEnabled) {
             videoCamGUI.disable();
+            playSoundEffect("Sounds/exitTopView.wav");
             
             changeOutsideWorldColor(ColorRGBA.DarkGray);
             changeLampColor(ColorRGBA.White);
