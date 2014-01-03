@@ -332,6 +332,9 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
             if (op.getMotionControl()!=null)
                 op.getMotionControl().pause();
         }
+        
+        if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 6)
+                    Params.tutorial.nextStep();
     }
     
     public void manageGameVolume(){
@@ -717,6 +720,8 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
             }else
             if (currentDynamicButtonSelected.contains(TypeActivity.Purchase.toString())){
                 tempActivityType = TypeActivity.Purchase;
+                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 9)
+                    Params.tutorial.nextStep();
 //                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapPurchase().size());
 //                for (E_Purchase temp : gameEngine.getGameData().getMapPurchase().values()){
 //                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
@@ -724,9 +729,12 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
 //                    arrActivitiesId.put(temp.getActivityDescription(), temp.getIdActivity());
 //                    position++;
 //                }
+
             }else
             if (currentDynamicButtonSelected.contains(TypeActivity.Transport.toString())){
                 tempActivityType = TypeActivity.Transport;
+                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 10)
+                    Params.tutorial.nextStep();
 //                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapTransport().size(),"180%");
 //                for (E_TransportStore temp : gameEngine.getGameData().getMapTransport().values()){
 //                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class)manageSo
@@ -761,6 +769,8 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
 //                }
                 screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(gameEngine, Params.machineList, null);
                 screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).setIdButton(id);
+                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 7)
+                    Params.tutorial.nextStep();
             }else
             if (currentDynamicButtonSelected.contains("Equipment")){
 //                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapUserMachineByTransport().size());
@@ -771,6 +781,8 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
 //                }
                 screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(gameEngine, Params.equipmentList, null);
                 screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).setIdButton(id);
+                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 8)
+                    Params.tutorial.nextStep();
             }else
             if (currentDynamicButtonSelected.contains("Operator")){
 //                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapUserOperator().size(),"140%");

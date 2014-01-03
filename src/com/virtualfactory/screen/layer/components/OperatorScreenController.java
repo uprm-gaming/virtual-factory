@@ -316,6 +316,8 @@ public class OperatorScreenController implements Controller {
             if (operator.getStatus().equals(Status.Idle)){
                 operator.setState(currentStateOperator);
                 ((Label)screen.findNiftyControl("messageResult_WOC", Label.class)).setText("Updated successfully");
+                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 5)
+                    Params.tutorial.nextStep();
             }else{
                 operator.activateLaterDeactivation = true;
                 ((Label)screen.findNiftyControl("messageResult_WOC", Label.class)).setText("Updated to a later deactivation");
