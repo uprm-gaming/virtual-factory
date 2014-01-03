@@ -243,6 +243,10 @@ public class GameRunningState extends AbstractAppState
                                 + "\nleft: " + cam.getLeft()
                                 + "\nup: " + cam.getUp()
                                 + "\ndirection: " + cam.getDirection());
+                    
+                    if (!isKeyPressed)
+                        Params.tutorial.nextStep();
+                    
                     break;
 
                 default:
@@ -335,12 +339,16 @@ public class GameRunningState extends AbstractAppState
                 player.warp(new Vector3f(121.2937f, 12.65f, -309.41315f));
                 cam.setRotation(new Quaternion(0.04508071f, -0.4710204f, 0.02474963f, 0.8806219f));
                 isPlayerUpstairs = false;
+                if (Params.tutorial.getCurrentStep() == 0)
+                    Params.tutorial.nextStep();
             }
             else {
                 player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
                 cam.setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
-                gameNarrator.talk("Second Floor.\nPress 'T' for a top view of the factory.", "Sounds/Narrator/instructions.wav");
+                if (!Params.isTutorialLevel)
+                    gameNarrator.talk("Second Floor.\nPress 'T' for a top view of the factory.", "Sounds/Narrator/instructions.wav");
                 isPlayerUpstairs = true;
+                
             }
             fadeFilter.fadeIn();
             playerSpeed = 1.3f;
@@ -364,9 +372,10 @@ public class GameRunningState extends AbstractAppState
     }
 
     private void createLighting() {
-        if (isLightingEnabled)
+        if (isLightingEnabled || !Params.firstRun)
             return;
         
+        Params.firstRun = false;
         isLightingEnabled = true;
         ColorRGBA color = ColorRGBA.White;
         lamp1 = new PointLight();
@@ -485,8 +494,6 @@ public class GameRunningState extends AbstractAppState
             
             switch(viewNumber) {
                 case 0:
-                    changeOutsideWorldColor(ColorRGBA.Brown);
-                    changeLampColor(ColorRGBA.Brown);
                     Params.camAxesLeft = cam.getLeft();
                     Params.camAxesUp = cam.getUp();
                     Params.camAxesDir = cam.getDirection();
@@ -499,8 +506,8 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 1:
-                    changeOutsideWorldColor(ColorRGBA.DarkGray);
-                    changeLampColor(ColorRGBA.DarkGray);
+                    changeOutsideWorldColor(ColorRGBA.Brown);
+                    changeLampColor(ColorRGBA.Brown);
                     
                     Params.camMaxY = Params.securityCamsMaxY;
                     Params.camMinY = Params.securityCamsMinY;
@@ -515,8 +522,8 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 2:
-                    changeOutsideWorldColor(ColorRGBA.Magenta);
-                    changeLampColor(ColorRGBA.Magenta);
+                    changeOutsideWorldColor(ColorRGBA.Blue);
+                    changeLampColor(ColorRGBA.Blue);
                     
                     Params.camMaxX = Params.playerMaxX;
                     Params.camMinX = Params.playerMinX;
@@ -529,8 +536,8 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 3:
-                    changeOutsideWorldColor(ColorRGBA.Orange);
-                    changeLampColor(ColorRGBA.Orange);
+                    changeOutsideWorldColor(ColorRGBA.DarkGray);
+                    changeLampColor(ColorRGBA.DarkGray);
                     
                     Params.camMaxX = 100f;
                     Params.camMinX = 0f;
@@ -584,7 +591,7 @@ public class GameRunningState extends AbstractAppState
     
     public void changeOutsideWorldColor(ColorRGBA color) 
     {
-        ambient.setColor(color.mult(3f));
+        ambient.setColor(color.mult(5f));
     }
     
     public void changeLampColor(ColorRGBA color)

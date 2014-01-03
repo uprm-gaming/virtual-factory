@@ -40,6 +40,7 @@ import com.virtualfactory.screen.other.Credits;
 import com.virtualfactory.simpack.*;
 import com.virtualfactory.strategy.ManageEvents;
 import com.virtualfactory.threads.*;
+import com.virtualfactory.tutorial.Tutorial;
 import com.virtualfactory.utils.*;
 import de.lessvoid.nifty.tools.SizeValue;
 import java.util.ArrayList;
@@ -88,6 +89,7 @@ public class GameEngine extends AbstractAppState {
     private GameSounds gameSounds;
     private ArrayList<Pair<GameSounds, Sounds>> arrGameSounds;
     private boolean isDashboardVisible = false;
+    private boolean firstRun = true;
 
     public SimpleApplication jmonkeyApp;
     private AppStateManager stateManager;
@@ -275,7 +277,14 @@ public class GameEngine extends AbstractAppState {
 
         isLevelStarted = true;
 
-        gameNarrator.talk("Welcome to Virtual Factory!\nPress 'T' for a top view of the factory.", 5);
+        if (gameData.getCurrentGame().getGameName().equalsIgnoreCase("tutorial")) {
+            Params.isTutorialLevel = true;
+            Params.tutorial = new Tutorial(gameNarrator);
+            Params.tutorial.update();
+        }
+        else {
+            gameNarrator.talk("Welcome to Virtual Factory!\nPress 'T' for a top view of the factory.", 5);
+        }
     }
 
     private void flushPreviousGame() {
@@ -451,6 +460,10 @@ public class GameEngine extends AbstractAppState {
             nextEvent = Sim.next_event(currentSystemTime, Sim.Mode.SYNC);
             getLayerScreenController().updateQuantityCurrentMoney(gameData.getCurrentMoney());
         }
+        
+        if (Params.isTutorialLevel)
+            Params.tutorial.update();
+        
     }
 
     private void toggleDashBoard() {

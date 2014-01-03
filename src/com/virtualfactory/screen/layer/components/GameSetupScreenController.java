@@ -25,6 +25,7 @@ import com.virtualfactory.utils.MessageType;
 import com.virtualfactory.utils.Messages;
 import com.virtualfactory.utils.ObjectState;
 import com.virtualfactory.utils.Pair;
+import com.virtualfactory.utils.Params;
 import com.virtualfactory.utils.Status;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -263,6 +264,9 @@ public class GameSetupScreenController implements Controller {
             screen.findElementByName("setupStartGame").getRenderer(ImageRenderer.class).setImage(nifty.createImage(buttonReady, false));
             isReadyToStart = true;
             isResourcesReady = isStorageReady = isUnitLoadReady = isPurchaseReady = isOperatorsReady = isPriorityReady = true;
+            System.out.println("\n\n\nLevel: " + Params.tutorial.getCurrentStep());
+            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 2)
+                Params.tutorial.nextStep();
         }
     }
     
@@ -270,6 +274,10 @@ public class GameSetupScreenController implements Controller {
         if (isResourcesReady && isStorageReady && isUnitLoadReady && isPurchaseReady && isOperatorsReady && isPriorityReady){
             screen.findElementByName("setupStartGame").getRenderer(ImageRenderer.class).setImage(nifty.createImage(buttonReady, false));
             isReadyToStart = true;
+            System.out.println("\n\n\nLevel: " + Params.tutorial.getCurrentStep());
+            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 2)
+                Params.tutorial.nextStep();
+            
         }else{
             screen.findElementByName("setupStartGame").getRenderer(ImageRenderer.class).setImage(nifty.createImage(buttonNoReady, false));
             isReadyToStart = false;
@@ -367,7 +375,10 @@ public class GameSetupScreenController implements Controller {
         if (isReadyToStart){
             gameEngine.getLayerScreenController().playGame();
             loadWindowControl(gameEngine, -1, null);
-        }else{
+            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 3)
+                Params.tutorial.nextStep();
+
+        } else {
             GameLogScreenController.addMessage(MessageType.Notification, Messages.gameSetup);
         }
     }

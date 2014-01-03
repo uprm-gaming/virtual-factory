@@ -9,6 +9,7 @@ import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
 import com.jme3.font.LineWrapMode;
 import com.jme3.font.Rectangle;
+import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 
@@ -38,7 +39,7 @@ public class Narrator extends AbstractAppState
         narratorText.setBox(new Rectangle(325,0, 1280 - 325*2, 200));
         narratorText.setAlignment(BitmapFont.Align.Center);
         narratorText.move(0, 200, 1);
-        
+        narratorText.setColor(ColorRGBA.DarkGray);
         guiNode.attachChild(narratorText);
     }
 

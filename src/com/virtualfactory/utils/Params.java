@@ -2,6 +2,7 @@ package com.virtualfactory.utils;
 
 import com.jme3.math.Vector3f;
 import com.virtualfactory.narrator.Narrator;
+import com.virtualfactory.tutorial.Tutorial;
 
 public class Params {
 
@@ -13,7 +14,10 @@ public class Params {
     public static final String supportedRenderer = "LWJGL-OpenGL2";
     public static int screenHeight = 0;
     public static int fullScreenHeight = 0;
-
+    public static boolean isTutorialLevel = false;
+    public static boolean firstRun = true;
+    public static Tutorial tutorial;
+    
     public static final String ControlsDescription = ""
             + "A: move left\n\n"
             + "D: move right\n\n"
@@ -24,7 +28,7 @@ public class Params {
             + "Left-Shift:  select an object\n\n"
             + "Right-Shift: open/close the dashboard\n\n"
             + "F1: turn on/off the full screen";
-
+    
     public static boolean topViewAvailable = true;
     public static int viewNumber = 0;
     public static final float playerGravity = 120;

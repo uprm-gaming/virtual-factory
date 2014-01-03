@@ -844,8 +844,11 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
             //showGAMESETUP window
             if (isVisibleWindowGameSetup)
                 screen.findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).loadWindowControl(gameEngine, -1, null);
-            else
+            else {
                 screen.findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).loadWindowControl(gameEngine, 0, null);
+                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 1)
+                    Params.tutorial.nextStep();
+            }
             isVisibleWindowGameSetup = !isVisibleWindowGameSetup;
         }
     }
@@ -914,6 +917,9 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
             dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Operator (" + gameEngine.getGameData().getMapUserOperator().size() + ")"); position++;
             dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Part (" + gameEngine.getGameData().getMapUserPart().size() + ")"); position++;
             dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Supplier(" + gameEngine.getGameData().getMapGameSupplier().size() + ")"); position++;
+            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 4)
+                Params.tutorial.nextStep();
+
         }
         currentOptionselected = id;
     }
