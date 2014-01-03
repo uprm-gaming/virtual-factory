@@ -1,5 +1,6 @@
 package com.virtualfactory.engine;
 
+import com.virtualfactory.screen.other.VideoCamGUI;
 import com.virtualfactory.utils.Sensor;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
@@ -91,6 +92,7 @@ public class GameRunningState extends AbstractAppState
     
     private HashMap<String, Sensor> factorySensors;
     private AmbientLight ambient;
+    private VideoCamGUI videoCamGUI;
     
     public GameRunningState(BulletAppState bulletAppState)
     {
@@ -149,6 +151,8 @@ public class GameRunningState extends AbstractAppState
         createInvisibleWalls();
         
         createSensors();
+        
+        initVideoCamGUI();
         
         /* First-person Player */
         // ----------
@@ -281,10 +285,11 @@ public class GameRunningState extends AbstractAppState
             rotateCamera(-Params.rotationSpeed, new Vector3f(0,1,0));
 
         if (isTopViewEnabled || isDebugCamEnabled) {
-            if (fadeFilter.getValue() <= 0) {
+            if (fadeFilter.getValue() <= 0)
                 fadeFilter.fadeIn();
-                // TODO: Change the ambient color
-            }
+            
+            if (!videoCamGUI.getDisplayedDateAndTime().equals(videoCamGUI.getUpdatedDateAndTime()))
+                videoCamGUI.updateDateAndTime();
             return;
         }
 
@@ -445,6 +450,11 @@ public class GameRunningState extends AbstractAppState
         for (int i = 0; i < sensorNames.length; i++)
             factorySensors.put(sensorNames[i], new Sensor(sensorSizes[i], sensorLocations[i], bulletAppState));
     }
+    
+    private void initVideoCamGUI()
+    {
+        videoCamGUI = new VideoCamGUI(assetManager, app.getGuiNode());
+    }
 
     private void rotateCamera(float value, Vector3f axis) 
     {
@@ -486,6 +496,9 @@ public class GameRunningState extends AbstractAppState
             if (viewNumber != 0)
                 fadeFilter.fadeOut();  
             
+            if (videoCamGUI.isDisabled())
+                videoCamGUI.enable();
+
             AudioNode camera;
             camera = new AudioNode(assetManager, "Sounds/camera.wav", false);
             camera.setPositional(false);
@@ -494,6 +507,8 @@ public class GameRunningState extends AbstractAppState
             
             switch(viewNumber) {
                 case 0:
+                    videoCamGUI.showCamInfo(VideoCamGUI.STATIC_CAM);
+                    
                     Params.camAxesLeft = cam.getLeft();
                     Params.camAxesUp = cam.getUp();
                     Params.camAxesDir = cam.getDirection();
@@ -506,6 +521,10 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 1:
+                    videoCamGUI.showCamInfo(VideoCamGUI.FLEXIBLE_CAM_1);
+                    videoCamGUI.moveDateAndTimeInfo(100, 50);
+                    videoCamGUI.moveCameraInfo(100, 100);
+                    
                     changeOutsideWorldColor(ColorRGBA.Brown);
                     changeLampColor(ColorRGBA.Brown);
                     
@@ -522,6 +541,8 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 2:
+                    videoCamGUI.showCamInfo(VideoCamGUI.FLEXIBLE_CAM_2);
+                    
                     changeOutsideWorldColor(ColorRGBA.Blue);
                     changeLampColor(ColorRGBA.Blue);
                     
@@ -536,6 +557,8 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 3:
+                    videoCamGUI.showCamInfo(VideoCamGUI.FLEXIBLE_CAM_3);
+                    
                     changeOutsideWorldColor(ColorRGBA.DarkGray);
                     changeLampColor(ColorRGBA.DarkGray);
                     
@@ -550,6 +573,8 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 4:
+                    videoCamGUI.showCamInfo(VideoCamGUI.FLEXIBLE_CAM_4);
+                    
                     changeOutsideWorldColor(ColorRGBA.Pink);
                     changeLampColor(ColorRGBA.Pink);
                     
@@ -571,9 +596,11 @@ public class GameRunningState extends AbstractAppState
 
         }
         else if (Params.topViewAvailable && isTopViewEnabled) {
+            videoCamGUI.disable();
+            
             changeOutsideWorldColor(ColorRGBA.DarkGray);
-            lamp1.setColor(ColorRGBA.White);
-            lamp2.setColor(ColorRGBA.White);
+            changeLampColor(ColorRGBA.White);
+            
             isTopViewEnabled = false;
             cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
             flyCam.setMoveSpeed(100);
