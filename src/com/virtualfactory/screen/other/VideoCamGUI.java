@@ -19,10 +19,10 @@ public class VideoCamGUI
     
     public static final String STATIC_CAM = "STATIC CAM 0";
     
-    public static final String FLEXIBLE_CAM_1 = "FLEXIBLE CAM 1";
-    public static final String FLEXIBLE_CAM_2 = "FLEXIBLE CAM 2";
-    public static final String FLEXIBLE_CAM_3 = "FLEXIBLE CAM 3";
-    public static final String FLEXIBLE_CAM_4 = "FLEXIBLE CAM 4";
+    public static final String FLEXIBLE_CAM_1 = "SECURITY CAM 1";
+    public static final String FLEXIBLE_CAM_2 = "SECURITY CAM 2";
+    public static final String FLEXIBLE_CAM_3 = "SECURITY CAM 3";
+    public static final String FLEXIBLE_CAM_4 = "SECURITY CAM 4";
     
     private SimpleDateFormat dateFormat;
     private Calendar calendar;
