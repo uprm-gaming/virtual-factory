@@ -340,8 +340,8 @@ public class GameRunningState extends AbstractAppState
         player.setWalkDirection(walkDirection); // walk!
         cam.setLocation(player.getPhysicsLocation());
         
-        if (isPlayerUpstairs && player.getPhysicsLocation().getY() < 58.0f)
-            player.warp(new Vector3f(player.getPhysicsLocation().getX(), 58.0f, player.getPhysicsLocation().getZ()));
+        if (isPlayerUpstairs && player.getPhysicsLocation().getY() < 57.0f)
+            player.warp(new Vector3f(new Vector3f(130.96266f, 59.064148f, -291.2517f)));
         else if (player.getPhysicsLocation().getY() < 12.65f)
             player.warp(new Vector3f(player.getPhysicsLocation().getX(), 12.65f, player.getPhysicsLocation().getZ()));
     }
