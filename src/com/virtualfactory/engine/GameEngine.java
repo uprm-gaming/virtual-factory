@@ -89,7 +89,7 @@ public class GameEngine extends AbstractAppState {
     private GameSounds gameSounds;
     private ArrayList<Pair<GameSounds, Sounds>> arrGameSounds;
     private boolean isDashboardVisible = false;
-    private boolean firstRun = true;
+    private boolean tutorialFinished = false;
 
     public SimpleApplication jmonkeyApp;
     private AppStateManager stateManager;
@@ -290,6 +290,7 @@ public class GameEngine extends AbstractAppState {
             Params.tutorial.update();
         }
         else {
+            Params.isTutorialLevel = false;
             gameNarrator.talk("Welcome to Virtual Factory!\nPress 'T' for a top view of the factory.", 5);
         }
     }
@@ -419,14 +420,19 @@ public class GameEngine extends AbstractAppState {
         if (!this.getLayerScreenController().getPauseStatus() && gameSounds.machineSoundPlaying())
             this.gameSounds.pauseSound(Sounds.MachineWorking);
         
-        if (!isLevelStarted) {
-            if (Params.isLevelStarted)
-                Params.isLevelStarted = false;
-            return;
+        Params.isLevelStarted = isLevelStarted;
+        if (Params.isTutorialLevel) {
+            Params.tutorial.update();
+            
+            if (Params.tutorial.isTutorialCompleted() && !tutorialFinished) {
+                niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).updateData();
+                tutorialFinished = true;
+            }
         }
+
         
-        if (!Params.isLevelStarted)
-            Params.isLevelStarted = true;
+        if (!isLevelStarted) 
+            return;
         
         if (currentSystemStatus.equals(Status.Busy))
             currentSystemTime += (double) ((System.currentTimeMillis() - currentTempSystemTime) / 1000.0);
@@ -473,10 +479,7 @@ public class GameEngine extends AbstractAppState {
             nextEvent = Sim.next_event(currentSystemTime, Sim.Mode.SYNC);
             getLayerScreenController().updateQuantityCurrentMoney(gameData.getCurrentMoney());
         }
-        
-        if (Params.isTutorialLevel)
-            Params.tutorial.update();
-        
+                
     }
 
     private void toggleDashBoard() {

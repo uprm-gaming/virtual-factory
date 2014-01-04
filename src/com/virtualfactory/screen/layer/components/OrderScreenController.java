@@ -213,6 +213,10 @@ public class OrderScreenController implements Controller {
         }else        
         if (arrOrders.size() == gameEngine.getGameData().getMapOrder().size() && allProcessed){
             //YOU WON!!!!
+            
+            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() != 19){ //If the tutorial has not been completed, do not end the game.
+                return;
+            }
             gameEngine.getGameSounds().stopSound(Sounds.Background);
             gameEngine.getGameSounds().playSound(Sounds.GameWon);
             gameEngine.getNifty().getScreen("layerScreen").findElementByName("winOvC_Element").getControl(OverallScreenController.class).updateData();
@@ -311,7 +315,6 @@ public class OrderScreenController implements Controller {
     {
         nifty.getScreen("layerScreen").findElementByName("winOrderControl").hide();
         nifty.getScreen("layerScreen").findElementByName("OrderLabel").show();
-        System.out.println("HideWindow called for OrderControl");
     }
     public void ShowWindow()
     {

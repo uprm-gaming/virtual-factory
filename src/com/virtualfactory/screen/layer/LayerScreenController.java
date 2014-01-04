@@ -846,6 +846,10 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
             isVisibleWindowFlowChart = !isVisibleWindowFlowChart;
         }else
         if (id.equals("buttonStaticOptionReturnToMenu")){
+            
+        if (Params.isTutorialLevel)
+            Params.tutorial.hide();
+
             pauseGame();
             ((MenuScreenController)nifty.getScreen("initialMenu").getScreenController()).setDefaultStart(false);
             nifty.gotoScreen("initialMenu");

@@ -235,6 +235,10 @@ public class MainMenuController implements Controller {
     
     @NiftyEventSubscriber(id="returnToGameButton_MMD")
     public void onReturnToGameButtonClicked(final String id, final ButtonClickedEvent event) {
+        
+        if (Params.isTutorialLevel)
+            Params.tutorial.show();
+
         Element currentElement = screen.findElementByName("dialogMainMenu");
         currentElement.hide();
         screen.findElementByName("dialogNewGameStage1Menu").stopEffect(EffectEventId.onCustom);

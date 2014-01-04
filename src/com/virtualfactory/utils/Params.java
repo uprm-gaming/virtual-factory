@@ -25,7 +25,7 @@ public class Params {
             + "W: move forward\n\n"
             + "S: move backward\n\n"
             + "Space Bar: jump\n\n"
-            + "Left/Right Arrow Keys: rotate camera\n\n"
+            + "Arrow Keys: rotate camera\n\n"
             + "Left-Shift:  select an object\n\n"
             + "Right-Shift: open/close the dashboard\n\n"
             + "F1: turn on/off the full screen";

@@ -16,7 +16,8 @@ public class Tutorial {
     private Narrator narrator;
     private String message; 
     private int stepNumber;
-    private boolean isLevelStarted;
+    private boolean isHidden;
+    private boolean isTutorialCompleted;
     
     public Tutorial(Narrator narrator) {
         
@@ -24,28 +25,46 @@ public class Tutorial {
         this.message = "Tutorial Level Started!!!\n"
                 + "Go to the first floor to start the tutorial.";
         this.stepNumber = 0;
-        this.isLevelStarted = false;
+        this.isHidden = false;
+        this.isTutorialCompleted = false;
     }
     
     public void update () {
 //        System.out.println("Step #" + this.stepNumber);
-        if (!Params.isLevelStarted && !this.narrator.hasStoppedTalking()) 
-            this.narrator.hide();
+        if (this.isTutorialCompleted);
+        else if (this.isHidden)  
+                hide();
         else if (this.narrator.hasStoppedTalking())
             talk();
         
     }
     
-    public void talk(){
+    public void talk() {
         
-        narrator.talk(this.message, 10);
+        this.narrator.talk(this.message, 10);
         
+    }
+    
+    public void hide() {
+        
+        this.narrator.hide();
+        this.isHidden = true;
+    }
+    
+    public void show() {
+        
+        this.isHidden = false;
     }
     
     public void nextStep () {
         this.narrator.hide();
         this.stepNumber++;
         this.message = getMessage();
+        
+        if (this.stepNumber == 19) {
+            this.isTutorialCompleted = true;
+            talk();
+        }
     }
 
     private String getMessage() {
@@ -93,8 +112,8 @@ public class Tutorial {
                         + "preventive maintenance on equipment.\nNow go to Activities-Purchase.";
                 break;
             case 10:
-                stepMessage = "In case you didn't know, you need material for "
-                        + "the product that your factory creates! In this window "
+                stepMessage = "In case you didn't know, you need material to create "
+                        + "the product! In this window "
                         + "you can decide how much material you want to buy (Order "
                         + "Quantity), how often you want to reorder material "
                         + "(Reorder Point) and who is going to be your supplier. "
@@ -112,16 +131,21 @@ public class Tutorial {
                 break;
             case 13:
                 stepMessage = "Different parts are required to create your product. "
-                        + "Bla, bla, bla...  \nGo to Utilities-Station.";
+                        + "This window displays the price for sell, parts required "
+                        + "and other useful information that you need to know."
+                        + " \nGo to Utilities-Station.";
                 break;
             case 14:
-                stepMessage = "La cantidad de cada pieza que tienen en cada estación?"
+                stepMessage = "There are different stations in your factory. Using "
+                        + "this window you can see how much material is"
+                        + " currently in a specific station. The Flow Chart explains "
+                        + "the creation process of the product."
                         + "\nPress the Right-Shift button.";
                 break;
             case 15:
                 stepMessage = "The dashboard is very useful to see what's going on in your factory. "
                         + "Press the Right-Shift button again to close the dashboard."
-                        + "\nClick the Order tab at the button left corner.";
+                        + "\nClick the Order tab at the bottom left corner.";
                 break;
             case 16:
                 stepMessage = "This window show the orders received by your "
@@ -129,24 +153,26 @@ public class Tutorial {
                         + "need to complete a certain amount of orders to win the game."
                         + " Check out the other two tabs too. They contain very"
                         + " important information that you will need to use during the game."
-                        + "\nClick the Overall tab at the button right corner.";
+                        + "\nClick the Overall tab at the botton right corner.";
                 break;
             case 17:
                 stepMessage = "The overall window tells you everything you need to know about money."
                         + "\nClick the Overall tab again to close it.";
                 break;
             case 18:
-                stepMessage = "Very good!  We are almost done. Do you see the "
-                        + "three clocks at the top of the screen?  They represent "
-                        + "something. You can see the information about a specific "
-                        + "object by getting near it and clicking on it or pressing"
-                        + " the Left-Shift button. Click something to see its information.";
+                stepMessage = "Do you see the three clocks at the top of the screen?  The one at the left"
+                        + " is the game time. The Next Order Due clock specifies in how much time the next "
+                        + "order has to be completed."
+                        + " and The Next Purchase indicator tells you the time that is left for a new purchase "
+                        + "of raw material to arrive to the factory. "
+                        + "\nYou can see an object's information by getting near it and clicking on it. "
+                        + "Click something to see its information.";
                 break;
             case 19:
-                stepMessage = "You are done!! To end the tutorial resume the game "
-                        + "and complete the received order. You can see more detailed information "
-                        + "in the user manual. Just go back to the main menu "
-                        + "and click the User Manual button.";
+                stepMessage = "Well done! To end the tutorial, resume the game "
+                        + "and complete the current order. You can see more detailed information "
+                        + "about the game in the user manual. You can access the user manual "
+                        + "by clicking the User Manual button in the main menu. \nHave fun!";
                 break;
             default:
                 stepMessage = "Step " + this.stepNumber + " message is missing.";
@@ -160,9 +186,9 @@ public class Tutorial {
     public int getCurrentStep() {
         return this.stepNumber;
     }
- 
-    public void isLevelStarted(boolean started) {
-        this.isLevelStarted = started;
+
+    public boolean isTutorialCompleted() {
+        return this.isTutorialCompleted;
     }
-    
+     
 }

@@ -160,7 +160,7 @@ public class InitialMenuController implements Controller {
         closePopupLoading(false);
         screen.processAddAndRemoveLayerElements();
         if (isValidated) {
-            if (Params.DEBUG_ON) { //Go straight to the levels menu
+            if (Params.DEBUG_ON && Params.firstRun) { //Go straight to the levels menu
                 Element nextElement = screen.findElementByName("dialogNewGameStage1Menu");
                 NewGame1MenuController loadGameMenu = nextElement.getControl(NewGame1MenuController.class);
                 loadGameMenu.updateControls_stage1();
