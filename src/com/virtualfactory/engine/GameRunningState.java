@@ -288,9 +288,11 @@ public class GameRunningState extends AbstractAppState
     }
     
     public void updatePlayerPosition() {
-        /*
-        if (!isLevelStarted)
-            return; */
+        if (!Params.isLevelStarted) {
+            if (videoCamGUI.isEnabled())
+                videoCamGUI.disable();
+            return;
+        }
 
         if (factorySensors.get("top stairs").isPlayerInRange() || factorySensors.get("bottom stairs").isPlayerInRange())
             handleTransition();
