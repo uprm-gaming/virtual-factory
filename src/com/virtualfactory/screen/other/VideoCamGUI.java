@@ -3,13 +3,14 @@ package com.virtualfactory.screen.other;
 import com.jme3.asset.AssetManager;
 import com.jme3.font.BitmapFont;
 import com.jme3.font.BitmapText;
+import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
- *
+ * This class handles the text displayed by the security cameras.
  * @author Abner Coimbre
  */
 public class VideoCamGUI
@@ -19,10 +20,10 @@ public class VideoCamGUI
     
     public static final String STATIC_CAM = "STATIC CAM 0";
     
-    public static final String FLEXIBLE_CAM_1 = "FLEXIBLE CAM 1";
-    public static final String FLEXIBLE_CAM_2 = "FLEXIBLE CAM 2";
-    public static final String FLEXIBLE_CAM_3 = "FLEXIBLE CAM 3";
-    public static final String FLEXIBLE_CAM_4 = "FLEXIBLE CAM 4";
+    public static final String SECURITY_CAM_1 = "SECURITY CAM 1";
+    public static final String SECURITY_CAM_2 = "SECURITY CAM 2";
+    public static final String SECURITY_CAM_3 = "SECURITY CAM 3";
+    public static final String SECURITY_CAM_4 = "SECURITY CAM 4";
     
     private SimpleDateFormat dateFormat;
     private Calendar calendar;
@@ -51,6 +52,7 @@ public class VideoCamGUI
         camInfo.setName("cam text");
         camInfo.setSize(myFont.getCharSet().getRenderedSize());
         camInfo.setText("");
+        camInfo.setColor(ColorRGBA.Red);
         camInfo.move(1000, 100, 0);
         
         guiNode.attachChild(camInfo);
@@ -69,20 +71,20 @@ public class VideoCamGUI
                 text = STATIC_CAM;
                 break;
             
-            case FLEXIBLE_CAM_1:
-                text = FLEXIBLE_CAM_1;
+            case SECURITY_CAM_1:
+                text = SECURITY_CAM_1;
                 break;
                 
-            case FLEXIBLE_CAM_2:
-                text = FLEXIBLE_CAM_2;
+            case SECURITY_CAM_2:
+                text = SECURITY_CAM_2;
                 break;   
             
-            case FLEXIBLE_CAM_3:
-                text = FLEXIBLE_CAM_3;
+            case SECURITY_CAM_3:
+                text = SECURITY_CAM_3;
                 break;
                 
-            case FLEXIBLE_CAM_4:
-                text = FLEXIBLE_CAM_4;
+            case SECURITY_CAM_4:
+                text = SECURITY_CAM_4;
                 break;
                
             default:
@@ -112,6 +114,7 @@ public class VideoCamGUI
         dateAndTime.setName("date text");
         dateAndTime.setSize(myFont.getCharSet().getRenderedSize());
         dateAndTime.setText("");
+        dateAndTime.setColor(ColorRGBA.Red);
         dateAndTime.move(1000, 50, 0);
         
         guiNode.attachChild(dateAndTime);
