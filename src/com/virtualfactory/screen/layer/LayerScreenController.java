@@ -759,6 +759,8 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
 //                    }
 //                }
                 screen.findElementByName("winSSC_Element").getControl(StorageStationScreenController.class).loadWindowControl(gameEngine,Params.stationList,null);
+                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 13)
+                    Params.tutorial.nextStep();
             }else
             if (currentDynamicButtonSelected.contains("Machine")){
 //                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapUserMachineByOperation().size());
@@ -802,6 +804,8 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
 //                    position++;
 //                }
                 screen.findElementByName("winPC_Element").getControl(PartScreenController.class).loadWindowControl(gameEngine, Params.partList, null);
+                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 12)
+                    Params.tutorial.nextStep();
             }else
             if (currentDynamicButtonSelected.contains("Supplier")){
 //                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapGameSupplier().size());
@@ -811,6 +815,8 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
 //                    position++;
 //                }
                 screen.findElementByName("winSuC_Element").getControl(SupplierScreenController.class).loadWindowControl(gameEngine, Params.supplierList, null);
+                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 11)
+                    Params.tutorial.nextStep();
             }
         }
     }

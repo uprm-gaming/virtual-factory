@@ -161,10 +161,11 @@ public class GameEngine extends AbstractAppState {
         deleteDefaultControls();
 
         String[] mappings = {"Picking", "Toggle Dashboard", 
-                             "Toggle Full Screen", "Mouse Picking"};
+                             "Toggle Full Screen", "Mouse Picking", "Tutorial Step Forward"};
 
         Trigger[] triggers = {new KeyTrigger(KeyInput.KEY_LSHIFT), new KeyTrigger(KeyInput.KEY_RSHIFT),
-                              new KeyTrigger(KeyInput.KEY_F1), new MouseButtonTrigger(MouseInput.BUTTON_LEFT)};
+                              new KeyTrigger(KeyInput.KEY_F1), new MouseButtonTrigger(MouseInput.BUTTON_LEFT), 
+                              new KeyTrigger(KeyInput.KEY_SPACE)};
 
         for (int i = 0; i < mappings.length; i++) {
             inputManager.addMapping(mappings[i], triggers[i]);
@@ -215,6 +216,12 @@ public class GameEngine extends AbstractAppState {
                 case "Toggle Dashboard":
                     if (!keyPressed)
                         toggleDashBoard();
+                    break;
+
+                case "Tutorial Step Forward":
+                    if (!keyPressed)
+                        if (Params.isTutorialLevel)
+                            Params.tutorial.nextStep();
                     break;
 
                 default:
@@ -411,10 +418,16 @@ public class GameEngine extends AbstractAppState {
     public void updateGameDataAndLogic() {
         if (!this.getLayerScreenController().getPauseStatus() && gameSounds.machineSoundPlaying())
             this.gameSounds.pauseSound(Sounds.MachineWorking);
-
-        if (!isLevelStarted)
+        
+        if (!isLevelStarted) {
+            if (Params.isLevelStarted)
+                Params.isLevelStarted = false;
             return;
-
+        }
+        
+        if (!Params.isLevelStarted)
+            Params.isLevelStarted = true;
+        
         if (currentSystemStatus.equals(Status.Busy))
             currentSystemTime += (double) ((System.currentTimeMillis() - currentTempSystemTime) / 1000.0);
 
@@ -469,9 +482,11 @@ public class GameEngine extends AbstractAppState {
     private void toggleDashBoard() {
         if (isDashboardVisible)
             niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").hide();
-        else
+        else {
             niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").show();
-        
+            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 14)
+                Params.tutorial.nextStep();
+        }
         isDashboardVisible = !isDashboardVisible;
     }
 
@@ -852,6 +867,8 @@ public class GameEngine extends AbstractAppState {
 
             loadWindowControl(shootableObject);
             System.out.println("######## SHOOT: " + shootableObject);
+            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 18)
+                Params.tutorial.nextStep();
         }
     }
 
