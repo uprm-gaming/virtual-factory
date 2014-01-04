@@ -19,7 +19,6 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.PointLight;
-import com.jme3.post.filters.PosterizationFilter;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
@@ -93,6 +92,7 @@ public class GameRunningState extends AbstractAppState
     private HashMap<String, Sensor> factorySensors;
     private AmbientLight ambient;
     private VideoCamGUI videoCamGUI;
+    private AudioNode cameraMovingSound;
     
     public GameRunningState(BulletAppState bulletAppState)
     {
@@ -113,6 +113,8 @@ public class GameRunningState extends AbstractAppState
         this.cam = this.app.getCamera();
         
         createFactory();
+        
+        initSoundEffects();
         
         loadPlayerKeyControls();
         
@@ -167,6 +169,12 @@ public class GameRunningState extends AbstractAppState
         bulletAppState.getPhysicsSpace().add(player);
         // ----------
     }
+    
+    private void initSoundEffects()
+    {
+        cameraMovingSound = new AudioNode(assetManager, "Sounds/cameraMovingSound.wav", false);
+        cameraMovingSound.setPositional(false);
+    }
 
     private void loadPlayerKeyControls()
     {
@@ -207,7 +215,7 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case "move left":
-                    moveLeft = isKeyPressed;
+                    moveLeft = isKeyPressed;     
                     break;
 
                 case "move right":
@@ -216,18 +224,22 @@ public class GameRunningState extends AbstractAppState
 
                 case "look up":
                     lookUp = isKeyPressed;
+                    handleCameraMovingSound(lookUp);
                     break;
 
                 case "look down":
                     lookDown = isKeyPressed;
+                    handleCameraMovingSound(lookDown);
                     break;
 
                 case "look left":
                     lookLeft = isKeyPressed;
+                    handleCameraMovingSound(lookLeft);
                     break;
 
                 case "look right":
-                    lookRight = isKeyPressed;
+                    lookRight = isKeyPressed;                   
+                    handleCameraMovingSound(lookRight);                  
                     break;
                     
                 case "toggle top view":
@@ -258,6 +270,17 @@ public class GameRunningState extends AbstractAppState
             }
         }
     };
+    
+    public void handleCameraMovingSound(boolean isKeyPressed)
+    {
+        if (isKeyPressed && isSecurityCamActive()) 
+            cameraMovingSound.play();
+        else 
+        {
+            if (!isThereLookKeyPressed())
+                cameraMovingSound.stop();
+        }
+    }
     
     @Override
     public void update(float tpf) {
@@ -528,12 +551,9 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 1:
-                    videoCamGUI.showCamInfo(VideoCamGUI.FLEXIBLE_CAM_1);
+                    videoCamGUI.showCamInfo(VideoCamGUI.SECURITY_CAM_1);
                     videoCamGUI.moveDateAndTimeInfo(100, 50);
                     videoCamGUI.moveCameraInfo(100, 100);
-                    
-                    changeOutsideWorldColor(ColorRGBA.Brown);
-                    changeLampColor(ColorRGBA.Brown);
                     
                     Params.camMaxY = Params.securityCamsMaxY;
                     Params.camMinY = Params.securityCamsMinY;
@@ -548,10 +568,7 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 2:
-                    videoCamGUI.showCamInfo(VideoCamGUI.FLEXIBLE_CAM_2);
-                    
-                    changeOutsideWorldColor(ColorRGBA.Blue);
-                    changeLampColor(ColorRGBA.Blue);
+                    videoCamGUI.showCamInfo(VideoCamGUI.SECURITY_CAM_2);
                     
                     Params.camMaxX = Params.playerMaxX;
                     Params.camMinX = Params.playerMinX;
@@ -564,10 +581,7 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 3:
-                    videoCamGUI.showCamInfo(VideoCamGUI.FLEXIBLE_CAM_3);
-                    
-                    changeOutsideWorldColor(ColorRGBA.DarkGray);
-                    changeLampColor(ColorRGBA.DarkGray);
+                    videoCamGUI.showCamInfo(VideoCamGUI.SECURITY_CAM_3);
                     
                     Params.camMaxX = 100f;
                     Params.camMinX = 0f;
@@ -580,10 +594,7 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case 4:
-                    videoCamGUI.showCamInfo(VideoCamGUI.FLEXIBLE_CAM_4);
-                    
-                    changeOutsideWorldColor(ColorRGBA.Pink);
-                    changeLampColor(ColorRGBA.Pink);
+                    videoCamGUI.showCamInfo(VideoCamGUI.SECURITY_CAM_4);
                     
                     Params.camMaxX = Params.playerMaxX;
                     Params.camMinX = Params.playerMinX;
@@ -606,9 +617,6 @@ public class GameRunningState extends AbstractAppState
             videoCamGUI.disable();
             playSoundEffect("Sounds/exitTopView.wav");
             
-            changeOutsideWorldColor(ColorRGBA.DarkGray);
-            changeLampColor(ColorRGBA.White);
-            
             isTopViewEnabled = false;
             cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
             flyCam.setMoveSpeed(100);
@@ -624,20 +632,19 @@ public class GameRunningState extends AbstractAppState
         }
     }
     
-    public void changeOutsideWorldColor(ColorRGBA color) 
-    {
-        ambient.setColor(color.mult(5f));
-    }
-    
-    public void changeLampColor(ColorRGBA color)
-    {
-        lamp1.setColor(color);
-        lamp2.setColor(color);
-    }
-    
     public boolean isTopViewEnabled()
     {
         return isTopViewEnabled;
+    }
+    
+    public boolean isSecurityCamActive()
+    {
+        return isTopViewEnabled && viewNumber > 1;
+    }
+    
+    public boolean isThereLookKeyPressed()
+    {
+        return lookUp || lookDown || lookLeft || lookRight;
     }
     
     public void setTopViewEnabled(boolean enabled)
