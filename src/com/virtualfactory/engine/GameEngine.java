@@ -220,7 +220,7 @@ public class GameEngine extends AbstractAppState {
 
                 case "Tutorial Step Forward":
                     if (!keyPressed)
-                        if (Params.isTutorialLevel)
+                        if (Params.isTutorialLevel && Params.DEBUG_ON)
                             Params.tutorial.nextStep();
                     break;
 
@@ -264,10 +264,14 @@ public class GameEngine extends AbstractAppState {
             this.getArrGameSounds().clear();
             this.gameSounds.stopSound(Sounds.Background);
             gameData.createGame(tempGame);
-        } else {
+            stateManager.detach(stateManager.getState(GameRunningState.class));
+            stateManager.attach(new GameRunningState(bulletAppState));
+            
+        } 
+        else {
             gameData.loadGame(tempGame);
         }
-
+        
         manageEvents = new ManageEvents(this, gameData);
 
         gameData.updateTimeOrders();
@@ -333,7 +337,6 @@ public class GameEngine extends AbstractAppState {
     }
 
     private void loadElementsToDisplay(GameType gameType) {
-        stateManager.attach(new GameRunningState(bulletAppState));
         
         E_Terrain tempTerrain = gameData.getMapTerrain();
 
