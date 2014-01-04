@@ -288,12 +288,7 @@ public class GameRunningState extends AbstractAppState
     }
     
     public void updatePlayerPosition() {
-        
-        System.out.println(isPlayerUpstairs);
-        
-        if (this.fadeFilter.getValue() < 1)
-            System.out.println(this.fadeFilter.getValue());
-        
+                        
         if (!Params.isLevelStarted) {
             if (videoCamGUI.isEnabled())
                 videoCamGUI.disable();
@@ -354,9 +349,7 @@ public class GameRunningState extends AbstractAppState
     private void handleTransition() {
         if (fadeFilter.getDuration() < 1.5f)
             fadeFilter.setDuration(1.5f);
-        
-//        isPlayerUpstairs = player.getPhysicsLocation().getY() > 50f;
-        
+                
         boolean isFadeEffectStarted = fadeFilter.getValue() < 1;
 
         if (!isFadeEffectStarted) {
