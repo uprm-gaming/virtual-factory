@@ -175,7 +175,7 @@ public class Tutorial {
                         + "by clicking the User Manual button in the main menu. \nHave fun!";
                 break;
             default:
-                stepMessage = "Step " + this.stepNumber + " message is missing.";
+                stepMessage = "Step " + this.stepNumber + "'s message is missing.";
                 
         }
         

@@ -110,7 +110,7 @@ public class PurchaseStrategy implements EventStrategy {
         tempOrderPoint = dataPurchase.getOrderPoint();
         tempOrderQuantity = dataPurchase.getOrderQuantity();
         if(dock !=null && partToBuy !=null && bucket !=null){
-            if(partToBuy.getCurrentStock() +bucket.getUnitsToArrive() > tempOrderPoint /*|| dock.getStatus()==Status.Busy*/
+            if(partToBuy.getCurrentStock() + bucket.getUnitsToArrive() > tempOrderPoint /*|| dock.getStatus()==Status.Busy*/
                    || bucket.getSize() + bucket.getUnitsToArrive() + tempOrderQuantity > bucket.getCapacity()){
 //                System.out.println("No need to make Purchase #" +dataPurchase.getIdPurchase()+ ".");
 //                validateMessage = "No need to make Purchase #" +dataPurchase.getIdPurchase()+ ".";
@@ -162,7 +162,7 @@ public class PurchaseStrategy implements EventStrategy {
             this.bucket.addUnitsToArrive(tempOrderQuantity);
         }catch(ExceededCapacityException e2){
             System.out.println(e2);
-            System.out.println("Problem with executeAlgorithm on PurchaseStrategy.");
+            System.out.println("Problem with execute algorithm on PurchaseStrategy.");
         }
         double timeCalculated;
         int newPurchaseTime;

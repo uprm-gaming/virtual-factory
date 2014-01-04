@@ -111,7 +111,7 @@ public class GameRunningState extends AbstractAppState
         this.rootNode = this.app.getRootNode();
         this.flyCam = this.app.getFlyByCamera();
         this.cam = this.app.getCamera();
-        
+        this.isPlayerUpstairs = true;
         createFactory();
         
         initSoundEffects();
@@ -288,13 +288,20 @@ public class GameRunningState extends AbstractAppState
     }
     
     public void updatePlayerPosition() {
+        
+        System.out.println(isPlayerUpstairs);
+        
+        if (this.fadeFilter.getValue() < 1)
+            System.out.println(this.fadeFilter.getValue());
+        
         if (!Params.isLevelStarted) {
             if (videoCamGUI.isEnabled())
                 videoCamGUI.disable();
             return;
         }
 
-        if (factorySensors.get("top stairs").isPlayerInRange() || factorySensors.get("bottom stairs").isPlayerInRange())
+        if (factorySensors.get("top stairs").isPlayerInRange() || factorySensors.get("bottom stairs").isPlayerInRange()
+                || this.fadeFilter.getValue() < 1)
             handleTransition();
 
         if (lookUp)
@@ -348,7 +355,7 @@ public class GameRunningState extends AbstractAppState
         if (fadeFilter.getDuration() < 1.5f)
             fadeFilter.setDuration(1.5f);
         
-        isPlayerUpstairs = factorySensors.get("top stairs").isPlayerInRange();
+//        isPlayerUpstairs = player.getPhysicsLocation().getY() > 50f;
         
         boolean isFadeEffectStarted = fadeFilter.getValue() < 1;
 
@@ -369,7 +376,7 @@ public class GameRunningState extends AbstractAppState
                 player.warp(new Vector3f(121.2937f, 12.65f, -309.41315f));
                 cam.setRotation(new Quaternion(0.04508071f, -0.4710204f, 0.02474963f, 0.8806219f));
                 isPlayerUpstairs = false;
-                if (Params.tutorial.getCurrentStep() == 0)
+                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 0)
                     Params.tutorial.nextStep();
             }
             else {
