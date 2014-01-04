@@ -17,6 +17,7 @@ public class Params {
     public static boolean isTutorialLevel = false;
     public static boolean firstRun = true;
     public static Tutorial tutorial;
+    public static boolean isLevelStarted = false;
     
     public static final String ControlsDescription = ""
             + "A: move left\n\n"

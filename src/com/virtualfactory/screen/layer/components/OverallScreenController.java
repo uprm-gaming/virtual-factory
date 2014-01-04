@@ -452,11 +452,15 @@ public class OverallScreenController implements Controller {
     {
         nifty.getScreen("layerScreen").findElementByName("winOverallControl").hide();
         nifty.getScreen("layerScreen").findElementByName("OverallLabel").show();
-        
+        if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 17)
+            Params.tutorial.nextStep();
     }
     public void ShowWindow(){
         nifty.getScreen("layerScreen").findElementByName("winOverallControl").show();
         nifty.getScreen("layerScreen").findElementByName("OverallLabel").hide();
+        if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 16)
+            Params.tutorial.nextStep();
+
     }
     
     public void refresh(boolean bool) {

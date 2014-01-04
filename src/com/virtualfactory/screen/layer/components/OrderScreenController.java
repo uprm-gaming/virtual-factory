@@ -25,6 +25,7 @@ import com.virtualfactory.utils.MessageType;
 import com.virtualfactory.utils.Messages;
 import com.virtualfactory.utils.OrderStates;
 import com.virtualfactory.utils.Pair;
+import com.virtualfactory.utils.Params;
 import com.virtualfactory.utils.Sounds;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -316,6 +317,8 @@ public class OrderScreenController implements Controller {
     {
         nifty.getScreen("layerScreen").findElementByName("winOrderControl").show();  
         nifty.getScreen("layerScreen").findElementByName("OrderLabel").hide();
-
+        if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 15)
+            Params.tutorial.nextStep();
+        
     }
 }
