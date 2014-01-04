@@ -53,7 +53,7 @@ public class VideoCamGUI
         camInfo.setSize(myFont.getCharSet().getRenderedSize());
         camInfo.setText("");
         camInfo.setColor(ColorRGBA.Red);
-        camInfo.move(1000, 100, 0);
+        camInfo.move(100, 100, 0);
         
         guiNode.attachChild(camInfo);
     }
@@ -99,12 +99,7 @@ public class VideoCamGUI
     {
         camInfo.setCullHint(CullHint.Always);
     }
-    
-    public void moveCameraInfo(float xPos, float yPos)
-    {
-        camInfo.setLocalTranslation(xPos, yPos, 0);
-    }
-    
+
     private void initDateAndTime()
     {
         dateFormat = new SimpleDateFormat("MM/dd/yyyy   HH:mm:ss");
@@ -115,7 +110,7 @@ public class VideoCamGUI
         dateAndTime.setSize(myFont.getCharSet().getRenderedSize());
         dateAndTime.setText("");
         dateAndTime.setColor(ColorRGBA.Red);
-        dateAndTime.move(1000, 50, 0);
+        dateAndTime.move(100, 50, 0);
         
         guiNode.attachChild(dateAndTime);
     }
@@ -129,17 +124,6 @@ public class VideoCamGUI
     public void hideDateAndTime()
     {
         dateAndTime.setCullHint(CullHint.Always);
-    }
-    
-    public void moveDateAndTimeInfo(float xPos, float yPos)
-    {
-        dateAndTime.setLocalTranslation(xPos, yPos, 0);
-    }
-    
-    public void resetPosition()
-    {
-        camInfo.move(1000, 100, 0);
-        dateAndTime.move(1000, 50, 0);
     }
     
     public void updateDateAndTime()
@@ -166,7 +150,6 @@ public class VideoCamGUI
     {
         showCamInfo("");
         showDateAndTime();
-        resetPosition();
     }
     
     public boolean isEnabled()

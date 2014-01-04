@@ -552,9 +552,7 @@ public class GameRunningState extends AbstractAppState
 
                 case 1:
                     videoCamGUI.showCamInfo(VideoCamGUI.SECURITY_CAM_1);
-                    videoCamGUI.moveDateAndTimeInfo(100, 50);
-                    videoCamGUI.moveCameraInfo(100, 100);
-                    
+
                     Params.camMaxY = Params.securityCamsMaxY;
                     Params.camMinY = Params.securityCamsMinY;
                     Params.camMaxX = Params.cam1MaxX;
