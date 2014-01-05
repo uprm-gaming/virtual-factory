@@ -161,20 +161,18 @@ public class Narrator extends AbstractAppState
         int pos = text2.indexOf("\n");
         
         while (pos > 0) {
-            s.add(text2.substring(0, pos));
+            System.out.println("---" + text2);
+            s.add(text2.substring(0, pos ));
             text2 = text2.substring(pos);
-            pos = text2.indexOf("\n");
+            pos = text2.indexOf('\n');
             i++;
         }
+        s.add(text2);
         
         int length = 0;
-        if (s.isEmpty())
-            length = text.length();
-        else {
-            for(String string: s)
-                if (length < string.length())
-                    length = string.length();
-        }
+        for(String string: s)
+            if (length < string.length())
+                length = string.length();
         
         width = narratorText.getSize()*length - 60;
         if (width > 1280 - 325*2)

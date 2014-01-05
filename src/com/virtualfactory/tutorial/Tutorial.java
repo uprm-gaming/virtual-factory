@@ -77,7 +77,9 @@ public class Tutorial {
                 break;
             case 2:
                 stepMessage = "To start the game, you will need to complete "
-                        + "the checklist.";
+                        + "the checklist. It is highly recomended to complete this part using the User Manual. "
+                        + "You can access the user manual by clicking the User"
+                        + " Manual button in the main menu.";
                 break;
             case 3:
                 stepMessage = "Now you are ready to start!\nPress the start "
@@ -171,8 +173,7 @@ public class Tutorial {
             case 19:
                 stepMessage = "Well done! To end the tutorial, resume the game "
                         + "and complete the current order. You can see more detailed information "
-                        + "about the game in the user manual. You can access the user manual "
-                        + "by clicking the User Manual button in the main menu. \nHave fun!";
+                        + "about the game in the user manual. \nHave fun!";
                 break;
             default:
                 stepMessage = "Step " + this.stepNumber + "'s message is missing.";

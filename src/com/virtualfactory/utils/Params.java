@@ -1,6 +1,7 @@
 package com.virtualfactory.utils;
 
 import com.jme3.math.Vector3f;
+import com.jme3.post.filters.FadeFilter;
 import com.virtualfactory.narrator.Narrator;
 import com.virtualfactory.tutorial.Tutorial;
 
@@ -38,12 +39,14 @@ public class Params {
             + "\n";
     
     public static boolean topViewAvailable = true;
+    public static boolean isTopViewEnabled = false;
     public static int viewNumber = 0;
     public static final float playerGravity = 120;
     public static float flyCamRotationSpeed = 0;
     public static Vector3f camAxesLeft = null;
     public static Vector3f camAxesUp = null;
     public static Vector3f camAxesDir = null;
+    public static FadeFilter fadeFilter = null;
     public static float rotationSpeed = 0.01f;
     public static float camMaxX = 100f;
     public static float camMinX = -100f;

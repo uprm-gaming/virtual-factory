@@ -68,7 +68,6 @@ public class GameRunningState extends AbstractAppState
     private boolean lookRightD;
     
     private boolean isDebugCamEnabled;
-    private boolean isTopViewEnabled;
     private boolean isLightingEnabled;
     
     private boolean isPlayerUpstairs = true;       
@@ -79,7 +78,6 @@ public class GameRunningState extends AbstractAppState
     private Vector3f walkDirection = new Vector3f(0, 0, 0);
     
     private FilterPostProcessor fpp;
-    private FadeFilter fadeFilter;
     private ViewPort viewPort;
     private Node factory;
     
@@ -88,13 +86,13 @@ public class GameRunningState extends AbstractAppState
     
     private PointLight lamp1;
     private PointLight lamp2;
-    private int viewNumber;
     
     private Narrator gameNarrator;
     
     private HashMap<String, Sensor> factorySensors;
     private VideoCamGUI videoCamGUI;
     private AudioNode cameraMovingSound;
+    private boolean isKilled = false;
     
     public GameRunningState(BulletAppState bulletAppState)
     {
@@ -127,8 +125,8 @@ public class GameRunningState extends AbstractAppState
     private void createFactory() 
     {
         fpp = new FilterPostProcessor(assetManager);
-        fadeFilter = new FadeFilter(1.5f);
-        fpp.addFilter(fadeFilter);
+        Params.fadeFilter = new FadeFilter(1.5f);
+        fpp.addFilter(Params.fadeFilter);
         viewPort.addProcessor(fpp);
 
         flyCam.setMoveSpeed(100);
@@ -211,6 +209,9 @@ public class GameRunningState extends AbstractAppState
         @Override
         public void onAction(String name, boolean isKeyPressed, float tpf)
         {
+            if (isKilled)
+                return;
+            
             switch (name)
             {
                 case "move forward":
@@ -297,7 +298,8 @@ public class GameRunningState extends AbstractAppState
     
     @Override
     public void update(float tpf) {
-        updatePlayerPosition();
+        if (!isKilled)
+            updatePlayerPosition();
     }
     
     public void updatePlayerPosition() {
@@ -307,9 +309,11 @@ public class GameRunningState extends AbstractAppState
                 videoCamGUI.disable();
             return;
         }
+        
+//        System.out.println(Params.viewNumber);
 
         if (factorySensors.get("top stairs").isPlayerInRange() || factorySensors.get("bottom stairs").isPlayerInRange()
-                || this.fadeFilter.getValue() < 1)
+                || (!Params.isTopViewEnabled && Params.fadeFilter.getValue() < 1))
             handleTransition();
 
         if (lookUp)
@@ -330,9 +334,9 @@ public class GameRunningState extends AbstractAppState
         if (lookRightD)
             rotateCamera(-Params.rotationSpeed, new Vector3f(0,1,0));
 
-        if (isTopViewEnabled || isDebugCamEnabled) {
-            if (fadeFilter.getValue() <= 0)
-                fadeFilter.fadeIn();
+        if (Params.isTopViewEnabled || isDebugCamEnabled) {
+            if (Params.fadeFilter.getValue() <= 0)
+                Params.fadeFilter.fadeIn();
             
             if (!videoCamGUI.getDisplayedDateAndTime().equals(videoCamGUI.getUpdatedDateAndTime()))
                 videoCamGUI.updateDateAndTime();
@@ -356,7 +360,7 @@ public class GameRunningState extends AbstractAppState
         if (moveRight)
             walkDirection.addLocal(camLeft.negate());
 
-        if (this.fadeFilter.getValue() == 1)
+        if (Params.fadeFilter.getValue() == 1)
             player.setWalkDirection(walkDirection); // walk!
         cam.setLocation(player.getPhysicsLocation());
         
@@ -367,17 +371,16 @@ public class GameRunningState extends AbstractAppState
     }
     
     private void handleTransition() {
-        if (isTopViewEnabled)
-            return;
         
-        if (fadeFilter.getDuration() < 1.5f)
-            fadeFilter.setDuration(1.5f);
+        
+        if (Params.fadeFilter.getDuration() < 1.5f)
+            Params.fadeFilter.setDuration(1.5f);
                 
-        boolean isFadeEffectStarted = fadeFilter.getValue() < 1;
+        boolean isFadeEffectStarted = Params.fadeFilter.getValue() < 1;
 
         if (!isFadeEffectStarted) {
             playerSpeed = 0;
-            fadeFilter.fadeOut();
+            Params.fadeFilter.fadeOut();
 
             AudioNode footsteps;
             footsteps = new AudioNode(assetManager, isPlayerUpstairs ? "Sounds/footsteps1.wav" : "Sounds/footsteps2.wav", false);
@@ -385,7 +388,7 @@ public class GameRunningState extends AbstractAppState
             footsteps.play();
         }
 
-        boolean isFadeEffectFinished = fadeFilter.getValue() <= 0;
+        boolean isFadeEffectFinished = Params.fadeFilter.getValue() <= 0;
 
         if (isFadeEffectFinished) {
             if (isPlayerUpstairs) {
@@ -403,7 +406,7 @@ public class GameRunningState extends AbstractAppState
                 isPlayerUpstairs = true;
                 
             }
-            fadeFilter.fadeIn();
+            Params.fadeFilter.fadeIn();
             playerSpeed = 1f;
         }
     }
@@ -514,12 +517,12 @@ public class GameRunningState extends AbstractAppState
     private void rotateCamera(float value, Vector3f axis) 
     {
         
-        if (this.fadeFilter.getValue() < 1) //don't rotate if screen is fading in/out
+        if (Params.fadeFilter.getValue() < 1) //don't rotate if screen is fading in/out
             return;
         
         Matrix3f matrix = new Matrix3f();
 
-        if (isTopViewEnabled)
+        if (Params.isTopViewEnabled)
             value = value * 0.3f;
 
         matrix.fromAngleNormalAxis(flyCam.getRotationSpeed() * value, axis);
@@ -556,26 +559,26 @@ public class GameRunningState extends AbstractAppState
     private void toggleTopView() 
     {
         
-        if (this.fadeFilter.getValue() < 1)
+        if (Params.fadeFilter.getValue() < 1)
             return;
         
-        if (Params.topViewAvailable && viewNumber != 5) {
-            isTopViewEnabled = true;
+        if (Params.topViewAvailable && Params.viewNumber != 5) {
+            Params.isTopViewEnabled = true;
             
-            if (fadeFilter.getDuration() > 0.25f)
-                fadeFilter.setDuration(0.25f);
+            if (Params.fadeFilter.getDuration() > 0.25f)
+                Params.fadeFilter.setDuration(0.25f);
             
-            if (viewNumber == 0) {
+            if (Params.viewNumber == 0) {
                 playSoundEffect("Sounds/enteredTopView.wav");
             } else {
-                fadeFilter.fadeOut();
+                Params.fadeFilter.fadeOut();
                 playSoundEffect("Sounds/cameraSwitch.wav");
             }
 
             if (videoCamGUI.isDisabled())
                 videoCamGUI.enable();
             
-            switch(viewNumber) {
+            switch(Params.viewNumber) {
                 case 0:
                     videoCamGUI.showCamInfo(VideoCamGUI.STATIC_CAM);
                     
@@ -645,22 +648,21 @@ public class GameRunningState extends AbstractAppState
                     break;
             }
 
-            viewNumber = (viewNumber + 1) % 6;
+            Params.viewNumber = (Params.viewNumber + 1) % 6;
             flyCam.setMoveSpeed(0);
-//            flyCam.setRotationSpeed(0);
             factory.getChild("Beams-Metal").setCullHint(Spatial.CullHint.Always);
 
         }
-        else if (Params.topViewAvailable && isTopViewEnabled) {
+        else if (Params.topViewAvailable && Params.isTopViewEnabled) {
             videoCamGUI.disable();
             playSoundEffect("Sounds/exitTopView.wav");
             
-            isTopViewEnabled = false;
+            Params.isTopViewEnabled = false;
             cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
             flyCam.setMoveSpeed(100);
             flyCam.setRotationSpeed(Params.flyCamRotationSpeed);
             factory.getChild("Beams-Metal").setCullHint(Spatial.CullHint.Never);
-            viewNumber = (viewNumber + 1)%6;
+            Params.viewNumber = (Params.viewNumber + 1)%6;
             Params.camMaxX = Params.playerMaxX;
             Params.camMinX = Params.playerMinX;
             Params.camMaxY = Params.playerMaxY;
@@ -672,12 +674,12 @@ public class GameRunningState extends AbstractAppState
     
     public boolean isTopViewEnabled()
     {
-        return isTopViewEnabled;
+        return Params.isTopViewEnabled;
     }
     
     public boolean isSecurityCamActive()
     {
-        return isTopViewEnabled && viewNumber > 1;
+        return Params.isTopViewEnabled && Params.viewNumber > 1;
     }
     
     public boolean isThereLookKeyPressed()
@@ -687,16 +689,20 @@ public class GameRunningState extends AbstractAppState
     
     public void setTopViewEnabled(boolean enabled)
     {
-        isTopViewEnabled = enabled;
+        Params.isTopViewEnabled = enabled;
     }
     
     public int getViewNumber() 
     {
-        return viewNumber;
+        return Params.viewNumber;
     }
     
     public void setViewNumber(int number)
     {
-        viewNumber = number;
+        Params.viewNumber = number;
+    }
+    
+    public void kill() {
+        isKilled = true;
     }
 }

@@ -22,6 +22,7 @@ import com.jme3.input.controls.*;
 import com.jme3.material.Material;
 import com.jme3.math.*;
 import com.jme3.niftygui.NiftyJmeDisplay;
+import com.jme3.post.filters.FadeFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.*;
@@ -46,6 +47,8 @@ import de.lessvoid.nifty.tools.SizeValue;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GameEngine extends AbstractAppState {
 
@@ -94,6 +97,7 @@ public class GameEngine extends AbstractAppState {
     public SimpleApplication jmonkeyApp;
     private AppStateManager stateManager;
     private AssetManager assetManager;
+    private GameRunningState gameState;
     private Node guiNode;
     private Node rootNode;
     private InputManager inputManager;
@@ -141,6 +145,7 @@ public class GameEngine extends AbstractAppState {
         guiViewPort = jmonkeyApp.getGuiViewPort();
         guiNode = jmonkeyApp.getGuiNode();
         rootNode = jmonkeyApp.getRootNode();
+        
     }
 
     private void loadGameData() {
@@ -263,15 +268,23 @@ public class GameEngine extends AbstractAppState {
         updateCursorIcon(1);
 
         flushPreviousGame();
-
+        
         if (newGame) {
             this.getArrGameSounds().clear();
             this.gameSounds.stopSound(Sounds.Background);
             gameData.createGame(tempGame);
-            stateManager.detach(stateManager.getState(GameRunningState.class));
-            stateManager.attach(new GameRunningState(bulletAppState));
             
-        } 
+            if (stateManager.hasState(gameState))  {
+                gameState = new GameRunningState(bulletAppState);
+                gameState.kill();
+            }
+            else{
+                gameState = new GameRunningState(bulletAppState);
+            }
+            
+             stateManager.attach(gameState);
+           
+        }
         else {
             gameData.loadGame(tempGame);
         }
@@ -285,7 +298,7 @@ public class GameEngine extends AbstractAppState {
         initSimPack();
 
         loadElementsToDisplay(newGame ? GameType.New : GameType.Load);
-
+        
         enableLayerScreen();
 
         updateCursorIcon(0);
@@ -375,9 +388,11 @@ public class GameEngine extends AbstractAppState {
         }
         createShowSpotObject();
 
-        if (stateManager.getState(GameRunningState.class).isTopViewEnabled()) {
-            stateManager.getState(GameRunningState.class).setTopViewEnabled(false);
-            stateManager.getState(GameRunningState.class).setViewNumber(0);
+        if (Params.isTopViewEnabled) {
+            Params.isTopViewEnabled = false;
+            Params.viewNumber = 0;
+            Params.fadeFilter.setValue(1);
+            Params.fadeFilter = new FadeFilter(1.5f);
             cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
             flyCam.setMoveSpeed(100);
             Params.camMaxX = Params.playerMaxX;
