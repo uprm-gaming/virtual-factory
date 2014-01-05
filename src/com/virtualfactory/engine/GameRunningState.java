@@ -18,7 +18,6 @@ import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.light.AmbientLight;
 import com.jme3.light.PointLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
@@ -94,7 +93,6 @@ public class GameRunningState extends AbstractAppState
     private Narrator gameNarrator;
     
     private HashMap<String, Sensor> factorySensors;
-    private AmbientLight ambient;
     private VideoCamGUI videoCamGUI;
     private AudioNode cameraMovingSound;
     
@@ -444,11 +442,6 @@ public class GameRunningState extends AbstractAppState
         lamp2.setColor(color);
         lamp2.setRadius(lamp1.getRadius());
         rootNode.addLight(lamp2);
-        
-        /* Atmosphere */
-        ambient = new AmbientLight();
-        ambient.setColor(ColorRGBA.DarkGray.mult(1.8f));
-        rootNode.addLight(ambient);
     }
 
     private void createInvisibleWalls() {
