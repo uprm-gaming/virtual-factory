@@ -490,17 +490,19 @@ public class GameRunningState extends AbstractAppState
     {    
         String[] sensorNames = {"top stairs", "bottom stairs", 
                                 "staff zone", "cutting process",
-                                "raw material"};
+                                "raw material", "finished goods"};
         
         Vector3f[] sensorSizes = {new Vector3f(15, 10, 5), new Vector3f(15, 10, 5),
                                   new Vector3f(25, 10, 10), new Vector3f(10, 10, 25),
-                                  new Vector3f(10, 10, 25)};
+                                  new Vector3f(10, 10, 25), new Vector3f(5, 10, 25)};
         
         Vector3f[] sensorLocations = {new Vector3f(134.05f, 59.06f, -285.02f), new Vector3f(107.42f, 12.67f, -284.9f),
                                       new Vector3f(0, 8, -290), new Vector3f(42.6f, 8, -200),
-                                      new Vector3f(34.600008f, 8.0f, -92.40164f)};
+                                      new Vector3f(34.600008f, 8.0f, -92.40164f), new Vector3f(115.59933f, 8.0f, -146.40082f)};
         
         factorySensors = new HashMap<>();
+        
+        bulletAppState.setDebugEnabled(true);
         
         for (int i = 0; i < sensorNames.length; i++)
             factorySensors.put(sensorNames[i], new Sensor(sensorSizes[i], sensorLocations[i], bulletAppState));
@@ -512,15 +514,18 @@ public class GameRunningState extends AbstractAppState
 
         Spatial[] bulletinBoards = {assetManager.loadModel(path + "staffZone.j3o"),
                                     assetManager.loadModel(path + "cuttingProcess1.j3o"),
-                                    assetManager.loadModel(path + "rawMaterial.j3o")};
+                                    assetManager.loadModel(path + "rawMaterial.j3o"),
+                                    assetManager.loadModel(path + "finishedGoods.j3o")};
         
         bulletinBoards[0].setName("staff zone");
         bulletinBoards[1].setName("cutting process");
         bulletinBoards[2].setName("raw material");
+        bulletinBoards[3].setName("finished goods");
         
         Vector3f[] bulletinBoardLocations = {new Vector3f(11.2f, 6.7999988f, -321.1999f),
                                              new Vector3f(-16.799f, 6.7999988f, -200.598f), 
-                                             new Vector3f(-23.200016f, 7.599997f, -100.79961f)};
+                                             new Vector3f(-23.200016f, 7.599997f, -100.79961f),
+                                             new Vector3f(52.000103f, 7.599997f, -151.19884f)};
         
         for (int i = 0; i < bulletinBoards.length; i++)
         {
@@ -531,7 +536,7 @@ public class GameRunningState extends AbstractAppState
             if (i > 0) // Staff zone is the only one that isn't rotated around the Z axis
                 bulletinBoards[i].rotate(new Quaternion().fromAngleAxis(FastMath.DEG_TO_RAD * -90, Vector3f.UNIT_Z));
             
-            bulletinBoards[i].addControl(new BulletinBoardControl(assetManager, factorySensors.get(bulletinBoards[i].getName())));
+            bulletinBoards[i].addControl(new BulletinBoardControl(factorySensors.get(bulletinBoards[i].getName())));
             rootNode.attachChild(bulletinBoards[i]);
         }
     }
