@@ -501,9 +501,7 @@ public class GameRunningState extends AbstractAppState
                                       new Vector3f(34.600008f, 8.0f, -92.40164f), new Vector3f(115.59933f, 8.0f, -146.40082f)};
         
         factorySensors = new HashMap<>();
-        
-        bulletAppState.setDebugEnabled(true);
-        
+
         for (int i = 0; i < sensorNames.length; i++)
             factorySensors.put(sensorNames[i], new Sensor(sensorSizes[i], sensorLocations[i], bulletAppState));
     }
