@@ -41,7 +41,7 @@ public class Tutorial {
     
     public void talk() {
         
-        this.narrator.talk(this.message, 10);
+        this.narrator.talk(this.message, 20);
         
     }
     
@@ -189,6 +189,10 @@ public class Tutorial {
 
     public boolean isTutorialCompleted() {
         return this.isTutorialCompleted;
+    }
+
+    public void setCurrentStep(int num) {
+        this.stepNumber = num;
     }
      
 }
