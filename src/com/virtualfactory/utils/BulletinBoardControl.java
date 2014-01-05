@@ -9,13 +9,15 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.control.AbstractControl;
 
 /**
- * Allows a station to be aware of its surroundings so it can make itself visible 
+ * This is a spatial control (http://hub.jmonkeyengine.org/wiki/doku.php/jme3:advanced:custom_controls).
+ * 
+ * Allows a bulletin board to be aware of its surroundings so it can make itself visible 
  * or invisible, depending on player proximity (Note: also rotates when visible 
  * to give a cartoonish animation).
  * 
  * @author Abner Coimbre
  */
-public class ZoneAnimationControl extends AbstractControl 
+public class BulletinBoardControl extends AbstractControl 
 {
     private final GhostControl stationRadius;
     
@@ -27,7 +29,7 @@ public class ZoneAnimationControl extends AbstractControl
     private boolean timeToPlayGrowingSound = true;
     private AudioNode growingSound;
 
-    public ZoneAnimationControl (AssetManager givenAssetManager, GhostControl givenStationRadius)
+    public BulletinBoardControl (AssetManager givenAssetManager, GhostControl givenStationRadius)
     {
         initStationSounds(givenAssetManager);
         stationRadius = givenStationRadius;

@@ -161,7 +161,7 @@ public class Narrator extends AbstractAppState
         int pos = text2.indexOf("\n");
         
         while (pos > 0) {
-            System.out.println("---" + text2);
+            //System.out.println("---" + text2);
             s.add(text2.substring(0, pos ));
             text2 = text2.substring(pos);
             pos = text2.indexOf('\n');

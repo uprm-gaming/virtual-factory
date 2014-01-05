@@ -1,6 +1,6 @@
 package com.virtualfactory.engine;
 
-import com.virtualfactory.utils.ZoneAnimationControl;
+import com.virtualfactory.utils.BulletinBoardControl;
 import com.virtualfactory.screen.other.VideoCamGUI;
 import com.virtualfactory.utils.Sensor;
 import com.jme3.app.Application;
@@ -173,6 +173,9 @@ public class GameRunningState extends AbstractAppState
         // ----------
     }
     
+    /**
+     * Any new sound effects (that is used in more than one method) could be initialized here.
+     */
     private void initSoundEffects()
     {
         cameraMovingSound = new AudioNode(assetManager, "Sounds/cameraMovingSound.wav", false);
@@ -484,17 +487,18 @@ public class GameRunningState extends AbstractAppState
     }
     
     private void createSensors()
-    {
-
-        
+    {    
         String[] sensorNames = {"top stairs", "bottom stairs", 
-                                "staff zone", "cutting process"};
+                                "staff zone", "cutting process",
+                                "raw material"};
         
         Vector3f[] sensorSizes = {new Vector3f(15, 10, 5), new Vector3f(15, 10, 5),
-                                  new Vector3f(25, 10, 10), new Vector3f(10, 10, 25)};
+                                  new Vector3f(25, 10, 10), new Vector3f(10, 10, 25),
+                                  new Vector3f(10, 10, 25)};
         
         Vector3f[] sensorLocations = {new Vector3f(134.05f, 59.06f, -285.02f), new Vector3f(107.42f, 12.67f, -284.9f),
-                                      new Vector3f(0, 8, -290), new Vector3f(42.6f, 8, -200)};
+                                      new Vector3f(0, 8, -290), new Vector3f(42.6f, 8, -200),
+                                      new Vector3f(34.600008f, 8.0f, -92.40164f)};
         
         factorySensors = new HashMap<>();
         
@@ -506,20 +510,30 @@ public class GameRunningState extends AbstractAppState
     {
         String path = "Models/BulletinBoards/";
 
-        Spatial staffZoneStation = assetManager.loadModel(path + "staffZone.j3o");
-        staffZoneStation.setLocalScale(0, 0, 0);
-        staffZoneStation.setLocalTranslation(11.2f, 6.7999988f, -321.1999f);
-        staffZoneStation.setLocalRotation(new Quaternion().fromAngleAxis(FastMath.DEG_TO_RAD * 90, Vector3f.UNIT_X));
-        staffZoneStation.addControl(new ZoneAnimationControl(assetManager, factorySensors.get("staff zone")));
-        rootNode.attachChild(staffZoneStation);
+        Spatial[] bulletinBoards = {assetManager.loadModel(path + "staffZone.j3o"),
+                                    assetManager.loadModel(path + "cuttingProcess1.j3o"),
+                                    assetManager.loadModel(path + "rawMaterial.j3o")};
         
-        Spatial cuttingProcess = assetManager.loadModel(path + "cuttingProcess1.j3o");
-        cuttingProcess.setLocalTranslation(-16.799f, 6.7999988f, -200.598f);
-        cuttingProcess.setLocalScale(0, 0, 0);
-        cuttingProcess.setLocalRotation(new Quaternion().fromAngleAxis(FastMath.DEG_TO_RAD * 90, Vector3f.UNIT_X));
-        cuttingProcess.rotate(new Quaternion().fromAngleAxis(FastMath.DEG_TO_RAD * -90, Vector3f.UNIT_Z));
-        cuttingProcess.addControl(new ZoneAnimationControl(assetManager, factorySensors.get("cutting process")));
-        rootNode.attachChild(cuttingProcess);
+        bulletinBoards[0].setName("staff zone");
+        bulletinBoards[1].setName("cutting process");
+        bulletinBoards[2].setName("raw material");
+        
+        Vector3f[] bulletinBoardLocations = {new Vector3f(11.2f, 6.7999988f, -321.1999f),
+                                             new Vector3f(-16.799f, 6.7999988f, -200.598f), 
+                                             new Vector3f(-23.200016f, 7.599997f, -100.79961f)};
+        
+        for (int i = 0; i < bulletinBoards.length; i++)
+        {
+            bulletinBoards[i].setLocalScale(0, 0, 0);
+            bulletinBoards[i].setLocalTranslation(bulletinBoardLocations[i]);
+            bulletinBoards[i].setLocalRotation(new Quaternion().fromAngleAxis(FastMath.DEG_TO_RAD * 90, Vector3f.UNIT_X));
+            
+            if (i > 0) // Staff zone is the only one that isn't rotated around the Z axis
+                bulletinBoards[i].rotate(new Quaternion().fromAngleAxis(FastMath.DEG_TO_RAD * -90, Vector3f.UNIT_Z));
+            
+            bulletinBoards[i].addControl(new BulletinBoardControl(assetManager, factorySensors.get(bulletinBoards[i].getName())));
+            rootNode.attachChild(bulletinBoards[i]);
+        }
     }
     
     private void initVideoCamGUI()
