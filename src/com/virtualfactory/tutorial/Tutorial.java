@@ -1,14 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.virtualfactory.tutorial;
 
 import com.virtualfactory.narrator.Narrator;
-import com.virtualfactory.utils.Params;
 
 /**
- *
+ * Custom tutorial to guide the beginning player.
  * @author José Martinez
  */
 public class Tutorial {
