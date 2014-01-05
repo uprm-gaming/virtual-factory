@@ -20,15 +20,22 @@ public class Params {
     public static boolean isLevelStarted = false;
     
     public static final String ControlsDescription = ""
-            + "A: move left\n\n"
-            + "D: move right\n\n"
-            + "W: move forward\n\n"
-            + "S: move backward\n\n"
-            + "Space Bar: jump\n\n"
-            + "Arrow Keys: rotate camera\n\n"
-            + "Left-Shift:  select an object\n\n"
-            + "Right-Shift: open/close the dashboard\n\n"
-            + "F1: turn on/off the full screen";
+            + "W: move forward\n"
+            + "S: move backward\n"
+            + "Q: move left\n"
+            + "E: move right\n"
+            + "---------------------------------\n"
+            + "A: look left\n"
+            + "D: look right\n"
+            + "Arrow Keys: look around\n"
+            + "---------------------------------\n"
+            + "Left-Shift:  select an object\n"
+            + "---------------------------------\n"
+            + "Right-Shift: open/close the dashboard\n"
+            + "---------------------------------\n"
+            + "F1: turn on/off the full screen\n"
+            + "\n"
+            + "\n";
     
     public static boolean topViewAvailable = true;
     public static int viewNumber = 0;
