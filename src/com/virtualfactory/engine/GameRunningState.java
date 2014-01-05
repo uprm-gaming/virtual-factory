@@ -1,5 +1,6 @@
 package com.virtualfactory.engine;
 
+import com.virtualfactory.utils.ZoneAnimationControl;
 import com.virtualfactory.screen.other.VideoCamGUI;
 import com.virtualfactory.utils.Sensor;
 import com.jme3.app.Application;
@@ -20,6 +21,7 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.PointLight;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.FastMath;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
@@ -114,6 +116,7 @@ public class GameRunningState extends AbstractAppState
         this.flyCam = this.app.getFlyByCamera();
         this.cam = this.app.getCamera();
         this.isPlayerUpstairs = true;
+        
         createFactory();
         
         initSoundEffects();
@@ -155,6 +158,8 @@ public class GameRunningState extends AbstractAppState
         createInvisibleWalls();
         
         createSensors();
+        
+        createBulletinBoards();
         
         initVideoCamGUI();
         
@@ -484,16 +489,28 @@ public class GameRunningState extends AbstractAppState
     
     private void createSensors()
     {
-        String[] sensorNames = {"top stairs", "bottom stairs"};
+        String[] sensorNames = {"top stairs", "bottom stairs", 
+                                "staff zone"};
         
-        Vector3f[] sensorSizes = {new Vector3f(15, 10, 5), new Vector3f(15, 10, 5)};
+        Vector3f[] sensorSizes = {new Vector3f(15, 10, 5), new Vector3f(15, 10, 5),
+                                  new Vector3f(25, 10, 10)};
         
-        Vector3f[] sensorLocations = {new Vector3f(134.05f, 59.06f, -285.02f), new Vector3f(107.42f, 12.67f, -284.9f)};
+        Vector3f[] sensorLocations = {new Vector3f(134.05f, 59.06f, -285.02f), new Vector3f(107.42f, 12.67f, -284.9f),
+                                      new Vector3f(0, 8, -290)};
         
         factorySensors = new HashMap<>();
         
         for (int i = 0; i < sensorNames.length; i++)
             factorySensors.put(sensorNames[i], new Sensor(sensorSizes[i], sensorLocations[i], bulletAppState));
+    }
+    
+    private void createBulletinBoards()
+    {
+        Spatial staffZoneStation = assetManager.loadModel("Models/BulletinBoards/staffZone.j3o");
+        staffZoneStation.setLocalTranslation(11.2f, 6.7999988f, -321.1999f);
+        staffZoneStation.setLocalRotation(new Quaternion().fromAngleAxis(FastMath.DEG_TO_RAD * 90, Vector3f.UNIT_X));
+        staffZoneStation.addControl(new ZoneAnimationControl(assetManager, factorySensors.get("staff zone")));
+        rootNode.attachChild(staffZoneStation);
     }
     
     private void initVideoCamGUI()
