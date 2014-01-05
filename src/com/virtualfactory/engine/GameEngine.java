@@ -220,8 +220,12 @@ public class GameEngine extends AbstractAppState {
 
                 case "Tutorial Step Forward":
                     if (!keyPressed)
-                        if (Params.isTutorialLevel && Params.DEBUG_ON)
-                            Params.tutorial.nextStep();
+                        if (Params.isTutorialLevel && Params.DEBUG_ON) {
+                            if (Params.tutorial.getCurrentStep() == 18)
+                                Params.tutorial.setCurrentStep(0);
+                            else
+                                Params.tutorial.nextStep();
+                        }
                     break;
 
                 default:
