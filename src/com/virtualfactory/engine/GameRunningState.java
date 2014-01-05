@@ -62,14 +62,16 @@ public class GameRunningState extends AbstractAppState
     private boolean lookUp;
     private boolean lookDown;
     private boolean lookLeft;
+    private boolean lookLeftA;
     private boolean lookRight;
+    private boolean lookRightD;
     
     private boolean isDebugCamEnabled;
     private boolean isTopViewEnabled;
     private boolean isLightingEnabled;
     
     private boolean isPlayerUpstairs = true;       
-    private float playerSpeed = 1.3f;
+    private float playerSpeed = 1f;
     
     private Vector3f camDir;
     private Vector3f camLeft;
@@ -164,7 +166,7 @@ public class GameRunningState extends AbstractAppState
         player.setGravity(Params.playerGravity);
         player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
         cam.setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
-        flyCam.setRotationSpeed(1.9499999f);
+        flyCam.setRotationSpeed(1f);
         player.setViewDirection(new Vector3f(0, 0, 1));
         bulletAppState.getPhysicsSpace().add(player);
         // ----------
@@ -181,14 +183,16 @@ public class GameRunningState extends AbstractAppState
         String[] mappings = {"move forward", "move backward",
                              "move left", "move right",
                              "look up", "look down",
-                             "look left", "look right",
+                             "look left", "look left A",
+                             "look right", "look right D",
                              "toggle top view", "debug cam",
                              "debug position"};
 
         KeyTrigger[] triggers = {new KeyTrigger(KeyInput.KEY_W), new KeyTrigger(KeyInput.KEY_S),
-                                 new KeyTrigger(KeyInput.KEY_A), new KeyTrigger(KeyInput.KEY_D),
+                                 new KeyTrigger(KeyInput.KEY_Q), new KeyTrigger(KeyInput.KEY_E),
                                  new KeyTrigger(KeyInput.KEY_UP), new KeyTrigger(KeyInput.KEY_DOWN),
-                                 new KeyTrigger(KeyInput.KEY_LEFT), new KeyTrigger(KeyInput.KEY_RIGHT),
+                                 new KeyTrigger(KeyInput.KEY_LEFT), new KeyTrigger(KeyInput.KEY_A),
+                                 new KeyTrigger(KeyInput.KEY_RIGHT), new KeyTrigger(KeyInput.KEY_D),
                                  new KeyTrigger(KeyInput.KEY_T), new KeyTrigger(KeyInput.KEY_0),
                                  new KeyTrigger(KeyInput.KEY_P)};
 
@@ -236,10 +240,20 @@ public class GameRunningState extends AbstractAppState
                     lookLeft = isKeyPressed;
                     handleCameraMovingSound(lookLeft);
                     break;
+                    
+                case "look left A":
+                    lookLeftA = isKeyPressed;
+                    handleCameraMovingSound(lookLeftA);
+                    break;
 
                 case "look right":
                     lookRight = isKeyPressed;                   
                     handleCameraMovingSound(lookRight);                  
+                    break;
+                    
+                case "look right D":
+                    lookRightD = isKeyPressed;                   
+                    handleCameraMovingSound(lookRightD);                  
                     break;
                     
                 case "toggle top view":
@@ -248,7 +262,7 @@ public class GameRunningState extends AbstractAppState
                     break;
 
                 case "debug cam":
-                    if (!isKeyPressed)
+                    if (!isKeyPressed && Params.DEBUG_ON)
                         isDebugCamEnabled = !isDebugCamEnabled;
                     break;
                     
@@ -259,10 +273,6 @@ public class GameRunningState extends AbstractAppState
                                 + "\nleft: " + cam.getLeft()
                                 + "\nup: " + cam.getUp()
                                 + "\ndirection: " + cam.getDirection());
-                    
-                    if (!isKeyPressed)
-                        Params.tutorial.nextStep();
-                    
                     break;
 
                 default:
@@ -307,8 +317,14 @@ public class GameRunningState extends AbstractAppState
 
         if (lookLeft)
             rotateCamera(Params.rotationSpeed, new Vector3f(0,1,0));
+        
+        if (lookLeftA)
+            rotateCamera(Params.rotationSpeed, new Vector3f(0,1,0));
 
         if (lookRight)
+            rotateCamera(-Params.rotationSpeed, new Vector3f(0,1,0));
+        
+        if (lookRightD)
             rotateCamera(-Params.rotationSpeed, new Vector3f(0,1,0));
 
         if (isTopViewEnabled || isDebugCamEnabled) {
@@ -337,7 +353,8 @@ public class GameRunningState extends AbstractAppState
         if (moveRight)
             walkDirection.addLocal(camLeft.negate());
 
-        player.setWalkDirection(walkDirection); // walk!
+        if (this.fadeFilter.getValue() == 1)
+            player.setWalkDirection(walkDirection); // walk!
         cam.setLocation(player.getPhysicsLocation());
         
         if (isPlayerUpstairs && player.getPhysicsLocation().getY() < 57.0f)
@@ -347,6 +364,9 @@ public class GameRunningState extends AbstractAppState
     }
     
     private void handleTransition() {
+        if (isTopViewEnabled)
+            return;
+        
         if (fadeFilter.getDuration() < 1.5f)
             fadeFilter.setDuration(1.5f);
                 
@@ -381,7 +401,7 @@ public class GameRunningState extends AbstractAppState
                 
             }
             fadeFilter.fadeIn();
-            playerSpeed = 1.3f;
+            playerSpeed = 1f;
         }
     }
 
@@ -483,22 +503,26 @@ public class GameRunningState extends AbstractAppState
 
     private void rotateCamera(float value, Vector3f axis) 
     {
-        Matrix3f mat = new Matrix3f();
+        
+        if (this.fadeFilter.getValue() < 1) //don't rotate if screen is fading in/out
+            return;
+        
+        Matrix3f matrix = new Matrix3f();
 
         if (isTopViewEnabled)
             value = value * 0.3f;
 
-        mat.fromAngleNormalAxis(flyCam.getRotationSpeed() * value, axis);
+        matrix.fromAngleNormalAxis(flyCam.getRotationSpeed() * value, axis);
 
         Vector3f tempUp = cam.getUp();
         Vector3f tempLeft = cam.getLeft();
         Vector3f tempDir = cam.getDirection();
 
-        mat.mult(tempUp, tempUp);
-        mat.mult(tempLeft, tempLeft);
-        mat.mult(tempDir, tempDir);
+        matrix.mult(tempUp, tempUp);
+        matrix.mult(tempLeft, tempLeft);
+        matrix.mult(tempDir, tempDir);
 
-        if (tempDir.getX() > Params.camMaxX || tempDir.getX() < Params.camMinX
+        if (       tempDir.getX() > Params.camMaxX || tempDir.getX() < Params.camMinX
                 || tempDir.getY() > Params.camMaxY || tempDir.getY() < Params.camMinY
                 || tempDir.getZ() > Params.camMaxZ || tempDir.getZ() < Params.camMinZ)
             return;
@@ -521,6 +545,10 @@ public class GameRunningState extends AbstractAppState
     
     private void toggleTopView() 
     {
+        
+        if (this.fadeFilter.getValue() < 1)
+            return;
+        
         if (Params.topViewAvailable && viewNumber != 5) {
             isTopViewEnabled = true;
             
@@ -644,7 +672,7 @@ public class GameRunningState extends AbstractAppState
     
     public boolean isThereLookKeyPressed()
     {
-        return lookUp || lookDown || lookLeft || lookRight;
+        return lookUp || lookDown || lookLeft || lookRight || lookLeftA || lookRightD;
     }
     
     public void setTopViewEnabled(boolean enabled)
