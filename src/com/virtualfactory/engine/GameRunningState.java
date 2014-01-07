@@ -310,13 +310,10 @@ public class GameRunningState
                 videoCamGUI.disable();
             return;
         }
-        
-//        System.out.println(Params.viewNumber);
+
         if (factorySensors.get("top stairs").isPlayerInRange() || factorySensors.get("bottom stairs").isPlayerInRange()
-                || (!Params.isTopViewEnabled && Params.fadeFilter.getValue() < 1)) {
-            System.out.println("merda");
+                || (!Params.isTopViewEnabled && Params.fadeFilter.getValue() < 1))
             handleTransition();
-        }
 
         if (lookUp)
             rotateCamera(-Params.rotationSpeed, cam.getLeft());
