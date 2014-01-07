@@ -293,7 +293,7 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
     public void playGame(){
         gameEngine.updateLastActivitySystemTime();
         if (!isGamePlaying){
-            screen.findElementByName("imagePlay").getRenderer(ImageRenderer.class).setImage(imagePlayGreen);
+            screen.findElementByName("imagePlay").getRenderer(ImageRenderer.class).setImage(imagePauseRed);
 //            screen.findElementByName("imagePause").getRenderer(ImageRenderer.class).setImage(imagePauseRed);
             isGamePlaying = true;
             playPauseGame();
@@ -301,6 +301,10 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
             setGamePrincipalStatus(" (Playing)");
             gameEngine.getGameSounds().playSound(Sounds.PlayPause);
             gameEngine.getGameSounds().playSound(Sounds.Background);
+            if (Params.isTutorialLevel)
+                gameEngine.getGameSounds().stopSound(Sounds.TutorialLevel);
+
+            
             gameEngine.updateGameSounds(true);
             sliderTimeFactor.enable();
         }else{
@@ -320,7 +324,7 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
         playPauseGame();
         GameLogScreenController.addMessage(MessageType.Info, Messages.gamePause);
         setGamePrincipalStatus(" (Paused)");
-        screen.findElementByName("imagePlay").getRenderer(ImageRenderer.class).setImage(imagePauseRed);
+        screen.findElementByName("imagePlay").getRenderer(ImageRenderer.class).setImage(imagePlayGreen);
 //        screen.findElementByName("imagePlay").getRenderer(ImageRenderer.class).setImage(imagePlayRed);
 //        screen.findElementByName("imagePause").getRenderer(ImageRenderer.class).setImage(imagePauseGreen);
         gameEngine.getGameSounds().playSound(Sounds.PlayPause);
@@ -333,7 +337,7 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
                 op.getMotionControl().pause();
         }
         
-        if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 6)
+        if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 21)
                     Params.tutorial.nextStep();
     }
     
@@ -841,8 +845,11 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
         if (id.equals("buttonStaticOptionFlowChart")){
             if (isVisibleWindowFlowChart)
                 screen.findElementByName("winFCC_Element").getControl(FlowChartScreenController.class).loadWindowControl(gameEngine, -1, null);
-            else
+            else {
                 screen.findElementByName("winFCC_Element").getControl(FlowChartScreenController.class).loadWindowControl(gameEngine, 0, null);
+                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 14)
+                    Params.tutorial.nextStep();
+            }
             isVisibleWindowFlowChart = !isVisibleWindowFlowChart;
         }else
         if (id.equals("buttonStaticOptionReturnToMenu")){

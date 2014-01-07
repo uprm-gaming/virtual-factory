@@ -2,7 +2,6 @@ package com.virtualfactory.utils;
 
 import com.jme3.math.Vector3f;
 import com.jme3.post.filters.FadeFilter;
-import com.virtualfactory.narrator.Narrator;
 import com.virtualfactory.tutorial.Tutorial;
 
 public class Params {

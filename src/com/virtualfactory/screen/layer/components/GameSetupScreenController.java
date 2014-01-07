@@ -152,6 +152,8 @@ public class GameSetupScreenController implements Controller {
         manageWindows(resources);
         gameEngine.getLayerScreenController().optionButtonClicked("buttonOptionControls");
         gameEngine.getLayerScreenController().onDynamicButtonClicked("dynBut3");
+        if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 2)
+            Params.tutorial.nextStep();
     }
     
     public void setupResourcesDone(){
@@ -265,7 +267,7 @@ public class GameSetupScreenController implements Controller {
             isReadyToStart = true;
             isResourcesReady = isStorageReady = isUnitLoadReady = isPurchaseReady = isOperatorsReady = isPriorityReady = true;
             System.out.println("\n\n\nLevel: " + Params.tutorial.getCurrentStep());
-            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 2)
+            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 15)
                 Params.tutorial.nextStep();
         }
     }
@@ -275,7 +277,7 @@ public class GameSetupScreenController implements Controller {
             screen.findElementByName("setupStartGame").getRenderer(ImageRenderer.class).setImage(nifty.createImage(buttonReady, false));
             isReadyToStart = true;
             System.out.println("\n\n\nLevel: " + Params.tutorial.getCurrentStep());
-            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 2)
+            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 15)
                 Params.tutorial.nextStep();
             
         }else{
@@ -375,8 +377,8 @@ public class GameSetupScreenController implements Controller {
         if (isReadyToStart){
             gameEngine.getLayerScreenController().playGame();
             loadWindowControl(gameEngine, -1, null);
-            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 3)
-                Params.tutorial.nextStep();
+//            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 16)
+//                Params.tutorial.nextStep();
 
         } else {
             GameLogScreenController.addMessage(MessageType.Notification, Messages.gameSetup);

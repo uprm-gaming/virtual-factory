@@ -226,7 +226,7 @@ public class GameEngine extends AbstractAppState {
                 case "Tutorial Step Forward":
                     if (!keyPressed)
                         if (Params.isTutorialLevel && Params.DEBUG_ON) {
-                            if (Params.tutorial.getCurrentStep() == 18)
+                            if (Params.tutorial.getCurrentStep() == 20)
                                 Params.tutorial.setCurrentStep(0);
                             else
                                 Params.tutorial.nextStep();
@@ -309,6 +309,7 @@ public class GameEngine extends AbstractAppState {
             Params.isTutorialLevel = true;
             Params.tutorial = new Tutorial(gameNarrator);
             Params.tutorial.update();
+            getGameSounds().playSound(Sounds.TutorialLevel);
         }
         else {
             Params.isTutorialLevel = false;
@@ -509,7 +510,7 @@ public class GameEngine extends AbstractAppState {
             niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").hide();
         else {
             niftyGUI.getScreen("layerScreen").findElementByName("winDashboard_Element").show();
-            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 14)
+            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 16)
                 Params.tutorial.nextStep();
         }
         isDashboardVisible = !isDashboardVisible;
@@ -892,7 +893,7 @@ public class GameEngine extends AbstractAppState {
 
             loadWindowControl(shootableObject);
             System.out.println("######## SHOOT: " + shootableObject);
-            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 18)
+            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 20)
                 Params.tutorial.nextStep();
         }
     }
@@ -964,6 +965,9 @@ public class GameEngine extends AbstractAppState {
                 gs.getFirst().playSound(gs.getSecond());
         }
         else {
+            if (Params.isTutorialLevel && Params.isLevelStarted)
+                return;
+            
             for (Pair<GameSounds, Sounds> gs : arrGameSounds)
                 gs.getFirst().pauseSound(gs.getSecond());
         }

@@ -24,6 +24,7 @@ public class GameSounds {
     public final static String gameWarningMoney = folder + "game_warning.wav";
     public final static String gameNoMoney = folder + "game_bankrupt.wav";
     public final static String purchaseArrived = folder + "purchase_arrived.wav";
+    public final static String tutorialSound = folder + "tutorial_sound.wav";
     private float currentSFXVolume=100;
     private AudioNode audioPlayPause;
     private AudioNode audioMachineEquipmentBroken;
@@ -35,6 +36,7 @@ public class GameSounds {
     private AudioNode audioGameOver;
     private AudioNode audioGameWon;
     private AudioNode audioBackground;
+    private AudioNode audioTutorial;
     private AudioNode audioMachineWorking;
     private AudioNode audioGameWarningMoney;
     private AudioNode audioGameNoMoney;
@@ -64,6 +66,8 @@ public class GameSounds {
         audioGameWon.setLooping(false);
         audioBackground = new AudioNode(assetManager, background, false);
         audioBackground.setLooping(true);
+        audioTutorial = new AudioNode(assetManager, tutorialSound, false);
+        audioTutorial.setLooping(true);
         audioMachineWorking = new AudioNode(assetManager, machineWorking, false);
         audioMachineWorking.setLooping(true);
         audioGameWarningMoney = new AudioNode(assetManager, gameWarningMoney, false);
@@ -128,6 +132,13 @@ public class GameSounds {
                     case -1:    audioBackground.stop(); break;
                     case 0:    audioBackground.pause(); break;
                     case 1:    audioBackground.play(); break;
+                }
+                break;
+            case TutorialLevel: 
+                switch (action){
+                    case -1:    audioTutorial.stop(); break;
+                    case 0:    audioTutorial.pause(); break;
+                    case 1:    audioTutorial.play(); break;
                 }
                 break;
             case MachineWorking: 

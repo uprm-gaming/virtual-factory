@@ -20,6 +20,7 @@ import com.virtualfactory.strategy.EventStrategy;
 import com.virtualfactory.utils.ObjectState;
 import com.virtualfactory.utils.OperatorCategory;
 import com.virtualfactory.utils.Pair;
+import com.virtualfactory.utils.Params;
 import com.virtualfactory.utils.Status;
 import com.virtualfactory.utils.TypeActivity;
 import com.virtualfactory.utils.Utils;
@@ -566,5 +567,9 @@ public class CharactersScreenController implements Controller {
         gameEngine.getGameData().updateUserOperatorCategories();
         gameEngine.getGameData().updateUserMachineEquipment();
         nifty.getScreen("layerScreen").findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).setupResourcesDone();
+        if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 3)
+            if (numOperatorAct == 3 && numMachineAct == 2 && numEquipmentAct == 2)
+                Params.tutorial.nextStep();
+        
     }
 }

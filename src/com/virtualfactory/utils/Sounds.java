@@ -22,5 +22,6 @@ public enum Sounds {
     MachineWorking,
     GameWarningMoney,
     GameNoMoney,
-    PurchaseArrived
+    PurchaseArrived,
+    TutorialLevel
 }
