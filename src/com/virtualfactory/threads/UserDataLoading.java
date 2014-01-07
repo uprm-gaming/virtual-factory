@@ -72,8 +72,14 @@ public class UserDataLoading extends Thread {
         pbc.setProgress(0.55f);
         //validate PASSWORD
         if (currentPlayer != null){
-            synchronizeGame_LocalRemoteDB();
-            synchronizeLog_LocalRemoteDB();
+            try {
+                synchronizeGame_LocalRemoteDB();
+                synchronizeLog_LocalRemoteDB();
+            }
+            catch (Exception e) {
+                System.out.println("EXCeption: UserDataLoading line 76");
+            }
+            
             if (!currentPlayer.getPassword().equals(password)){
                 updatingLabel.setText("Wrong Password.");
                 result = false;

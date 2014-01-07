@@ -36,6 +36,7 @@ import com.jme3.util.SkyFactory;
 import com.virtualfactory.narrator.Narrator;
 import com.virtualfactory.utils.InvisibleWall;
 import com.virtualfactory.utils.Params;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -47,7 +48,7 @@ import java.util.HashMap;
  * 
  * @author Abner Coimbre
  */
-public class GameRunningState extends AbstractAppState
+public class GameRunningState 
 {
     private SimpleApplication app;
     private AssetManager assetManager;
@@ -81,7 +82,7 @@ public class GameRunningState extends AbstractAppState
     private ViewPort viewPort;
     private Node factory;
     
-    private final BulletAppState bulletAppState;
+    private BulletAppState bulletAppState;
     private CharacterControl player;
     
     private PointLight lamp1;
@@ -93,18 +94,23 @@ public class GameRunningState extends AbstractAppState
     private VideoCamGUI videoCamGUI;
     private AudioNode cameraMovingSound;
     private boolean isKilled = false;
+    private Node grass;
+    private Spatial skyBox;
+    private ArrayList<Geometry> invisibleWalls;
+    private ArrayList<Spatial> bulletinBoardsArray;
+    private RigidBodyControl rigidBody;
+    
     
     public GameRunningState(BulletAppState bulletAppState)
     {
         this.bulletAppState = bulletAppState;
     }
 
-    @Override
-    public void initialize(AppStateManager stateManager, Application app)
+    public void initialize(AppStateManager stateManager, Application app, BulletAppState bulletAppState)
     {
-        super.initialize(stateManager, app);
         
         this.app = (SimpleApplication) app;
+        this.bulletAppState = bulletAppState;
         this.assetManager = this.app.getAssetManager();
         this.inputManager = this.app.getInputManager();
         this.viewPort = this.app.getViewPort();
@@ -112,7 +118,6 @@ public class GameRunningState extends AbstractAppState
         this.flyCam = this.app.getFlyByCamera();
         this.cam = this.app.getCamera();
         this.isPlayerUpstairs = true;
-        
         createFactory();
         
         initSoundEffects();
@@ -122,7 +127,7 @@ public class GameRunningState extends AbstractAppState
         gameNarrator = new Narrator(stateManager, assetManager, this.app.getGuiNode());
     }
     
-    private void createFactory() 
+    public void createFactory() 
     {
         fpp = new FilterPostProcessor(assetManager);
         Params.fadeFilter = new FadeFilter(1.5f);
@@ -137,12 +142,12 @@ public class GameRunningState extends AbstractAppState
         factory.setLocalScale(250.0f, 250.0f, 250.0f);
         factory.setLocalTranslation(-9.0f, 0.0f, 82.0f);
         rootNode.attachChild(factory);
-        RigidBodyControl rigidBody = new RigidBodyControl(0);
+        rigidBody = new RigidBodyControl(0);
         factory.addControl(rigidBody);
         bulletAppState.getPhysicsSpace().add(rigidBody);
         // ----------
         
-        Node grass = (Node) assetManager.loadModel("Models/grass.j3o");
+        grass = (Node) assetManager.loadModel("Models/grass.j3o");
         grass.setLocalScale(250.0f, 250.0f, 250.0f);
         grass.setLocalTranslation(-9.0f, 0.0f, 82.0f);
         rootNode.attachChild(grass);
@@ -162,13 +167,7 @@ public class GameRunningState extends AbstractAppState
         /* First-person Player */
         // ----------
         player = new CharacterControl(new CapsuleCollisionShape(0.4f, 24.5f, 1), 0.05f);
-        player.setJumpSpeed(45);
-        player.setFallSpeed(120);
-        player.setGravity(Params.playerGravity);
-        player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
-        cam.setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
-        flyCam.setRotationSpeed(1f);
-        player.setViewDirection(new Vector3f(0, 0, 1));
+        setupPlayer();
         bulletAppState.getPhysicsSpace().add(player);
         // ----------
     }
@@ -299,7 +298,6 @@ public class GameRunningState extends AbstractAppState
         }
     }
     
-    @Override
     public void update(float tpf) {
         if (!isKilled)
             updatePlayerPosition();
@@ -314,10 +312,11 @@ public class GameRunningState extends AbstractAppState
         }
         
 //        System.out.println(Params.viewNumber);
-
         if (factorySensors.get("top stairs").isPlayerInRange() || factorySensors.get("bottom stairs").isPlayerInRange()
-                || (!Params.isTopViewEnabled && Params.fadeFilter.getValue() < 1))
+                || (!Params.isTopViewEnabled && Params.fadeFilter.getValue() < 1)) {
+            System.out.println("merda");
             handleTransition();
+        }
 
         if (lookUp)
             rotateCamera(-Params.rotationSpeed, cam.getLeft());
@@ -351,7 +350,7 @@ public class GameRunningState extends AbstractAppState
 
         walkDirection.set(0, 0, 0); // reset walkDirection vector
 
-        if (moveForward)
+        if (moveForward) 
             walkDirection.addLocal(camDir);
 
         if (moveBackward)
@@ -363,10 +362,11 @@ public class GameRunningState extends AbstractAppState
         if (moveRight)
             walkDirection.addLocal(camLeft.negate());
 
-        if (Params.fadeFilter.getValue() == 1)
+        if (Params.fadeFilter.getValue() == 1) 
             player.setWalkDirection(walkDirection); // walk!
-        cam.setLocation(player.getPhysicsLocation());
         
+        cam.setLocation(player.getPhysicsLocation());
+
         if (isPlayerUpstairs && player.getPhysicsLocation().getY() < 57.0f)
             player.warp(new Vector3f(new Vector3f(130.96266f, 59.064148f, -291.2517f)));
         else if (player.getPhysicsLocation().getY() < 12.65f)
@@ -375,7 +375,8 @@ public class GameRunningState extends AbstractAppState
     
     private void handleTransition() {
         
-        
+//        if (true)
+//            return;
         if (Params.fadeFilter.getDuration() < 1.5f)
             Params.fadeFilter.setDuration(1.5f);
                 
@@ -414,7 +415,7 @@ public class GameRunningState extends AbstractAppState
         }
     }
 
-    private void createSkyBox() {
+    public void createSkyBox() {
         String path = "Textures/Skybox/";
         
         Texture west = assetManager.loadTexture(path + "skyLeft.jpg");
@@ -424,7 +425,7 @@ public class GameRunningState extends AbstractAppState
         Texture top = assetManager.loadTexture(path + "skyTop.jpg");
         Texture bottom = assetManager.loadTexture(path + "skyDown.jpg");
         
-        Spatial skyBox = SkyFactory.createSky(assetManager, west, east, north, 
+        skyBox = SkyFactory.createSky(assetManager, west, east, north, 
                                                             south, top, bottom);
         
         rootNode.attachChild(skyBox);
@@ -478,10 +479,12 @@ public class GameRunningState extends AbstractAppState
                                 new Vector3f(31.656963f, 56.8007f, -289.88876f),
                                 new Vector3f(50.433777f, 56.38947f, -350.81924f)};
         
+        invisibleWalls = new ArrayList<>();
         for (int i = 0; i < wallNames.length; i++)
         {
             Geometry invisibleWall = new InvisibleWall(bulletAppState, sizes[i], locations[i]);
             invisibleWall.setName(wallNames[i]);
+            invisibleWalls.add(invisibleWall);
             rootNode.attachChild(invisibleWall);
         }
     }
@@ -525,6 +528,7 @@ public class GameRunningState extends AbstractAppState
                                              new Vector3f(-23.200016f, 7.599997f, -100.79961f),
                                              new Vector3f(52.000103f, 7.599997f, -151.19884f)};
         
+        bulletinBoardsArray = new ArrayList<>();
         for (int i = 0; i < bulletinBoards.length; i++)
         {
             bulletinBoards[i].setLocalScale(0, 0, 0);
@@ -535,6 +539,7 @@ public class GameRunningState extends AbstractAppState
                 bulletinBoards[i].rotate(new Quaternion().fromAngleAxis(FastMath.DEG_TO_RAD * -90, Vector3f.UNIT_Z));
             
             bulletinBoards[i].addControl(new BulletinBoardControl(factorySensors.get(bulletinBoards[i].getName())));
+            bulletinBoardsArray.add(bulletinBoards[i]);
             rootNode.attachChild(bulletinBoards[i]);
         }
     }
@@ -731,8 +736,38 @@ public class GameRunningState extends AbstractAppState
     {
         Params.viewNumber = number;
     }
-    
-    public void kill() {
-        isKilled = true;
-    }
+     public void attachFactory(BulletAppState bulletAppState) {
+         this.bulletAppState = bulletAppState;
+         factory.addControl(rigidBody);
+         rootNode.attachChild(factory);
+         rootNode.attachChild(grass);
+         rootNode.attachChild(skyBox);
+         for (Spatial board: bulletinBoardsArray)
+             rootNode.attachChild(board);
+         for (Geometry wall: invisibleWalls)
+             rootNode.attachChild(wall);
+         resetSensors();                 
+         this.bulletAppState.getPhysicsSpace().add(rigidBody);
+         setupPlayer();
+         this.bulletAppState.getPhysicsSpace().add(player);
+     }
+     
+     private void setupPlayer() {
+        player.setJumpSpeed(45);
+        player.setFallSpeed(120);
+        player.setGravity(Params.playerGravity);
+        player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
+        cam.setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
+        flyCam.setRotationSpeed(1.4f);
+        player.setViewDirection(new Vector3f(0, 0, 1));
+        this.isPlayerUpstairs = true;
+
+     }
+     
+     private void resetSensors() {
+         for (Sensor sensor: factorySensors.values()) {
+             sensor.resetPhysicsEngine(this.bulletAppState);
+         }
+         createSensors();
+     }
 }

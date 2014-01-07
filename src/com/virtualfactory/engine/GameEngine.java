@@ -100,6 +100,7 @@ public class GameEngine extends AbstractAppState {
     private GameRunningState gameState;
     private Node guiNode;
     private Node rootNode;
+    private Node factoryNode;
     private InputManager inputManager;
     private FlyByCamera flyCam;
     private Camera cam;
@@ -267,22 +268,21 @@ public class GameEngine extends AbstractAppState {
 
         updateCursorIcon(1);
 
-        flushPreviousGame();
+
         
         if (newGame) {
             this.getArrGameSounds().clear();
             this.gameSounds.stopSound(Sounds.Background);
+            this.gameSounds.stopSound(Sounds.TutorialLevel);
             gameData.createGame(tempGame);
-            
-            if (stateManager.hasState(gameState))  {
+            flushPreviousGame();
+            if (gameState == null) {
+                factoryNode = new Node();
                 gameState = new GameRunningState(bulletAppState);
-                gameState.kill();
+                gameState.initialize(stateManager, jmonkeyApp, bulletAppState);
             }
-            else{
-                gameState = new GameRunningState(bulletAppState);
-            }
-            
-             stateManager.attach(gameState);
+            else
+                gameState.attachFactory(bulletAppState);
            
         }
         else {
@@ -303,18 +303,23 @@ public class GameEngine extends AbstractAppState {
 
         updateCursorIcon(0);
 
+        
+        if (!isLevelStarted) {
+            if (gameData.getCurrentGame().getGameName().equalsIgnoreCase("tutorial")) {
+                Params.isTutorialLevel = true;
+                Params.tutorial = new Tutorial(gameNarrator);
+                Params.tutorial.update();
+                getGameSounds().playSound(Sounds.TutorialLevel);
+            }
+            else {
+                Params.isTutorialLevel = false;
+                gameNarrator.talk("Welcome to Virtual Factory!\nPress 'T' for a top view of the factory.", 5);
+            }
+        }
+        else if (!gameData.getCurrentGame().getGameName().equalsIgnoreCase("tutorial")) {
+                Params.isTutorialLevel = false;
+        }
         isLevelStarted = true;
-
-        if (gameData.getCurrentGame().getGameName().equalsIgnoreCase("tutorial")) {
-            Params.isTutorialLevel = true;
-            Params.tutorial = new Tutorial(gameNarrator);
-            Params.tutorial.update();
-            getGameSounds().playSound(Sounds.TutorialLevel);
-        }
-        else {
-            Params.isTutorialLevel = false;
-            gameNarrator.talk("Welcome to Virtual Factory!\nPress 'T' for a top view of the factory.", 5);
-        }
     }
 
     private void flushPreviousGame() {
@@ -332,9 +337,15 @@ public class GameEngine extends AbstractAppState {
             bulletAppState = new BulletAppState();
             bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
             stateManager.attach(bulletAppState);
-        } else {
-            bulletAppState.getPhysicsSpace().destroy();
-            bulletAppState.getPhysicsSpace().create();
+        } 
+        else {
+            stateManager.detach(bulletAppState);
+            bulletAppState = new BulletAppState();
+            bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
+            stateManager.attach(bulletAppState);
+
+//            bulletAppState.getPhysicsSpace().destroy();
+//            bulletAppState.getPhysicsSpace().create();
         }
     }
 
@@ -437,9 +448,12 @@ public class GameEngine extends AbstractAppState {
     @Override
     public void update(float tpf) {
         updateGameDataAndLogic();
+        if (gameState != null)
+            gameState.update(tpf);
     }
 
     public void updateGameDataAndLogic() {
+        
         if (!this.getLayerScreenController().getPauseStatus() && gameSounds.machineSoundPlaying())
             this.gameSounds.pauseSound(Sounds.MachineWorking);
         
@@ -454,8 +468,9 @@ public class GameEngine extends AbstractAppState {
         }
 
         
-        if (!isLevelStarted) 
+        if (!isLevelStarted) { 
             return;
+        }
         
         if (currentSystemStatus.equals(Status.Busy))
             currentSystemTime += (double) ((System.currentTimeMillis() - currentTempSystemTime) / 1000.0);
@@ -833,7 +848,7 @@ public class GameEngine extends AbstractAppState {
         else {
             Params.screenHeight = settings.getHeight();
         }
-
+        
         updateInterfacePosition();
         jmonkeyApp.setSettings(settings);
         jmonkeyApp.restart();
@@ -876,7 +891,7 @@ public class GameEngine extends AbstractAppState {
                 System.out.println(closest.getDistance());
             }
 
-            if (closest.getDistance() > 60f && !stateManager.getState(GameRunningState.class).isTopViewEnabled()) {
+            if (closest.getDistance() > 60f && !gameState.isTopViewEnabled()) {
                 return;
             }
 
@@ -965,11 +980,12 @@ public class GameEngine extends AbstractAppState {
                 gs.getFirst().playSound(gs.getSecond());
         }
         else {
-            if (Params.isTutorialLevel && Params.isLevelStarted)
-                return;
-            
-            for (Pair<GameSounds, Sounds> gs : arrGameSounds)
-                gs.getFirst().pauseSound(gs.getSecond());
+
+            for (Pair<GameSounds, Sounds> gs : arrGameSounds) {
+                if (gs.getSecond() != Sounds.TutorialLevel)
+                    gs.getFirst().pauseSound(gs.getSecond());
+                        
+            }
         }
     }
 

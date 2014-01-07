@@ -49,4 +49,11 @@ public class Sensor extends GhostControl
     { 
         return this.getOverlappingCount() > 1; 
     }
+    
+    public void resetPhysicsEngine(BulletAppState physicsEngine) {
+        
+        this.physicsEngine.getPhysicsSpace().remove(this);
+        this.physicsEngine = physicsEngine;
+        initSensor();
+    }
 }

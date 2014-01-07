@@ -152,7 +152,7 @@ public class Tutorial {
                 break;
             case 16:
                 stepMessage = "You can now start the game.\nPress the start button to begin, then "
-                        + "Press the Right-Shift button.";
+                        + "press the Right-Shift button.";
                 break;
 
             case 17:
