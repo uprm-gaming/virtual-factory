@@ -1,6 +1,5 @@
 package com.virtualfactory.utils;
 
-import com.jme3.asset.AssetManager;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.math.FastMath;
 import com.jme3.renderer.RenderManager;
