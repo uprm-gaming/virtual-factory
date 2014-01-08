@@ -26,7 +26,7 @@ public class ScreenSettings {
     private void loadGameScreen() {
         gameScreen = new AppSettings(true);
         Params.renderer = gameScreen.getRenderer();
-        gameScreen.setTitle("Virtual Factory 2.0 (Alpha) - ININ-UPRM - NSF #0835990");
+        gameScreen.setTitle("Virtual Factory 2.0 (Beta) - ININ-UPRM - NSF #0835990");
         gameScreen.setRenderer(AppSettings.LWJGL_OPENGL2);
         gameScreen.setSettingsDialogImage("Interface/icon.png");
         
