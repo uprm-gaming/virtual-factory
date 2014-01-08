@@ -11,9 +11,6 @@ import com.virtualfactory.pathfinding.AStarPathFinder;
 import com.virtualfactory.pathfinding.Path;
 import com.virtualfactory.pathfinding.Path.Step;
 import com.virtualfactory.pathfinding.PathFinder;
-import com.virtualfactory.utils.Pair;
-import com.virtualfactory.utils.Params;
-import com.virtualfactory.utils.Status;
 
 /**
  *
@@ -77,7 +74,7 @@ public class DispOperatorWalksTo {
     
     private void printRoute()
     {
-        Path path = null;
+        Path path;
         operator.setMotionPath(new MotionPath());
         path = pathFinder.findPath(operator.getCurrentLocationX(), operator.getCurrentLocationZ(), finalPosX, finalPosZ);
 //        System.out.println("### OperatorWalksTo, Operator:" + operator.getIdOperator() + " - PathSize:" + path.getLength() + " - Strategy:" + operator.getIdStrategyAssigned());

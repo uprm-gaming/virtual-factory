@@ -266,7 +266,6 @@ public class GameSetupScreenController implements Controller {
             screen.findElementByName("setupStartGame").getRenderer(ImageRenderer.class).setImage(nifty.createImage(buttonReady, false));
             isReadyToStart = true;
             isResourcesReady = isStorageReady = isUnitLoadReady = isPurchaseReady = isOperatorsReady = isPriorityReady = true;
-            System.out.println("\n\n\nLevel: " + Params.tutorial.getCurrentStep());
             if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 15)
                 Params.tutorial.nextStep();
         }
@@ -276,7 +275,6 @@ public class GameSetupScreenController implements Controller {
         if (isResourcesReady && isStorageReady && isUnitLoadReady && isPurchaseReady && isOperatorsReady && isPriorityReady){
             screen.findElementByName("setupStartGame").getRenderer(ImageRenderer.class).setImage(nifty.createImage(buttonReady, false));
             isReadyToStart = true;
-            System.out.println("\n\n\nLevel: " + Params.tutorial.getCurrentStep());
             if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 15)
                 Params.tutorial.nextStep();
             
