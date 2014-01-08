@@ -1,5 +1,7 @@
 package com.virtualfactory.utils;
 
+import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.bullet.control.GhostControl;
 import com.jme3.math.FastMath;
 import com.jme3.renderer.RenderManager;
@@ -17,15 +19,18 @@ import com.jme3.scene.control.AbstractControl;
  */
 public class BulletinBoardControl extends AbstractControl 
 {
+    private AssetManager assetManager;
     private final GhostControl stationRadius;
     
     private long initialTime;
     private long currentTime;
     
     private float rotationDegree = 0.1f;
+    private boolean canPlayGrowingSound;
 
-    public BulletinBoardControl (GhostControl givenStationRadius)
+    public BulletinBoardControl (AssetManager givenAssetManager, GhostControl givenStationRadius)
     {
+        assetManager = givenAssetManager;
         stationRadius = givenStationRadius;
         initialTime = System.currentTimeMillis();
     }
@@ -34,7 +39,15 @@ public class BulletinBoardControl extends AbstractControl
     protected void controlUpdate(float tpf) 
     {
         if (stationRadius.getOverlappingCount() > 1)
-        {         
+        {
+            if (canPlayGrowingSound)
+            {
+                AudioNode growingSound = new AudioNode(assetManager, "Sounds/growingSound.wav", false);
+                growingSound.setPositional(false);
+                growingSound.playInstance();
+                canPlayGrowingSound = false;
+            }
+            
             if (spatial.getLocalScale().getX() < 1) 
                 spatial.setLocalScale(spatial.getLocalScale().add(0.03f, 0.03f, 0.03f));
             else
@@ -44,6 +57,7 @@ public class BulletinBoardControl extends AbstractControl
         {
             if (spatial.getLocalScale().getX() > 0)
                 spatial.setLocalScale(spatial.getLocalScale().subtract(0.03f, 0.03f, 0.03f));
+            canPlayGrowingSound = true;
         }
     }
     
