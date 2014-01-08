@@ -3,7 +3,6 @@ package com.virtualfactory.engine;
 import com.virtualfactory.utils.BulletinBoardControl;
 import com.virtualfactory.screen.other.VideoCamGUI;
 import com.virtualfactory.utils.Sensor;
-import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
@@ -105,10 +104,10 @@ public class GameRunningState
         this.bulletAppState = bulletAppState;
     }
 
-    public void initialize(AppStateManager stateManager, Application app, BulletAppState bulletAppState)
+    public void initialize(AppStateManager stateManager, SimpleApplication app, BulletAppState bulletAppState)
     {
         
-        this.app = (SimpleApplication) app;
+        this.app = app;
         this.bulletAppState = bulletAppState;
         this.assetManager = this.app.getAssetManager();
         this.inputManager = this.app.getInputManager();
@@ -117,6 +116,7 @@ public class GameRunningState
         this.flyCam = this.app.getFlyByCamera();
         this.cam = this.app.getCamera();
         this.isPlayerUpstairs = true;
+        
         createFactory();
         
         initSoundEffects();
@@ -654,7 +654,6 @@ public class GameRunningState
             Params.viewNumber = (Params.viewNumber + 1) % 6;
             flyCam.setMoveSpeed(0);
             factory.getChild("Beams-Metal").setCullHint(Spatial.CullHint.Always);
-
         }
         else if (Params.topViewAvailable && Params.isTopViewEnabled) {
             videoCamGUI.disable();
