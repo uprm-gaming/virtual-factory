@@ -1,7 +1,6 @@
 package com.virtualfactory.engine;
 
 import com.virtualfactory.utils.BulletinBoardControl;
-import com.virtualfactory.screen.other.VideoCamGUI;
 import com.virtualfactory.utils.Sensor;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AppStateManager;
@@ -89,7 +88,6 @@ public class GameRunningState
     private Narrator gameNarrator;
     
     private HashMap<String, Sensor> factorySensors;
-    private VideoCamGUI videoCamGUI;
     private AudioNode cameraMovingSound;
     private boolean isKilled = false;
     private Node grass;
@@ -160,9 +158,7 @@ public class GameRunningState
         createSensors();
         
         createBulletinBoards();
-        
-        initVideoCamGUI();
-        
+
         /* First-person Player */
         // ----------
         player = new CharacterControl(new CapsuleCollisionShape(0.4f, 24.5f, 1), 0.05f);
@@ -304,11 +300,8 @@ public class GameRunningState
     
     public void updatePlayerPosition() {
                         
-        if (!Params.isLevelStarted) {
-            if (videoCamGUI.isEnabled())
-                videoCamGUI.disable();
+        if (!Params.isLevelStarted)
             return;
-        }
 
         if (factorySensors.get("top stairs").isPlayerInRange() || factorySensors.get("bottom stairs").isPlayerInRange()
                 || (!Params.isTopViewEnabled && Params.fadeFilter.getValue() < 1))
@@ -335,9 +328,6 @@ public class GameRunningState
         if (Params.isTopViewEnabled || isDebugCamEnabled) {
             if (Params.fadeFilter.getValue() <= 0)
                 Params.fadeFilter.fadeIn();
-            
-            if (!videoCamGUI.getDisplayedDateAndTime().equals(videoCamGUI.getUpdatedDateAndTime()))
-                videoCamGUI.updateDateAndTime();
             return;
         }
 
@@ -511,11 +501,6 @@ public class GameRunningState
         staffZoneStation.addControl(new BulletinBoardControl(assetManager, factorySensors.get("staff zone")));
         rootNode.attachChild(staffZoneStation);
     }
-    
-    private void initVideoCamGUI()
-    {
-        videoCamGUI = new VideoCamGUI(assetManager, app.getGuiNode());
-    }
 
     private void rotateCamera(float value, Vector3f axis) 
     {
@@ -578,13 +563,8 @@ public class GameRunningState
                 playSoundEffect("Sounds/cameraSwitch.wav");
             }
 
-            if (videoCamGUI.isDisabled())
-                videoCamGUI.enable();
-            
             switch(Params.viewNumber) {
                 case 0:
-                    videoCamGUI.showCamInfo(VideoCamGUI.STATIC_CAM);
-                    
                     Params.camAxesLeft = cam.getLeft();
                     Params.camAxesUp = cam.getUp();
                     Params.camAxesDir = cam.getDirection();
@@ -597,8 +577,6 @@ public class GameRunningState
                     break;
 
                 case 1:
-                    videoCamGUI.showCamInfo(VideoCamGUI.SECURITY_CAM_1);
-
                     Params.camMaxY = Params.securityCamsMaxY;
                     Params.camMinY = Params.securityCamsMinY;
                     Params.camMaxX = Params.cam1MaxX;
@@ -612,8 +590,6 @@ public class GameRunningState
                     break;
 
                 case 2:
-                    videoCamGUI.showCamInfo(VideoCamGUI.SECURITY_CAM_2);
-                    
                     Params.camMaxX = Params.playerMaxX;
                     Params.camMinX = Params.playerMinX;
                     Params.camMaxZ = 0;
@@ -625,8 +601,6 @@ public class GameRunningState
                     break;
 
                 case 3:
-                    videoCamGUI.showCamInfo(VideoCamGUI.SECURITY_CAM_3);
-                    
                     Params.camMaxX = 100f;
                     Params.camMinX = 0f;
                     Params.camMaxZ = Params.playerMaxZ;
@@ -637,9 +611,7 @@ public class GameRunningState
                             new Vector3f(0.871574f, -0.49024346f, -0.004471898f));
                     break;
 
-                case 4:
-                    videoCamGUI.showCamInfo(VideoCamGUI.SECURITY_CAM_4);
-                    
+                case 4:  
                     Params.camMaxX = Params.playerMaxX;
                     Params.camMinX = Params.playerMinX;
                     Params.camMaxZ = 100f;
@@ -656,7 +628,6 @@ public class GameRunningState
             factory.getChild("Beams-Metal").setCullHint(Spatial.CullHint.Always);
         }
         else if (Params.topViewAvailable && Params.isTopViewEnabled) {
-            videoCamGUI.disable();
             playSoundEffect("Sounds/exitTopView.wav");
             
             Params.isTopViewEnabled = false;
