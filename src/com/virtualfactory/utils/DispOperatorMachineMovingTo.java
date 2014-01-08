@@ -111,6 +111,13 @@ public class DispOperatorMachineMovingTo {
                         operator.playStopAnimation(false);
                         operator.setIsMoving(false);
                         operator.setMotionControl(null);
+                        
+                        // Don't let operators get inside the kart
+                        Vector3f currentLocation = operator.getCharacter().getPhysicsLocation();
+                        operator.getCharacter().setPhysicsLocation(new Vector3f(currentLocation.getX() - 5,
+                                                                                currentLocation.getY(),
+                                                                                currentLocation.getZ()));
+                        
 //                        System.out.println("DispOperatorMachineMovingTo - Activity:" + operator.getIdActivityAssigned() + " - Operator:" + operator.getIdOperator() + " - Machine:" + operator.getIdMachineAttached());
                         //game.getManageEvents().getArrEvents().get(operator.getIdActivityAssigned()).release();
                         if (!toMachineZone){

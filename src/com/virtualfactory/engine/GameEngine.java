@@ -47,8 +47,6 @@ import de.lessvoid.nifty.tools.SizeValue;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class GameEngine extends AbstractAppState {
 
@@ -63,7 +61,6 @@ public class GameEngine extends AbstractAppState {
     private boolean isLevelStarted;
     private MenuScreenController menuScreenC;
     private LayerScreenController layerScreenC;
-    private Node world;
     private RigidBodyControl bucketRigid;
     private Box bucketBox;
     private Material bucketMaterial;
@@ -100,13 +97,13 @@ public class GameEngine extends AbstractAppState {
     private GameRunningState gameState;
     private Node guiNode;
     private Node rootNode;
-    private Node factoryNode;
     private InputManager inputManager;
     private FlyByCamera flyCam;
     private Camera cam;
     private ViewPort guiViewPort;
 
     private Narrator gameNarrator;
+    private Node factoryNode;
 
     @Override
     public void initialize(AppStateManager manager, Application application) {
@@ -268,8 +265,6 @@ public class GameEngine extends AbstractAppState {
 
         updateCursorIcon(1);
 
-
-        
         if (newGame) {
             this.getArrGameSounds().clear();
             this.gameSounds.stopSound(Sounds.Background);
@@ -466,7 +461,6 @@ public class GameEngine extends AbstractAppState {
                 tutorialFinished = true;
             }
         }
-
         
         if (!isLevelStarted) { 
             return;
