@@ -89,7 +89,7 @@ public class GameEngine extends AbstractAppState {
     private GameSounds gameSounds;
     private ArrayList<Pair<GameSounds, Sounds>> arrGameSounds;
     private boolean isDashboardVisible = false;
-    private boolean tutorialFinished = false;
+    private boolean isTutorialFinished = false;
 
     public SimpleApplication jmonkeyApp;
     private AppStateManager stateManager;
@@ -456,9 +456,9 @@ public class GameEngine extends AbstractAppState {
         if (Params.isTutorialLevel) {
             Params.tutorial.update();
             
-            if (Params.tutorial.isTutorialCompleted() && !tutorialFinished) {
+            if (Params.tutorial.isTutorialCompleted() && !isTutorialFinished) {
                 niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).updateData();
-                tutorialFinished = true;
+                isTutorialFinished = true;
             }
         }
         
