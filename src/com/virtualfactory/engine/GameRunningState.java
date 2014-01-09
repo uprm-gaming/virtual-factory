@@ -494,15 +494,15 @@ public class GameRunningState
     
     private void createBulletinBoards()
     {
-        bulletinBoardsArray = new ArrayList<>();
         
         Spatial staffZoneStation = assetManager.loadModel("Models/BulletinBoards/staffZone.j3o");
         staffZoneStation.setLocalScale(0, 0, 0);
         staffZoneStation.setLocalTranslation(new Vector3f(11.2f, 6.7999988f, -321.1999f));
         staffZoneStation.setLocalRotation(new Quaternion().fromAngleAxis(FastMath.DEG_TO_RAD * 90, Vector3f.UNIT_X));
         staffZoneStation.addControl(new BulletinBoardControl(assetManager, factorySensors.get("staff zone")));
-
+        bulletinBoardsArray = new ArrayList<>();
         bulletinBoardsArray.add(staffZoneStation);
+        rootNode.attachChild(staffZoneStation);
     }
 
     private void rotateCamera(float value, Vector3f axis) 
