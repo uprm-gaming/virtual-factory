@@ -877,6 +877,11 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
                 screen.findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).loadWindowControl(gameEngine, 0, null);
                 if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 1)
                     Params.tutorial.nextStep();
+                if (Params.isTutorialLevel)
+                    screen.findElementByName("setupDefaultGame").disable();
+                else
+                    screen.findElementByName("setupDefaultGame").enable();
+                    
             }
             isVisibleWindowGameSetup = !isVisibleWindowGameSetup;
         }
