@@ -175,14 +175,14 @@ public class Tutorial {
             case 20:
                 stepMessage = "Do you see the three clocks at the top of the screen?  The one at the left"
                         + " is the game time. The Next Order Due clock specifies in how much time the next "
-                        + "order has to be completed. and The Next Purchase indicator tells you the time "
+                        + "order has to be completed and the Next Purchase indicator tells you the time "
                         + "that is left for a new purchase of raw material to arrive to the factory. "
                         + "\nClick some object to see its information.";
                 break;
             case 21:
                 stepMessage = "You can see an object's information by clicking it. You can click on "
                         + "workers, machines, equipment and stations."
-                        + "\nPausing the game can be really helpful!. Pause "
+                        + "\nPausing the game can be really helpful! Pause "
                         + "the game using the button at the top left corner. ";
                 break;
             case 22:
@@ -212,10 +212,6 @@ public class Tutorial {
 
     public void setCurrentStep(int num) {
         this.stepNumber = num;
-    }
-
-    public int getLastStep() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
      
 }
