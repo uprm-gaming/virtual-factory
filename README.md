@@ -1,5 +1,12 @@
 ![vf-2-beta](https://f.cloud.github.com/assets/4027178/1882041/4111c01e-7970-11e3-9650-d4abbb60cf92.png)
 
+NSF Award No. 0835990 
+--------
+
+![logos](https://f.cloud.github.com/assets/4027178/1883952/9298295c-7991-11e3-9d79-d5e7f933ac21.png)
+
+An NSF-funded serious game that helps students know what it might be like to work in a factory as an industrial engineer.
+
 Download and Play
 --------
 https://github.com/uprm-gaming/virtual-factory/releases
@@ -30,12 +37,8 @@ History
 
 UPRM Gaming - Virtual Factory 2.0 is latest version of a  serious game that has been in development in recent years. The  research project started in 2009 and  has been sponsored  by the National Science Foundation (NSF) since its beginning. Many have been the people, among UPRM faculty members and students, who have collaborated to make this project possible.  We invite you to learn more about the game and its purpose by reading the research's basic  overview that follows.
 
-![logos](https://f.cloud.github.com/assets/4027178/1883952/9298295c-7991-11e3-9d79-d5e7f933ac21.png)
-
-NSF Award No. 0835990 
+Innovations in Engineering Education
 --------
-
-**Innovations in Engineering Education, Curriculum and Infrastructure (IEECI)**
 
 Can Gaming Provide Enough Context to Improve Knowledge Integration and Retention in Engineering Freshman?
 
