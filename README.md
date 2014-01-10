@@ -27,3 +27,5 @@ Develop computer-based serious game where students interact with a virtual world
 *Benefits*
 
 Improve retention and motivation of IE freshman students; support learning in context; improve students understanding of core concepts; improve problem-solving skills in complex unstructured problems; gain an understanding of how engineering students learn concepts and develop skills through educational games.
+
+![logos](https://www.dropbox.com/s/actyl92lu2uk2xf/logos.png)
