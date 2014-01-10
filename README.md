@@ -13,7 +13,7 @@ https://github.com/uprm-gaming/virtual-factory/releases
 
 Compiling From Source
 --------
-Actually, it's really easy to download the source code and fiddle with it yourself:
+Here's one way to download the source code so you can fiddle with it:
 
 ![step1](https://f.cloud.github.com/assets/4027178/1884444/f5828ada-79a0-11e3-8949-7efd42c69178.png)
 1. Download the latest version of jMonkey (http://jmonkeyengine.org)
