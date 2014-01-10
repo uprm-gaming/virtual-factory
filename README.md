@@ -9,6 +9,8 @@ History
 
 UPRM Gaming - Virtual Factory 2.0 is latest version of a  serious game that has been in development in recent years. The  research project started in 2009 and  has been sponsored  by the National Science Foundation (NSF) since its beginning. Many have been the people, among UPRM faculty members and students, who have collaborated to make this project possible.  We invite you to learn more about the game and its purpose by reading the research's basic  overview that follows.
 
+![logos](https://f.cloud.github.com/assets/4027178/1883952/9298295c-7991-11e3-9d79-d5e7f933ac21.png)
+
 NSF Award No. 0835990 
 --------
 
@@ -27,5 +29,3 @@ Develop computer-based serious game where students interact with a virtual world
 *Benefits*
 
 Improve retention and motivation of IE freshman students; support learning in context; improve students understanding of core concepts; improve problem-solving skills in complex unstructured problems; gain an understanding of how engineering students learn concepts and develop skills through educational games.
-
-![logos](https://www.dropbox.com/s/actyl92lu2uk2xf/logos.png)
