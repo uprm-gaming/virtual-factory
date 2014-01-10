@@ -1,6 +1,27 @@
 ![vf-2-beta](https://f.cloud.github.com/assets/4027178/1882041/4111c01e-7970-11e3-9650-d4abbb60cf92.png)
 
-**See release here:** https://github.com/uprm-gaming/virtual-factory/releases
+Download and Play
+--------
+https://github.com/uprm-gaming/virtual-factory/releases
+
+Compiling From Source
+--------
+Actually, it's really easy to download the source code and fiddle with it yourself:
+
+![step1](https://f.cloud.github.com/assets/4027178/1884444/f5828ada-79a0-11e3-8949-7efd42c69178.png)
+1. Download the latest version of jMonkey (http://jmonkeyengine.org)
+
+![step2](https://f.cloud.github.com/assets/4027178/1884585/e6609cd6-79a5-11e3-9e23-85921905bb87.png)
+2. Choose the option to clone a project
+
+![step3](https://f.cloud.github.com/assets/4027178/1884616/2b7bc66e-79a7-11e3-9acc-62aee9b8ea28.png)
+3. After forking this repository, write down its link along with a github username and password.
+
+![step4](https://f.cloud.github.com/assets/4027178/1884714/0f1b4c20-79ab-11e3-9165-e63193ed246e.png)
+4. Once cloned, you are missing two files that go directly inside the assets/Models directory of the project. Download them here (https://www.dropbox.com/sh/hym1yy77134duqv/WgRwWaktyo)
+
+![step5](https://f.cloud.github.com/assets/4027178/1884741/19e02b8e-79ac-11e3-897f-3cfc8195f59e.png)
+5. That should be about it! If you have any issues, please contact jose.martinez70@upr.edu
 
 History
 --------
