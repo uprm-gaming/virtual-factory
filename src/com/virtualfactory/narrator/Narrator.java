@@ -12,14 +12,18 @@ import com.jme3.font.Rectangle;
 import com.jme3.material.Material;
 import com.jme3.material.RenderState.BlendMode;
 import com.jme3.math.ColorRGBA;
-import com.jme3.renderer.queue.RenderQueue.Bucket;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial.CullHint;
 import com.jme3.scene.shape.Quad;
-import com.jme3.texture.Texture;
 import java.util.ArrayList;
 
+/**
+ * A narrator that can be used in any jMonkey game.
+ * 
+ * @author Abner Coimbre @abner7
+ * @author Jose "Pepe" Martinez @pepepr08
+ */
 public class Narrator extends AbstractAppState
 {
     private AssetManager assetManager;
