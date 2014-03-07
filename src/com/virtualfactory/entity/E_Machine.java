@@ -6,6 +6,7 @@ import com.jme3.bullet.BulletAppState;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.events.MotionTrack;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
@@ -256,7 +257,7 @@ public class E_Machine{
             boxForMachine = new Box(Vector3f.ZERO, (float)Params.standardPartWidthLength*2, 0f, (float)Params.standardPartWidthLength*2);
             itemsForMachine = new Geometry(TypeElements.MACHINE + String.valueOf(getIdMachine()) + "_" + TypeElements.PART + idPart, boxForMachine);
             materialForMachine = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            if (colorPart.length() > 0) materialForMachine.setColor("Color", Colors.getColorRGBA(colorPart));
+            if (colorPart.length() > 0) materialForMachine.setColor("Color", ColorRGBA.Brown);//.setColor("Color", Colors.getColorRGBA(colorPart));
             if (texturePart.length() > 0) materialForMachine.setTexture("ColorMap", assetManager.loadTexture(texturePart));
             itemsForMachine.setMaterial(materialForMachine);
             rootNode.attachChild(itemsForMachine);

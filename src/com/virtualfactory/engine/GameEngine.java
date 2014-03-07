@@ -690,7 +690,7 @@ public class GameEngine extends AbstractAppState {
         bucketBox = new Box(Vector3f.ZERO, (float) Params.standardBucketWidthLength / 2.0f, .5f, (float) Params.standardBucketWidthLength / 2.0f);
         Geometry bucketGeo = new Geometry(TypeElements.STATION + String.valueOf(bucket.getIdStation()) + "_" + TypeElements.BUCKET + String.valueOf(bucket.getIdBucket()), bucketBox);
         bucketMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        bucketMaterial.setColor("Color", ColorRGBA.Yellow);
+        bucketMaterial.setColor("Color", ColorRGBA.Pink);
         bucketGeo.setMaterial(bucketMaterial);
         rootNode.attachChild(bucketGeo);
         bucketGeo.setLocalTranslation(new Vector3f((float) bucket.getCurrentLocationX(), 1.0f, (float) bucket.getCurrentLocationZ()));
@@ -708,7 +708,7 @@ public class GameEngine extends AbstractAppState {
         if (part == null) {
             part = new Geometry(TypeElements.STATION + String.valueOf(bucket.getIdStation()) + "_" + TypeElements.BUCKET + String.valueOf(bucket.getIdBucket()) + "_" + TypeElements.PART + String.valueOf(bucket.getIdPart()), partBox);
             partMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            partMaterial.setColor("Color", Colors.getColorRGBA(gameData.getMapUserPart().get(bucket.getIdPart()).getPartDesignColor()));
+            partMaterial.setColor("Color", ColorRGBA.Cyan);//.setColor("Color", Colors.getColorRGBA(gameData.getMapUserPart().get(bucket.getIdPart()).getPartDesignColor()));
             part.setMaterial(partMaterial);
             rootNode.attachChild(part);
             shootables.attachChild(part);
