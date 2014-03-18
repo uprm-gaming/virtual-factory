@@ -97,6 +97,14 @@ public class MainMenuController implements Controller {
                     screen.findElementByName("editProfileButton_MMD").disable();
                     screen.findElementByName("creditsButton_MMD").disable();
         }
+        
+        if (Params.SKIP_LOGIN_SCREEN) {
+            screen.findElementByName("editProfileButton_MMD").disable();
+            screen.findElementByName("switchUserButton_MMD").disable();
+        }
+    
+        
+            
     }
 
     @NiftyEventSubscriber(id="newGameButton_MMD")
