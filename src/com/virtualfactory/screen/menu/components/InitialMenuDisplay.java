@@ -1,6 +1,7 @@
 package com.virtualfactory.screen.menu.components;
 
 import com.virtualfactory.utils.CommonBuilders;
+import com.virtualfactory.utils.Params;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;
@@ -22,6 +23,8 @@ public class InitialMenuDisplay {
         new ControlDefinitionBuilder(NAME) {{
             controller(new InitialMenuController());
             control(new ControlBuilder(DialogPanelControlDefinition.NAME) {{
+                if (Params.SKIP_LOGIN_SCREEN)
+                    panel(builders.vspacer("10000px"));
                 panel(builders.vspacer("20%"));
                 panel(new PanelBuilder() {{
                   childLayoutHorizontal();

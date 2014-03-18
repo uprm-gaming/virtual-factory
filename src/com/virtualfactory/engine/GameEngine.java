@@ -122,8 +122,10 @@ public class GameEngine extends AbstractAppState {
         niftyGUI = niftyDisplay.getNifty();
 
         buildGameScreens();
-
-        if (Params.DEBUG_ON)
+        
+        if (Params.SKIP_LOGIN_SCREEN)
+            niftyGUI.gotoScreen("start");
+        else if (Params.DEBUG_ON)
             niftyGUI.gotoScreen("initialMenu");
         else
             niftyGUI.gotoScreen("start");

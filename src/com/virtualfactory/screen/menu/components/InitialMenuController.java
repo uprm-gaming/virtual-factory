@@ -50,6 +50,7 @@ public class InitialMenuController implements Controller {
             final Attributes controlDefinitionAttributes) {
         this.screen = screen;
         this.nifty = nifty;
+        
         this.userTextField = screen.findNiftyControl("userTextField_IMD", TextField.class);
         this.passTextField = screen.findNiftyControl("passTextField_IMD", TextField.class);
         this.loginButton = screen.findNiftyControl("loginButton_IMD", Button.class);
@@ -87,19 +88,19 @@ public class InitialMenuController implements Controller {
         userTextField.setMaxLength(100);
         passTextField.setText("");
         passTextField.setMaxLength(20);
-        if (Params.DEBUG_ON) {
+        if (Params.DEBUG_ON || Params.SKIP_LOGIN_SCREEN) {
             userTextField.setText("nnn@nnn.com");
             passTextField.setText("123456");
         }
         errorMessage.setText("");
-        if (!checkedUpdate && !Params.DEBUG_ON) {
+        if (!checkedUpdate && (!Params.DEBUG_ON && !Params.SKIP_LOGIN_SCREEN)) {
             checkedUpdate = true;
             nifty.showPopup(screen, updatingPopup.getId(), null);
             screen.processAddAndRemoveLayerElements();
             gameEngine.getGameData().updateLocalDB();
         }
         userTextField.setFocus();
-        if (Params.DEBUG_ON) {
+        if (Params.DEBUG_ON || Params.SKIP_LOGIN_SCREEN) {
             onLoginButtonClicked("", null );
         }
     }
@@ -160,7 +161,7 @@ public class InitialMenuController implements Controller {
         closePopupLoading(false);
         screen.processAddAndRemoveLayerElements();
         if (isValidated) {
-            if (Params.DEBUG_ON && Params.firstRun) { //Go straight to the levels menu
+            if ((Params.DEBUG_ON) && Params.firstRun) { //Go straight to the levels menu
                 Element nextElement = screen.findElementByName("dialogNewGameStage1Menu");
                 NewGame1MenuController loadGameMenu = nextElement.getControl(NewGame1MenuController.class);
                 loadGameMenu.updateControls_stage1();

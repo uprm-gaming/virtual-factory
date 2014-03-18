@@ -84,7 +84,7 @@ public class MySqlConn {
         }
         Statement s;
         boolean result = false;
-        if (!Params.DEBUG_ON) {
+        if (!Params.DEBUG_ON && !Params.SKIP_LOGIN_SCREEN) {
             OpenConnection();
         } else {
             conn = null;
@@ -114,7 +114,7 @@ public class MySqlConn {
             return null;
         }
         Statement s;
-        if (!Params.DEBUG_ON) {
+        if (!Params.DEBUG_ON && !Params.SKIP_LOGIN_SCREEN) {
             OpenConnection();
         } else {
             conn = null;

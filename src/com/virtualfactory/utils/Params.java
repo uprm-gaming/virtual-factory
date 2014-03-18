@@ -6,7 +6,8 @@ import com.virtualfactory.tutorial.Tutorial;
 
 public class Params {
 
-    public static final boolean DEBUG_ON = true;
+    public static final boolean DEBUG_ON = false;
+    public static final boolean SKIP_LOGIN_SCREEN = true;
     public static final boolean BUILD_FOR_MAC_APP = false;
     public static final boolean BUILD_FOR_TESTING_SESSION = false;
 

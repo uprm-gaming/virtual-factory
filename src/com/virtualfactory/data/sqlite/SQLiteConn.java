@@ -65,7 +65,7 @@ public class SQLiteConn {
         }
     }
     
-    public boolean ExecuteSP(String strSP){
+    public boolean ExecuteSP(String strSP) {
         Statement s;
         boolean result = false;
         OpenConnection();
