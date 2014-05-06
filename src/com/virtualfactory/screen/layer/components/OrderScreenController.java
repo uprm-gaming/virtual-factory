@@ -217,6 +217,9 @@ public class OrderScreenController implements Controller {
             if (Params.isTutorialLevel && !Params.tutorial.isTutorialCompleted()){ //If the tutorial has not been completed, do not end the game.
                 return;
             }
+            else if (Params.isObjectiveLevel && !Params.objective.isObjectiveCompleted()){ //If the objective level has not been completed, do not end the game.
+                return;
+            }
             
             gameEngine.getGameSounds().stopSound(Sounds.Background);
             gameEngine.getGameSounds().playSound(Sounds.GameWon);

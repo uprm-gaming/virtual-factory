@@ -2,11 +2,12 @@ package com.virtualfactory.utils;
 
 import com.jme3.math.Vector3f;
 import com.jme3.post.filters.FadeFilter;
+import com.virtualfactory.tutorial.Objective;
 import com.virtualfactory.tutorial.Tutorial;
 
 public class Params {
 
-    public static final boolean DEBUG_ON = false;
+    public static final boolean DEBUG_ON = true;
     public static final boolean SKIP_LOGIN_SCREEN = true;
     public static final boolean BUILD_FOR_MAC_APP = false;
     public static final boolean BUILD_FOR_TESTING_SESSION = false;
@@ -16,8 +17,10 @@ public class Params {
     public static int screenHeight = 0;
     public static int fullScreenHeight = 0;
     public static boolean isTutorialLevel = false;
+    public static boolean isObjectiveLevel = false;
     public static boolean firstRun = true;
     public static Tutorial tutorial;
+    public static Objective objective;
     public static boolean isLevelStarted = false;
     
     public static final String ControlsDescription = ""

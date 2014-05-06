@@ -5,6 +5,7 @@
 package com.virtualfactory.screen.menu.components;
 
 import com.virtualfactory.utils.CommonBuilders;
+import com.virtualfactory.utils.Params;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.builder.ControlBuilder;
 import de.lessvoid.nifty.builder.ControlDefinitionBuilder;
@@ -68,16 +69,20 @@ public class MainMenuDisplay {
                     control(new ButtonBuilder("controlsButton_MMD", "Controls"){{ width(buttonsWidth); alignCenter(); }});
                     panel(builders.vspacer());
                     //                  control(new ButtonBuilder("optionsButton_MMD", "Game Settings"){{ width(buttonsWidth); alignCenter(); }});
-                    control(new ButtonBuilder("editProfileButton_MMD", "Profile"){{ width(buttonsWidth); alignCenter(); }});
-                    panel(builders.vspacer());
+                    if (!Params.SKIP_LOGIN_SCREEN) {
+                        control(new ButtonBuilder("editProfileButton_MMD", "Profile"){{ width(buttonsWidth); alignCenter(); }});
+                        panel(builders.vspacer());
+                    }
                     //                  control(new ButtonBuilder("tutorialButton_MMD", "Tutorial"){{ width(buttonsWidth); alignCenter(); }});
                     //                  panel(builders.vspacer());
                     control(new ButtonBuilder("userManualButton_MMD", "User Manual"){{ width(buttonsWidth); alignCenter(); }});
                     panel(builders.vspacer());
                     control(new ButtonBuilder("creditsButton_MMD", "Credits"){{ width(buttonsWidth); alignCenter(); }});
                     panel(builders.vspacer());
-                    control(new ButtonBuilder("switchUserButton_MMD", "Switch User"){{ width(buttonsWidth); alignCenter(); }});
-                    panel(builders.vspacer());
+                    if (!Params.SKIP_LOGIN_SCREEN) {
+                        control(new ButtonBuilder("switchUserButton_MMD", "Switch User"){{ width(buttonsWidth); alignCenter(); }});
+                        panel(builders.vspacer());
+                    }
                     control(new ButtonBuilder("quitButton_MMD", "Quit Game"){{ width(buttonsWidth); alignCenter(); }});
                 }});
             }});

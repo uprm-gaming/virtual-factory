@@ -13,7 +13,7 @@ import javax.mail.internet.*;
 public class SendEmail {
     private static final String SMTP_HOST_NAME = "smtp.gmail.com";
     private static final String SMTP_AUTH_USER = "yaguez.factory@gmail.com";
-    private static final String SMTP_AUTH_PWD  = "#gamingYaguez$";
+    private static final String SMTP_AUTH_PWD  = "gamingYaguez$";//#gamingYaguez$";
     
     public SendEmail(){
         
@@ -61,7 +61,7 @@ public class SendEmail {
             transport.send(message);
             return "";
         }catch (MessagingException mex) {
-            return "Error: " +mex.getMessage();
+            return "Error: " + mex.getMessage();
         }
     }
     

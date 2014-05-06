@@ -391,8 +391,8 @@ public class GameRunningState
             else {
                 player.setPhysicsLocation(new Vector3f(51.68367f, 59.064148f, -292.67755f));
                 cam.setRotation(new Quaternion(0.07086334f, -0.01954512f, 0.0019515193f, 0.99729264f));
-                if (!Params.isTutorialLevel)
-                    gameNarrator.talk("Second Floor.\nPress 'T' for a top view of the factory.", "Sounds/Narrator/instructions.wav");
+                if (!Params.isTutorialLevel && !Params.isObjectiveLevel)
+                    gameNarrator.talk("Second Floor.\nPress 'T' for a top view of the factory.", 5);//"Sounds/Narrator/instructions.wav");
                 isPlayerUpstairs = true;
                 
             }

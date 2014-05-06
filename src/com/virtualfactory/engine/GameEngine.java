@@ -41,6 +41,7 @@ import com.virtualfactory.screen.other.Credits;
 import com.virtualfactory.simpack.*;
 import com.virtualfactory.strategy.ManageEvents;
 import com.virtualfactory.threads.*;
+import com.virtualfactory.tutorial.Objective;
 import com.virtualfactory.tutorial.Tutorial;
 import com.virtualfactory.utils.*;
 import de.lessvoid.nifty.tools.SizeValue;
@@ -90,6 +91,7 @@ public class GameEngine extends AbstractAppState {
     private ArrayList<Pair<GameSounds, Sounds>> arrGameSounds;
     private boolean isDashboardVisible = false;
     private boolean isTutorialFinished = false;
+    private boolean isObjectiveFinished = false;
 
     public SimpleApplication jmonkeyApp;
     private AppStateManager stateManager;
@@ -231,6 +233,12 @@ public class GameEngine extends AbstractAppState {
                             else
                                 Params.tutorial.nextStep();
                         }
+                        else if (Params.isObjectiveLevel && Params.DEBUG_ON) {
+                            if (Params.objective.getCurrentStep() == 20)
+                                Params.objective.setCurrentStep(0);
+                            else
+                                Params.objective.nextStep();
+                        }
                     break;
 
                 default:
@@ -308,7 +316,15 @@ public class GameEngine extends AbstractAppState {
                 Params.tutorial.update();
                 getGameSounds().playSound(Sounds.TutorialLevel);
             }
+            else if (gameData.getCurrentGame().getGameName().equalsIgnoreCase("objective")) {
+                Params.isTutorialLevel = false;
+                Params.isObjectiveLevel = true;
+                Params.objective = new Objective(gameNarrator);
+                Params.objective.update();
+//                getGameSounds().playSound(Sounds.TutorialLevel);
+            }
             else {
+                Params.isObjectiveLevel = false;
                 Params.isTutorialLevel = false;
                 gameNarrator.talk("Welcome to Virtual Factory!\nPress 'T' for a top view of the factory.", 5);
             }
@@ -316,6 +332,10 @@ public class GameEngine extends AbstractAppState {
         else if (!gameData.getCurrentGame().getGameName().equalsIgnoreCase("tutorial")) {
                 Params.isTutorialLevel = false;
         }
+        
+        if (isLevelStarted && !gameData.getCurrentGame().getGameName().equalsIgnoreCase("objective"))
+            Params.isObjectiveLevel = false;
+
         isLevelStarted = true;
     }
 
@@ -461,6 +481,14 @@ public class GameEngine extends AbstractAppState {
             if (Params.tutorial.isTutorialCompleted() && !isTutorialFinished) {
                 niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).updateData();
                 isTutorialFinished = true;
+            }
+        }
+        if (Params.isObjectiveLevel) {
+            Params.objective.update();
+            
+            if (Params.objective.isObjectiveCompleted() && !isObjectiveFinished) {
+                niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).updateData();
+                isObjectiveFinished = true;
             }
         }
         
@@ -674,7 +702,7 @@ public class GameEngine extends AbstractAppState {
         shootables.attachChild(stationGeo);
         if (station.getStationType().toString().toUpperCase().contains("Storage".toUpperCase())) {
             //create grid, only in Storages
-            createGrid(station.getStationLocationX() - (int) station.getSizeW() / 2, station.getStationLocationY() - (int) station.getSizeL() / 2, (int) station.getSizeW(), (int) station.getSizeL());
+            //createGrid(station.getStationLocationX() - (int) station.getSizeW() / 2, station.getStationLocationY() - (int) station.getSizeL() / 2, (int) station.getSizeW(), (int) station.getSizeL());
             createPartsInStation(station.getIdStation(), station.getStationLocationX() - (int) station.getSizeW() / 2, station.getStationLocationY() - (int) station.getSizeL() / 2, (int) station.getSizeW(), (int) station.getSizeL());
             setTerrainMap(station.getStationLocationX() - Params.standardBucketWidthLength / 2, station.getStationLocationY(), (int) station.getSizeW() - Params.standardBucketWidthLength, (int) station.getSizeL(), true);
         } else {

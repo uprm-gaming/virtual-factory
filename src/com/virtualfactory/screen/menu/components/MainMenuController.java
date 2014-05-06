@@ -15,6 +15,7 @@ import de.lessvoid.xml.xpp3.Attributes;
 import com.virtualfactory.engine.GameEngine;
 import com.virtualfactory.utils.Params;
 import com.virtualfactory.utils.Status;
+import de.lessvoid.nifty.tools.SizeValue;
 import java.awt.Desktop;
 import java.io.File;
 import java.net.URI;
@@ -86,9 +87,13 @@ public class MainMenuController implements Controller {
     }
     
     public void updateControls(){
+        String nameMessage = "Welcome to Virtual Factory!";
         if (this.gameEngine.getGameData().getPlayer() != null)
-            this.userName.setText("Welcome back: " + this.gameEngine.getGameData().getPlayer().getName().toUpperCase());
-        
+            if (!Params.SKIP_LOGIN_SCREEN)
+               nameMessage = "Welcome back: " + this.gameEngine.getGameData().getPlayer().getName().toUpperCase();
+                
+            this.userName.setText(nameMessage);
+            
         if (!gameEngine.isExecuteGame()) {
             screen.findElementByName("returnToGameButton_MMD").disable();
         }
@@ -96,14 +101,7 @@ public class MainMenuController implements Controller {
         if (Params.BUILD_FOR_TESTING_SESSION) {
                     screen.findElementByName("editProfileButton_MMD").disable();
                     screen.findElementByName("creditsButton_MMD").disable();
-        }
-        
-        if (Params.SKIP_LOGIN_SCREEN) {
-            screen.findElementByName("editProfileButton_MMD").disable();
-            screen.findElementByName("switchUserButton_MMD").disable();
-        }
-    
-        
+        }    
             
     }
 
@@ -246,6 +244,9 @@ public class MainMenuController implements Controller {
         
         if (Params.isTutorialLevel)
             Params.tutorial.show();
+        
+        else if (Params.isObjectiveLevel)
+            Params.objective.show();
 
         Element currentElement = screen.findElementByName("dialogMainMenu");
         currentElement.hide();

@@ -50,9 +50,9 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
     private Label labelPurchaseDueDate;
     private float currentTimeFactor;
     private Label labelCurrentTimeFactor;
-//    private Label labelPeopleBusy;
-//    private Label labelPeopleIdle;
-//    private Label labelCurrentMoney;
+    //    private Label labelPeopleBusy;
+    //    private Label labelPeopleIdle;
+    //    private Label labelCurrentMoney;
     private GameEngine gameEngine;
     private Slider sliderTimeFactor;
     private boolean isGamePlaying;
@@ -83,27 +83,27 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
     private boolean isEnableVolumeMusic = true;
     private boolean isEnableVolumeSFX = true;
     final CommonBuilders common = new CommonBuilders();
-
+    
     public String getButtonSelectedSecondLevel() {
         return buttonSelectedSecondLevel;
     }
-
+    
     public void setButtonSelectedSecondLevel(String buttonSelectedSecondLevel) {
         this.buttonSelectedSecondLevel = buttonSelectedSecondLevel;
     }
-
+    
     public String getCurrentOptionselected() {
         return currentOptionselected;
     }
-
+    
     public void setCurrentOptionselected(String currentOptionselected) {
         this.currentOptionselected = currentOptionselected;
     }
-
+    
     public GameEngine getGameEngine() {
         return gameEngine;
     }
-
+    
     public void setGameEngine(GameEngine gameEngine) {
         this.gameEngine = gameEngine;
     }
@@ -120,9 +120,9 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
         this.labelDueDateNextOrder = screen.findNiftyControl("labelDueDateNextOrder", Label.class);
         this.labelPurchaseDueDate = screen.findNiftyControl("labelPurchaseDueDate", Label.class);
         this.labelCurrentTimeFactor = screen.findNiftyControl("labelSliderTime", Label.class);
-//        this.labelPeopleBusy = screen.findNiftyControl("peopleBusy", Label.class);
-//        this.labelPeopleIdle = screen.findNiftyControl("peopleIdle", Label.class);
-//        this.labelCurrentMoney = screen.findNiftyControl("currentMoney", Label.class);
+        //        this.labelPeopleBusy = screen.findNiftyControl("peopleBusy", Label.class);
+        //        this.labelPeopleIdle = screen.findNiftyControl("peopleIdle", Label.class);
+        //        this.labelCurrentMoney = screen.findNiftyControl("currentMoney", Label.class);
         Attributes x = new Attributes();
         x.set("hideOnClose", "true");
         this.sliderTimeFactor = screen.findNiftyControl("sliderTime", Slider.class);
@@ -162,9 +162,9 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
     
     @Override
     public void onStartScreen() {
-//        ((Slider) screen.findNiftyControl("sliderTime", Slider.class)).setup(1.f, 8.f, 4.f, 1.f, 1.f);
-//        showHideDynamicButtons(0);
-//        showHideDynamicSubLevelButtons(0);
+        //        ((Slider) screen.findNiftyControl("sliderTime", Slider.class)).setup(1.f, 8.f, 4.f, 1.f, 1.f);
+        //        showHideDynamicButtons(0);
+        //        showHideDynamicSubLevelButtons(0);
     }
     
     @Override
@@ -225,7 +225,7 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
         }
         sliderTimeFactor.setValue(newTimeFactor);
     }
-
+    
     public void updateStartScreen(){
         ((Slider) screen.findNiftyControl("sliderTime", Slider.class)).setup(1.f, 8.f, 4.f, 1.f, 1.f);
         showHideDynamicButtons(0);
@@ -247,13 +247,13 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
         labelPurchaseDueDate.setText("NextPurchase: " + time);
     }
     
-//    public void updateQuantityPeopleStatus(int noPeopleBusy, int noPeopleIdle){
-//        this.labelPeopleBusy.setText(noPeopleBusy + " Busy");
-//        this.labelPeopleIdle.setText(noPeopleIdle + " Idle");
-//    }
+    //    public void updateQuantityPeopleStatus(int noPeopleBusy, int noPeopleIdle){
+    //        this.labelPeopleBusy.setText(noPeopleBusy + " Busy");
+    //        this.labelPeopleIdle.setText(noPeopleIdle + " Idle");
+    //    }
     
     public void updateQuantityCurrentMoney(double currentMoney){
-//        this.labelCurrentMoney.setText(Params.moneySign + " " + Utils.formatValue2DecToString(currentMoney));
+        //        this.labelCurrentMoney.setText(Params.moneySign + " " + Utils.formatValue2DecToString(currentMoney));
         if (currentMoney < 1000 && currentMoney > 980){
             GameLogScreenController.addMessage(MessageType.Notification, Messages.moneyBetween1000and980);
             if (callOnceMoneyWarning){
@@ -287,14 +287,14 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
         }else{
             GameLogScreenController.addMessage(MessageType.Notification, Messages.gameSetup);
         }
-//        nifty.gotoScreen("initialMenu");
+        //        nifty.gotoScreen("initialMenu");
     }
     
     public void playGame(){
         gameEngine.updateLastActivitySystemTime();
         if (!isGamePlaying){
             screen.findElementByName("imagePlay").getRenderer(ImageRenderer.class).setImage(imagePauseRed);
-//            screen.findElementByName("imagePause").getRenderer(ImageRenderer.class).setImage(imagePauseRed);
+            //            screen.findElementByName("imagePause").getRenderer(ImageRenderer.class).setImage(imagePauseRed);
             isGamePlaying = true;
             playPauseGame();
             GameLogScreenController.addMessage(MessageType.Info, Messages.gamePlay);
@@ -303,7 +303,7 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
             gameEngine.getGameSounds().playSound(Sounds.Background);
             if (Params.isTutorialLevel)
                 gameEngine.getGameSounds().stopSound(Sounds.TutorialLevel);
-
+            
             
             gameEngine.updateGameSounds(true);
             sliderTimeFactor.enable();
@@ -325,8 +325,8 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
         GameLogScreenController.addMessage(MessageType.Info, Messages.gamePause);
         setGamePrincipalStatus(" (Paused)");
         screen.findElementByName("imagePlay").getRenderer(ImageRenderer.class).setImage(imagePlayGreen);
-//        screen.findElementByName("imagePlay").getRenderer(ImageRenderer.class).setImage(imagePlayRed);
-//        screen.findElementByName("imagePause").getRenderer(ImageRenderer.class).setImage(imagePauseGreen);
+        //        screen.findElementByName("imagePlay").getRenderer(ImageRenderer.class).setImage(imagePlayRed);
+        //        screen.findElementByName("imagePause").getRenderer(ImageRenderer.class).setImage(imagePauseGreen);
         gameEngine.getGameSounds().playSound(Sounds.PlayPause);
         gameEngine.getGameSounds().pauseSound(Sounds.Background);
         gameEngine.updateGameSounds(false);
@@ -338,7 +338,7 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
         }
         
         if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 21)
-                    Params.tutorial.nextStep();
+            Params.tutorial.nextStep();
     }
     
     public void manageGameVolume(){
@@ -417,15 +417,15 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
                 gameEngine.getGameSounds().setVolumeMusic(0);
             }
         }else
-        if (id.equals("enableSFX_MGV")){
-            if (event.isChecked()){
-                screen.findElementByName("controlVolumeSFX_MGV").enable();
-                gameEngine.getGameSounds().setVolumeSFX(((Slider) screen.findNiftyControl("controlVolumeSFX_MGV", Slider.class)).getValue()/100.f,gameEngine);
-            }else{
-                screen.findElementByName("controlVolumeSFX_MGV").disable();
-                gameEngine.getGameSounds().setVolumeSFX(0,gameEngine);
+            if (id.equals("enableSFX_MGV")){
+                if (event.isChecked()){
+                    screen.findElementByName("controlVolumeSFX_MGV").enable();
+                    gameEngine.getGameSounds().setVolumeSFX(((Slider) screen.findNiftyControl("controlVolumeSFX_MGV", Slider.class)).getValue()/100.f,gameEngine);
+                }else{
+                    screen.findElementByName("controlVolumeSFX_MGV").disable();
+                    gameEngine.getGameSounds().setVolumeSFX(0,gameEngine);
+                }
             }
-        }
     }
     
     @NiftyEventSubscriber(pattern="controlVolume.*")
@@ -435,11 +435,11 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
             if(((CheckBox) screen.findNiftyControl("enableMusic_MGV", CheckBox.class)).isChecked())
                 gameEngine.getGameSounds().setVolumeMusic(((Slider) screen.findNiftyControl("controlVolumeMusic_MGV", Slider.class)).getValue()/100.f);
         }else
-        if (id.equals("controlVolumeSFX_MGV")){
-            ((Label)screen.findNiftyControl("labelSFXValue_MGV", Label.class)).setText((int)event.getValue() + "%");
-            if(((CheckBox) screen.findNiftyControl("enableSFX_MGV", CheckBox.class)).isChecked())
-                gameEngine.getGameSounds().setVolumeSFX(((Slider) screen.findNiftyControl("controlVolumeSFX_MGV", Slider.class)).getValue()/100.f,gameEngine);
-        }
+            if (id.equals("controlVolumeSFX_MGV")){
+                ((Label)screen.findNiftyControl("labelSFXValue_MGV", Label.class)).setText((int)event.getValue() + "%");
+                if(((CheckBox) screen.findNiftyControl("enableSFX_MGV", CheckBox.class)).isChecked())
+                    gameEngine.getGameSounds().setVolumeSFX(((Slider) screen.findNiftyControl("controlVolumeSFX_MGV", Slider.class)).getValue()/100.f,gameEngine);
+            }
     }
     
     private void playPauseGame(){
@@ -466,7 +466,7 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
                 i++;
                 element.setVisible(i <= numberButtonsVisible ? true : false);
                 ((Button)screen.findNiftyControl(element.getId(), Button.class)).setWidth(new SizeValue(sizeWidth));
-            }            
+            }
         }
         screen.findElementByName("dynamicButtons").layoutElements();
     }
@@ -483,7 +483,7 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
                 i++;
                 element.setVisible(i <= numberButtonsVisible ? true : false);
                 ((Button)screen.findNiftyControl(element.getId(), Button.class)).setWidth(new SizeValue(sizeWidth));
-            }            
+            }
         }
         screen.findElementByName("dynamicSubLevelButtons").layoutElements();
     }
@@ -533,72 +533,72 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
             screen.findElementByName(nameButton).getRenderer(ImageRenderer.class).setImage(nifty.createImage(buttonActive, false));
             buttonSelectedThirdLevel = nameButton;
         }else
-        if (buttonSelectedThirdLevel.equals(nameButton)){
-            screen.findElementByName(nameButton).getRenderer(ImageRenderer.class).setImage(nifty.createImage(buttonInactive, false));
-            buttonSelectedThirdLevel = "";
-        }else{
-            screen.findElementByName(buttonSelectedThirdLevel).getRenderer(ImageRenderer.class).setImage(nifty.createImage(buttonInactive, false));
-            screen.findElementByName(nameButton).getRenderer(ImageRenderer.class).setImage(nifty.createImage(buttonActive, false));
-            buttonSelectedThirdLevel = nameButton;
-        }
+            if (buttonSelectedThirdLevel.equals(nameButton)){
+                screen.findElementByName(nameButton).getRenderer(ImageRenderer.class).setImage(nifty.createImage(buttonInactive, false));
+                buttonSelectedThirdLevel = "";
+            }else{
+                screen.findElementByName(buttonSelectedThirdLevel).getRenderer(ImageRenderer.class).setImage(nifty.createImage(buttonInactive, false));
+                screen.findElementByName(nameButton).getRenderer(ImageRenderer.class).setImage(nifty.createImage(buttonActive, false));
+                buttonSelectedThirdLevel = nameButton;
+            }
     }
-
+    
     public void hideCurrentControlsWindow(){
         if (currentOptionselected.equals("buttonOptionControls")){
             if (currentDynamicButtonSelected.contains("Resources")){
                 screen.findElementByName("winChC_Element").getControl(CharactersScreenController.class).loadWindowControl(gameEngine, -1, null);
             }else
-            if (currentDynamicButtonSelected.contains("PriorityActivities")){
-                screen.findElementByName("winPrC_Element").getControl(PriorityScreenController.class).loadWindowControl(gameEngine, -1, null);
-            }else
-            if (currentDynamicButtonSelected.contains("AssignOperators")){
-                screen.findElementByName("winAsOpC_Element").getControl(AssignOperatorScreenController.class).loadWindowControl(gameEngine, -1, null);
-            }else
-            if (currentDynamicButtonSelected.contains("UnitLoad")){
-                screen.findElementByName("winULC_Element").getControl(UnitLoadScreenController.class).loadWindowControl(gameEngine, -1, null);
-            }else
-            if (currentDynamicButtonSelected.contains("AllocateStorages")){
-                screen.findElementByName("winASCC_Element").getControl(StorageCostScreenController.class).loadWindowControl(gameEngine, -1, null);
-            }
+                if (currentDynamicButtonSelected.contains("PriorityActivities")){
+                    screen.findElementByName("winPrC_Element").getControl(PriorityScreenController.class).loadWindowControl(gameEngine, -1, null);
+                }else
+                    if (currentDynamicButtonSelected.contains("AssignOperators")){
+                        screen.findElementByName("winAsOpC_Element").getControl(AssignOperatorScreenController.class).loadWindowControl(gameEngine, -1, null);
+                    }else
+                        if (currentDynamicButtonSelected.contains("UnitLoad")){
+                            screen.findElementByName("winULC_Element").getControl(UnitLoadScreenController.class).loadWindowControl(gameEngine, -1, null);
+                        }else
+                            if (currentDynamicButtonSelected.contains("AllocateStorages")){
+                                screen.findElementByName("winASCC_Element").getControl(StorageCostScreenController.class).loadWindowControl(gameEngine, -1, null);
+                            }
         }else
-        if (currentOptionselected.equals("buttonOptionActivities")){
-            screen.findElementByName("winAC_Element").getControl(ActivityScreenController.class).loadWindowControl(gameEngine, -1, TypeActivity.None, null);
-        }else
-        if (currentOptionselected.equals("buttonOptionUtilities")){
-            if (currentDynamicButtonSelected.contains("Station")){
-                screen.findElementByName("winSSC_Element").getControl(StorageStationScreenController.class).loadWindowControl(gameEngine,-1,null);
-//                screen.findElementByName("winSC_Element").getControl(StationControl.class).loadWindowControl(gameEngine, -1, null);
+            if (currentOptionselected.equals("buttonOptionActivities")){
+                screen.findElementByName("winAC_Element").getControl(ActivityScreenController.class).loadWindowControl(gameEngine, -1, TypeActivity.None, null);
             }else
-            if (currentDynamicButtonSelected.contains("Machine") || currentDynamicButtonSelected.contains("Equipment")){
-                screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(gameEngine, -1, null);
-            }else
-            if (currentDynamicButtonSelected.contains("Operator")){
-                screen.findElementByName("winOC_Element").getControl(OperatorScreenController.class).loadWindowControl(gameEngine, -1, null);
-            }else
-            if (currentDynamicButtonSelected.contains("Part")){
-                screen.findElementByName("winPC_Element").getControl(PartScreenController.class).loadWindowControl(gameEngine, -1, null);
-            }else
-            if (currentDynamicButtonSelected.contains("Supplier")){
-                screen.findElementByName("winSuC_Element").getControl(SupplierScreenController.class).loadWindowControl(gameEngine, -1, null);
-            }
-        }else
-        if (currentOptionselected.equals("windowOperator")){
-            screen.findElementByName("winOC_Element").getControl(OperatorScreenController.class).loadWindowControl(gameEngine, -1, null);
-        }else
-        if (currentOptionselected.equals("windowPart")){
-            screen.findElementByName("winPC_Element").getControl(PartScreenController.class).loadWindowControl(gameEngine, -1, null);
-        }else
-        if (currentOptionselected.equals("windowStorageStation")){
-            screen.findElementByName("winSSC_Element").getControl(StorageStationScreenController.class).loadWindowControl(gameEngine,-1,null);
-        }else
-//        if (currentOptionselected.equals("windowStation")){
-//            screen.findElementByName("winSC_Element").getControl(StationControl.class).loadWindowControl(gameEngine, -1, null);
-//        }else
-        if (currentOptionselected.equals("windowMachine")){
-            screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(gameEngine, -1, null);
-        }
+                if (currentOptionselected.equals("buttonOptionUtilities")){
+                    if (currentDynamicButtonSelected.contains("Station")){
+                        screen.findElementByName("winSSC_Element").getControl(StorageStationScreenController.class).loadWindowControl(gameEngine,-1,null);
+                        //                screen.findElementByName("winSC_Element").getControl(StationControl.class).loadWindowControl(gameEngine, -1, null);
+                    }else
+                        if (currentDynamicButtonSelected.contains("Machine") || currentDynamicButtonSelected.contains("Equipment")){
+                            screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(gameEngine, -1, null);
+                        }else
+                            if (currentDynamicButtonSelected.contains("Operator")){
+                                screen.findElementByName("winOC_Element").getControl(OperatorScreenController.class).loadWindowControl(gameEngine, -1, null);
+                            }else
+                                if (currentDynamicButtonSelected.contains("Part")){
+                                    screen.findElementByName("winPC_Element").getControl(PartScreenController.class).loadWindowControl(gameEngine, -1, null);
+                                }else
+                                    if (currentDynamicButtonSelected.contains("Supplier")){
+                                        screen.findElementByName("winSuC_Element").getControl(SupplierScreenController.class).loadWindowControl(gameEngine, -1, null);
+                                    }
+                }else
+                    if (currentOptionselected.equals("windowOperator")){
+                        screen.findElementByName("winOC_Element").getControl(OperatorScreenController.class).loadWindowControl(gameEngine, -1, null);
+                    }else
+                        if (currentOptionselected.equals("windowPart")){
+                            screen.findElementByName("winPC_Element").getControl(PartScreenController.class).loadWindowControl(gameEngine, -1, null);
+                        }else
+                            if (currentOptionselected.equals("windowStorageStation")){
+                                screen.findElementByName("winSSC_Element").getControl(StorageStationScreenController.class).loadWindowControl(gameEngine,-1,null);
+                            }else
+                                //        if (currentOptionselected.equals("windowStation")){
+                                //            screen.findElementByName("winSC_Element").getControl(StationControl.class).loadWindowControl(gameEngine, -1, null);
+                                //        }else
+                                if (currentOptionselected.equals("windowMachine")){
+                                    screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(gameEngine, -1, null);
+                                }
     }
-
+    
     @NiftyEventSubscriber(pattern="dynSubLevelBut.*")
     public void onDynamicSubLevelButtonClicked(final String id, final ButtonClickedEvent event) {
         gameEngine.updateLastActivitySystemTime();
@@ -610,50 +610,50 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
             return;
         }
         currentDynamicSubLevelButtonSelected = ((Button)nifty.getScreen("layerScreen").findNiftyControl(id, Button.class)).getText();
-//        if (currentDynamicButtonSelected.contains(TypeActivity.Operation.toString()) || currentDynamicButtonSelected.contains(TypeActivity.Purchase.toString()) || currentDynamicButtonSelected.contains(TypeActivity.Transport.toString())){
-//            TypeActivity tempActivityType = TypeActivity.None;
-//            int tempIdActivity = arrActivitiesId.get(currentDynamicSubLevelButtonSelected);
-//            if (currentDynamicButtonSelected.contains(TypeActivity.Operation.toString())){
-//                tempActivityType = TypeActivity.Operation;
-//            }else
-//            if (currentDynamicButtonSelected.contains(TypeActivity.Purchase.toString())){
-//                tempActivityType = TypeActivity.Purchase;
-//            }else
-//            if (currentDynamicButtonSelected.contains(TypeActivity.Transport.toString())){
-//                tempActivityType = TypeActivity.Transport;
-//            }
-//            screen.findElementByName("winAC_Element").getControl(ActivityScreenController.class).loadWindowControl(gameEngine, tempIdActivity, tempActivityType, null);
-//        }else
-//        if (currentDynamicButtonSelected.contains("Station")){
-//            for (E_Station temp : gameEngine.getGameData().getMapUserStation().values()){
-//                if (temp.getStationDescription().equals(currentDynamicSubLevelButtonSelected)){
-//                    if (temp.getStationType().equals(StationType.StorageFG) || 
-//                            temp.getStationType().equals(StationType.StorageIG) ||
-//                            temp.getStationType().equals(StationType.StorageRM))
-//                        screen.findElementByName("winSSC_Element").getControl(StorageStationScreenController.class).loadWindowControl(gameEngine,temp.getIdStation(),null);
-//                    else
-//                        screen.findElementByName("winSC_Element").getControl(StationControl.class).loadWindowControl(gameEngine,temp.getIdStation(),null);
-//                }                
-//            }
-//        }//else
-//        if (currentDynamicButtonSelected.contains("Machine")){ 
-//            screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(gameEngine, Integer.valueOf(currentDynamicSubLevelButtonSelected.replace(" ", "").replace("Machine", "").replace("(", "").replace(")", "").replace(Params.active, "").replace(Params.inactive, "")), null);
-//            screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).setIdButton(id);
-//        }else
-//        if (currentDynamicButtonSelected.contains("Equipment")){
-//            screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(gameEngine, Integer.valueOf(currentDynamicSubLevelButtonSelected.replace(" ", "").replace("Equipment", "").replace("(", "").replace(")", "").replace(Params.active, "").replace(Params.inactive, "")), null);
-//            screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).setIdButton(id);
-//        }else
-//        if (currentDynamicButtonSelected.contains("Operator")){
-//            screen.findElementByName("winOC_Element").getControl(OperatorScreenController.class).loadWindowControl(gameEngine, Integer.valueOf(currentDynamicSubLevelButtonSelected.replace(" ", "").replace("(", "").replace(")", "").replace("Operator", "").replace("Material", "").replace("Handler", "").replace("Ope", "").replace(Params.opeActive, "").replace(Params.opeInactive, "").replace(OperatorCategory.Versatile.toString(), "")), null);
-//            screen.findElementByName("winOC_Element").getControl(OperatorScreenController.class).setIdButton(id);
-//        }else
-//        if (currentDynamicButtonSelected.contains("Part")){
-//            screen.findElementByName("winPC_Element").getControl(PartScreenController.class).loadWindowControl(gameEngine, Integer.valueOf(currentDynamicSubLevelButtonSelected.replace(" ", "").replace("Part", "")), null);
-//        }else
-//        if (currentDynamicButtonSelected.contains("Supplier")){
-//            screen.findElementByName("winSuC_Element").getControl(SupplierScreenController.class).loadWindowControl(gameEngine, Integer.valueOf(currentDynamicSubLevelButtonSelected.replace(" ", "").replace("Supplier", "")), null);
-//        }
+        //        if (currentDynamicButtonSelected.contains(TypeActivity.Operation.toString()) || currentDynamicButtonSelected.contains(TypeActivity.Purchase.toString()) || currentDynamicButtonSelected.contains(TypeActivity.Transport.toString())){
+        //            TypeActivity tempActivityType = TypeActivity.None;
+        //            int tempIdActivity = arrActivitiesId.get(currentDynamicSubLevelButtonSelected);
+        //            if (currentDynamicButtonSelected.contains(TypeActivity.Operation.toString())){
+        //                tempActivityType = TypeActivity.Operation;
+        //            }else
+        //            if (currentDynamicButtonSelected.contains(TypeActivity.Purchase.toString())){
+        //                tempActivityType = TypeActivity.Purchase;
+        //            }else
+        //            if (currentDynamicButtonSelected.contains(TypeActivity.Transport.toString())){
+        //                tempActivityType = TypeActivity.Transport;
+        //            }
+        //            screen.findElementByName("winAC_Element").getControl(ActivityScreenController.class).loadWindowControl(gameEngine, tempIdActivity, tempActivityType, null);
+        //        }else
+        //        if (currentDynamicButtonSelected.contains("Station")){
+        //            for (E_Station temp : gameEngine.getGameData().getMapUserStation().values()){
+        //                if (temp.getStationDescription().equals(currentDynamicSubLevelButtonSelected)){
+        //                    if (temp.getStationType().equals(StationType.StorageFG) ||
+        //                            temp.getStationType().equals(StationType.StorageIG) ||
+        //                            temp.getStationType().equals(StationType.StorageRM))
+        //                        screen.findElementByName("winSSC_Element").getControl(StorageStationScreenController.class).loadWindowControl(gameEngine,temp.getIdStation(),null);
+        //                    else
+        //                        screen.findElementByName("winSC_Element").getControl(StationControl.class).loadWindowControl(gameEngine,temp.getIdStation(),null);
+        //                }
+        //            }
+        //        }//else
+        //        if (currentDynamicButtonSelected.contains("Machine")){
+        //            screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(gameEngine, Integer.valueOf(currentDynamicSubLevelButtonSelected.replace(" ", "").replace("Machine", "").replace("(", "").replace(")", "").replace(Params.active, "").replace(Params.inactive, "")), null);
+        //            screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).setIdButton(id);
+        //        }else
+        //        if (currentDynamicButtonSelected.contains("Equipment")){
+        //            screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(gameEngine, Integer.valueOf(currentDynamicSubLevelButtonSelected.replace(" ", "").replace("Equipment", "").replace("(", "").replace(")", "").replace(Params.active, "").replace(Params.inactive, "")), null);
+        //            screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).setIdButton(id);
+        //        }else
+        //        if (currentDynamicButtonSelected.contains("Operator")){
+        //            screen.findElementByName("winOC_Element").getControl(OperatorScreenController.class).loadWindowControl(gameEngine, Integer.valueOf(currentDynamicSubLevelButtonSelected.replace(" ", "").replace("(", "").replace(")", "").replace("Operator", "").replace("Material", "").replace("Handler", "").replace("Ope", "").replace(Params.opeActive, "").replace(Params.opeInactive, "").replace(OperatorCategory.Versatile.toString(), "")), null);
+        //            screen.findElementByName("winOC_Element").getControl(OperatorScreenController.class).setIdButton(id);
+        //        }else
+        //        if (currentDynamicButtonSelected.contains("Part")){
+        //            screen.findElementByName("winPC_Element").getControl(PartScreenController.class).loadWindowControl(gameEngine, Integer.valueOf(currentDynamicSubLevelButtonSelected.replace(" ", "").replace("Part", "")), null);
+        //        }else
+        //        if (currentDynamicButtonSelected.contains("Supplier")){
+        //            screen.findElementByName("winSuC_Element").getControl(SupplierScreenController.class).loadWindowControl(gameEngine, Integer.valueOf(currentDynamicSubLevelButtonSelected.replace(" ", "").replace("Supplier", "")), null);
+        //        }
     }
     
     public void onDynamicButtonClicked(String id){
@@ -661,168 +661,168 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
         showHideDynamicSubLevelButtons(0);
         hideCurrentControlsWindow();
         if (currentDynamicButtonSelected.equals(((Button)nifty.getScreen("layerScreen").findNiftyControl(id, Button.class)).getText().replace(" ", ""))){
-//            if (currentOptionselected.equals("buttonOptionInformation")){
-//                if (currentDynamicButtonSelected.contains("Overall")){
-//                    screen.findElementByName("winOvC_Element").getControl(OverallControl.class).loadWindowControl(gameEngine, -1, null);
-//                }else
-//                if (currentDynamicButtonSelected.contains("Order")){
-//                    screen.findElementByName("winOrC_Element").getControl(OrderControl.class).loadWindowControl(gameEngine, -1, null);
-//                }else
-//                if (currentDynamicButtonSelected.contains("FlowChart")){
-//                    screen.findElementByName("winFCC_Element").getControl(FlowChartScreenController.class).loadWindowControl(gameEngine, -1, null);
-//                }
-//            }            
+            //            if (currentOptionselected.equals("buttonOptionInformation")){
+            //                if (currentDynamicButtonSelected.contains("Overall")){
+            //                    screen.findElementByName("winOvC_Element").getControl(OverallControl.class).loadWindowControl(gameEngine, -1, null);
+            //                }else
+            //                if (currentDynamicButtonSelected.contains("Order")){
+            //                    screen.findElementByName("winOrC_Element").getControl(OrderControl.class).loadWindowControl(gameEngine, -1, null);
+            //                }else
+            //                if (currentDynamicButtonSelected.contains("FlowChart")){
+            //                    screen.findElementByName("winFCC_Element").getControl(FlowChartScreenController.class).loadWindowControl(gameEngine, -1, null);
+            //                }
+            //            }
             currentDynamicButtonSelected = "";
             return;
         }
         //load appropriate action
         currentDynamicButtonSelected = ((Button)nifty.getScreen("layerScreen").findNiftyControl(id, Button.class)).getText().replace(" ", "");
         
-//        if (currentOptionselected.equals("buttonOptionInformation")){
-//            if (currentDynamicButtonSelected.contains("Overall")){
-//                screen.findElementByName("winOvC_Element").getControl(OverallControl.class).loadWindowControl(gameEngine, 0, null);
-//            }else
-//            if (currentDynamicButtonSelected.contains("Order")){
-//                screen.findElementByName("winOrC_Element").getControl(OrderControl.class).loadWindowControl(gameEngine, 0, null);
-//            }else
-//            if (currentDynamicButtonSelected.contains("FlowChart")){
-//                screen.findElementByName("winFCC_Element").getControl(FlowChartScreenController.class).loadWindowControl(gameEngine, 0, null);
-//            }
-//        }else
+        //        if (currentOptionselected.equals("buttonOptionInformation")){
+        //            if (currentDynamicButtonSelected.contains("Overall")){
+        //                screen.findElementByName("winOvC_Element").getControl(OverallControl.class).loadWindowControl(gameEngine, 0, null);
+        //            }else
+        //            if (currentDynamicButtonSelected.contains("Order")){
+        //                screen.findElementByName("winOrC_Element").getControl(OrderControl.class).loadWindowControl(gameEngine, 0, null);
+        //            }else
+        //            if (currentDynamicButtonSelected.contains("FlowChart")){
+        //                screen.findElementByName("winFCC_Element").getControl(FlowChartScreenController.class).loadWindowControl(gameEngine, 0, null);
+        //            }
+        //        }else
         if (currentOptionselected.equals("buttonOptionControls")){
             if (currentDynamicButtonSelected.contains("Resources")){
                 screen.findElementByName("winChC_Element").getControl(CharactersScreenController.class).loadWindowControl(gameEngine, 0, null);
             }else
-            if (currentDynamicButtonSelected.contains("PriorityActivities")){
-                screen.findElementByName("winPrC_Element").getControl(PriorityScreenController.class).loadWindowControl(gameEngine, 0, null);
-            }else
-            if (currentDynamicButtonSelected.contains("AssignOperators")){
-                screen.findElementByName("winAsOpC_Element").getControl(AssignOperatorScreenController.class).loadWindowControl(gameEngine, 0, null);
-            }else
-            if (currentDynamicButtonSelected.contains("UnitLoad")){
-                screen.findElementByName("winULC_Element").getControl(UnitLoadScreenController.class).loadWindowControl(gameEngine, 0, null);
-            }else
-            if (currentDynamicButtonSelected.contains("AllocateStorages")){
-                screen.findElementByName("winASCC_Element").getControl(StorageCostScreenController.class).loadWindowControl(gameEngine, 0, null);
-            }
+                if (currentDynamicButtonSelected.contains("PriorityActivities")){
+                    screen.findElementByName("winPrC_Element").getControl(PriorityScreenController.class).loadWindowControl(gameEngine, 0, null);
+                }else
+                    if (currentDynamicButtonSelected.contains("AssignOperators")){
+                        screen.findElementByName("winAsOpC_Element").getControl(AssignOperatorScreenController.class).loadWindowControl(gameEngine, 0, null);
+                    }else
+                        if (currentDynamicButtonSelected.contains("UnitLoad")){
+                            screen.findElementByName("winULC_Element").getControl(UnitLoadScreenController.class).loadWindowControl(gameEngine, 0, null);
+                        }else
+                            if (currentDynamicButtonSelected.contains("AllocateStorages")){
+                                screen.findElementByName("winASCC_Element").getControl(StorageCostScreenController.class).loadWindowControl(gameEngine, 0, null);
+                            }
         }else
-        if (currentOptionselected.equals("buttonOptionActivities")){
-            TypeActivity tempActivityType = TypeActivity.None;
-            Button dynamicButton;
-            int position = 0;
-            Screen screenButton = nifty.getScreen("layerScreen");
-            arrActivitiesId.clear();
-           if (currentDynamicButtonSelected.contains(TypeActivity.Operation.toString())){
-                tempActivityType = TypeActivity.Operation;
-//                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapOperation().size());
-//                for (E_Operation temp : gameEngine.getGameData().getMapOperation().values()){
-//                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
-//                    dynamicButton.setText(temp.getActivityDescription());
-//                    arrActivitiesId.put(temp.getActivityDescription(), temp.getIdActivity());
-//                    position++;
-//                }
+            if (currentOptionselected.equals("buttonOptionActivities")){
+                TypeActivity tempActivityType = TypeActivity.None;
+                Button dynamicButton;
+                int position = 0;
+                Screen screenButton = nifty.getScreen("layerScreen");
+                arrActivitiesId.clear();
+                if (currentDynamicButtonSelected.contains(TypeActivity.Operation.toString())){
+                    tempActivityType = TypeActivity.Operation;
+                    //                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapOperation().size());
+                    //                for (E_Operation temp : gameEngine.getGameData().getMapOperation().values()){
+                    //                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
+                    //                    dynamicButton.setText(temp.getActivityDescription());
+                    //                    arrActivitiesId.put(temp.getActivityDescription(), temp.getIdActivity());
+                    //                    position++;
+                    //                }
+                }else
+                    if (currentDynamicButtonSelected.contains(TypeActivity.Purchase.toString())){
+                        tempActivityType = TypeActivity.Purchase;
+                        if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 9)
+                            Params.tutorial.nextStep();
+                        //                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapPurchase().size());
+                        //                for (E_Purchase temp : gameEngine.getGameData().getMapPurchase().values()){
+                        //                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
+                        //                    dynamicButton.setText(temp.getActivityDescription());
+                        //                    arrActivitiesId.put(temp.getActivityDescription(), temp.getIdActivity());
+                        //                    position++;
+                        //                }
+                        
+                    }else
+                        if (currentDynamicButtonSelected.contains(TypeActivity.Transport.toString())){
+                            tempActivityType = TypeActivity.Transport;
+                            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 10)
+                                Params.tutorial.nextStep();
+                            //                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapTransport().size(),"180%");
+                            //                for (E_TransportStore temp : gameEngine.getGameData().getMapTransport().values()){
+                            //                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class)manageSo
+                            //                    dynamicButton.setText(temp.getActivityDescription());
+                            //                    arrActivitiesId.put(temp.getActivityDescription(), temp.getIdActivity());
+                            //                    position++;
+                            //                }
+                        }
+                screen.findElementByName("winAC_Element").getControl(ActivityScreenController.class).loadWindowControl(gameEngine, 0, tempActivityType, null);
             }else
-            if (currentDynamicButtonSelected.contains(TypeActivity.Purchase.toString())){
-                tempActivityType = TypeActivity.Purchase;
-                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 9)
-                    Params.tutorial.nextStep();
-//                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapPurchase().size());
-//                for (E_Purchase temp : gameEngine.getGameData().getMapPurchase().values()){
-//                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
-//                    dynamicButton.setText(temp.getActivityDescription());
-//                    arrActivitiesId.put(temp.getActivityDescription(), temp.getIdActivity());
-//                    position++;
-//                }
-
-            }else
-            if (currentDynamicButtonSelected.contains(TypeActivity.Transport.toString())){
-                tempActivityType = TypeActivity.Transport;
-                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 10)
-                    Params.tutorial.nextStep();
-//                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapTransport().size(),"180%");
-//                for (E_TransportStore temp : gameEngine.getGameData().getMapTransport().values()){
-//                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class)manageSo
-//                    dynamicButton.setText(temp.getActivityDescription());
-//                    arrActivitiesId.put(temp.getActivityDescription(), temp.getIdActivity());
-//                    position++;
-//                }
-            }
-            screen.findElementByName("winAC_Element").getControl(ActivityScreenController.class).loadWindowControl(gameEngine, 0, tempActivityType, null);
-        }else
-        if (currentOptionselected.equals("buttonOptionUtilities")){
-//            Button dynamicButton;
-//            int position = 0;
-//            Screen screenButton = nifty.getScreen("layerScreen");
-            if (currentDynamicButtonSelected.contains("Station")){
-//                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapUserStation().size()-2,"120%");
-//                for (E_Station temp : gameEngine.getGameData().getMapUserStation().values()){
-//                    if (!(temp.getStationType().equals(StationType.MachineZone) || temp.getStationType().equals(StationType.StaffZone))){
-//                        dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
-//                        dynamicButton.setText(temp.getStationDescription());
-//                        position++;
-//                    }
-//                }
-                screen.findElementByName("winSSC_Element").getControl(StorageStationScreenController.class).loadWindowControl(gameEngine,Params.stationList,null);
-                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 13)
-                    Params.tutorial.nextStep();
-            }else
-            if (currentDynamicButtonSelected.contains("Machine")){
-//                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapUserMachineByOperation().size());
-//                for (E_Machine temp : gameEngine.getGameData().getMapUserMachineByOperation().values()){
-//                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
-//                    dynamicButton.setText("Machine " +temp.getIdMachine() + " (" + (temp.getMachineState().equals(ObjectState.Inactive) ? Params.inactive : Params.active) + ")");
-//                    position++;
-//                }
-                screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(gameEngine, Params.machineList, null);
-                screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).setIdButton(id);
-                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 7)
-                    Params.tutorial.nextStep();
-            }else
-            if (currentDynamicButtonSelected.contains("Equipment")){
-//                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapUserMachineByTransport().size());
-//                for (E_Machine temp : gameEngine.getGameData().getMapUserMachineByTransport().values()){
-//                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
-//                    dynamicButton.setText("Equipment " +temp.getIdMachine() + " (" + (temp.getMachineState().equals(ObjectState.Inactive) ? Params.inactive : Params.active) + ")");
-//                    position++;
-//                }
-                screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(gameEngine, Params.equipmentList, null);
-                screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).setIdButton(id);
-                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 8)
-                    Params.tutorial.nextStep();
-            }else
-            if (currentDynamicButtonSelected.contains("Operator")){
-//                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapUserOperator().size(),"140%");
-//                for (E_Operator temp : gameEngine.getGameData().getMapUserOperator().values()){
-//                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
-//                    dynamicButton.setText("Ope" + temp.getIdOperator() + " ( " + (temp.getState().equals(ObjectState.Inactive) ? Params.opeInactive : Params.opeActive) + " ) " + (temp.getCategory().equals(OperatorCategory.Assembler) ? "Operator" : (temp.getCategory().equals(OperatorCategory.Carrier) ? "Material Handler" : OperatorCategory.Versatile.toString())));
-//                    position++;
-//                }
-               screen.findElementByName("winOC_Element").getControl(OperatorScreenController.class).loadWindowControl(gameEngine, Params.operatorList, null);
-                screen.findElementByName("winOC_Element").getControl(OperatorScreenController.class).setIdButton(id);
-            }else
-            if (currentDynamicButtonSelected.contains("Part")){
-//                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapUserPart().size());
-//                for (E_Part temp : gameEngine.getGameData().getMapUserPart().values()){
-//                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
-//                    dynamicButton.setText("Part " + temp.getIdPart());
-//                    position++;
-//                }
-                screen.findElementByName("winPC_Element").getControl(PartScreenController.class).loadWindowControl(gameEngine, Params.partList, null);
-                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 12)
-                    Params.tutorial.nextStep();
-            }else
-            if (currentDynamicButtonSelected.contains("Supplier")){
-//                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapGameSupplier().size());
-//                for (E_Supplier temp : gameEngine.getGameData().getMapGameSupplier().values()){
-//                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
-//                    dynamicButton.setText("Supplier " + temp.getIdSupplier());
-//                    position++;
-//                }
-                screen.findElementByName("winSuC_Element").getControl(SupplierScreenController.class).loadWindowControl(gameEngine, Params.supplierList, null);
-                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 11)
-                    Params.tutorial.nextStep();
-            }
-        }
+                if (currentOptionselected.equals("buttonOptionUtilities")){
+                    //            Button dynamicButton;
+                    //            int position = 0;
+                    //            Screen screenButton = nifty.getScreen("layerScreen");
+                    if (currentDynamicButtonSelected.contains("Station")){
+                        //                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapUserStation().size()-2,"120%");
+                        //                for (E_Station temp : gameEngine.getGameData().getMapUserStation().values()){
+                        //                    if (!(temp.getStationType().equals(StationType.MachineZone) || temp.getStationType().equals(StationType.StaffZone))){
+                        //                        dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
+                        //                        dynamicButton.setText(temp.getStationDescription());
+                        //                        position++;
+                        //                    }
+                        //                }
+                        screen.findElementByName("winSSC_Element").getControl(StorageStationScreenController.class).loadWindowControl(gameEngine,Params.stationList,null);
+                        if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 13)
+                            Params.tutorial.nextStep();
+                    }else
+                        if (currentDynamicButtonSelected.contains("Machine")){
+                            //                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapUserMachineByOperation().size());
+                            //                for (E_Machine temp : gameEngine.getGameData().getMapUserMachineByOperation().values()){
+                            //                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
+                            //                    dynamicButton.setText("Machine " +temp.getIdMachine() + " (" + (temp.getMachineState().equals(ObjectState.Inactive) ? Params.inactive : Params.active) + ")");
+                            //                    position++;
+                            //                }
+                            screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(gameEngine, Params.machineList, null);
+                            screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).setIdButton(id);
+                            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 7)
+                                Params.tutorial.nextStep();
+                        }else
+                            if (currentDynamicButtonSelected.contains("Equipment")){
+                                //                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapUserMachineByTransport().size());
+                                //                for (E_Machine temp : gameEngine.getGameData().getMapUserMachineByTransport().values()){
+                                //                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
+                                //                    dynamicButton.setText("Equipment " +temp.getIdMachine() + " (" + (temp.getMachineState().equals(ObjectState.Inactive) ? Params.inactive : Params.active) + ")");
+                                //                    position++;
+                                //                }
+                                screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).loadWindowControl(gameEngine, Params.equipmentList, null);
+                                screen.findElementByName("winMC_Element").getControl(MachineScreenController.class).setIdButton(id);
+                                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 8)
+                                    Params.tutorial.nextStep();
+                            }else
+                                if (currentDynamicButtonSelected.contains("Operator")){
+                                    //                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapUserOperator().size(),"140%");
+                                    //                for (E_Operator temp : gameEngine.getGameData().getMapUserOperator().values()){
+                                    //                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
+                                    //                    dynamicButton.setText("Ope" + temp.getIdOperator() + " ( " + (temp.getState().equals(ObjectState.Inactive) ? Params.opeInactive : Params.opeActive) + " ) " + (temp.getCategory().equals(OperatorCategory.Assembler) ? "Operator" : (temp.getCategory().equals(OperatorCategory.Carrier) ? "Material Handler" : OperatorCategory.Versatile.toString())));
+                                    //                    position++;
+                                    //                }
+                                    screen.findElementByName("winOC_Element").getControl(OperatorScreenController.class).loadWindowControl(gameEngine, Params.operatorList, null);
+                                    screen.findElementByName("winOC_Element").getControl(OperatorScreenController.class).setIdButton(id);
+                                }else
+                                    if (currentDynamicButtonSelected.contains("Part")){
+                                        //                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapUserPart().size());
+                                        //                for (E_Part temp : gameEngine.getGameData().getMapUserPart().values()){
+                                        //                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
+                                        //                    dynamicButton.setText("Part " + temp.getIdPart());
+                                        //                    position++;
+                                        //                }
+                                        screen.findElementByName("winPC_Element").getControl(PartScreenController.class).loadWindowControl(gameEngine, Params.partList, null);
+                                        if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 12)
+                                            Params.tutorial.nextStep();
+                                    }else
+                                        if (currentDynamicButtonSelected.contains("Supplier")){
+                                            //                showHideDynamicSubLevelButtons(gameEngine.getGameData().getMapGameSupplier().size());
+                                            //                for (E_Supplier temp : gameEngine.getGameData().getMapGameSupplier().values()){
+                                            //                    dynamicButton = screenButton.findNiftyControl("dynSubLevelBut" + position, Button.class);
+                                            //                    dynamicButton.setText("Supplier " + temp.getIdSupplier());
+                                            //                    position++;
+                                            //                }
+                                            screen.findElementByName("winSuC_Element").getControl(SupplierScreenController.class).loadWindowControl(gameEngine, Params.supplierList, null);
+                                            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 11)
+                                                Params.tutorial.nextStep();
+                                        }
+                }
     }
     
     @NiftyEventSubscriber(pattern="dynBut.*")
@@ -830,18 +830,18 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
         gameEngine.updateLastActivitySystemTime();
         onDynamicButtonClicked(id);
     }
-
+    
     @NiftyEventSubscriber(pattern="buttonStaticOption.*")
     public void onOptionStaticButtonClicked(final String id, final ButtonClickedEvent event) {
         gameEngine.updateLastActivitySystemTime();
-//        if (id.equals("buttonStaticOptionGameLog")){
-            //showGAMELOG window
-//            if (isVisibleWindowGameLog)
-//                screen.findElementByName("winGLC_Element").getControl(GameLogScreenController.class).loadWindowControl(gameEngine, -1, null);
-//            else
-//                screen.findElementByName("winGLC_Element").getControl(GameLogScreenController.class).loadWindowControl(gameEngine, 0, null);
-//            isVisibleWindowGameLog = !isVisibleWindowGameLog;
-//        }else
+        //        if (id.equals("buttonStaticOptionGameLog")){
+        //showGAMELOG window
+        //            if (isVisibleWindowGameLog)
+        //                screen.findElementByName("winGLC_Element").getControl(GameLogScreenController.class).loadWindowControl(gameEngine, -1, null);
+        //            else
+        //                screen.findElementByName("winGLC_Element").getControl(GameLogScreenController.class).loadWindowControl(gameEngine, 0, null);
+        //            isVisibleWindowGameLog = !isVisibleWindowGameLog;
+        //        }else
         if (id.equals("buttonStaticOptionFlowChart")){
             if (isVisibleWindowFlowChart)
                 screen.findElementByName("winFCC_Element").getControl(FlowChartScreenController.class).loadWindowControl(gameEngine, -1, null);
@@ -852,39 +852,42 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
             }
             isVisibleWindowFlowChart = !isVisibleWindowFlowChart;
         }else
-        if (id.equals("buttonStaticOptionReturnToMenu")){
-            
-        if (Params.isTutorialLevel)
-            Params.tutorial.hide();
-
-            pauseGame();
-            ((MenuScreenController)nifty.getScreen("initialMenu").getScreenController()).setDefaultStart(false);
-            nifty.gotoScreen("initialMenu");
-            nifty.getScreen("initialMenu").findElementByName("dialogMainMenu").hideWithoutEffect();
-            nifty.getScreen("initialMenu").findElementByName("dialogNewGameStage1Menu").hideWithoutEffect();
-            nifty.getScreen("initialMenu").findElementByName("dialogInitialMenu").hideWithoutEffect();
-            Element nextElement = nifty.getScreen("initialMenu").findElementByName("dialogMainMenu");
-            MainMenuController mainMenu = nextElement.getControl(MainMenuController.class);
-            mainMenu.updateControls();
-            nextElement.show();
-            gameEngine.getGameData().updatePlayerLog();
-        } else
-        if (id.equals("buttonStaticOptionGameSetup")){
-            //showGAMESETUP window
-            if (isVisibleWindowGameSetup)
-                screen.findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).loadWindowControl(gameEngine, -1, null);
-            else {
-                screen.findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).loadWindowControl(gameEngine, 0, null);
-                if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 1)
-                    Params.tutorial.nextStep();
+            if (id.equals("buttonStaticOptionReturnToMenu")){
+                
                 if (Params.isTutorialLevel)
-                    screen.findElementByName("setupDefaultGame").disable();
-                else
-                    screen.findElementByName("setupDefaultGame").enable();
-                    
-            }
-            isVisibleWindowGameSetup = !isVisibleWindowGameSetup;
-        }
+                    Params.tutorial.hide();
+                
+                if (Params.isObjectiveLevel)
+                    Params.objective.hide();
+                
+                pauseGame();
+                ((MenuScreenController)nifty.getScreen("initialMenu").getScreenController()).setDefaultStart(false);
+                nifty.gotoScreen("initialMenu");
+                nifty.getScreen("initialMenu").findElementByName("dialogMainMenu").hideWithoutEffect();
+                nifty.getScreen("initialMenu").findElementByName("dialogNewGameStage1Menu").hideWithoutEffect();
+                nifty.getScreen("initialMenu").findElementByName("dialogInitialMenu").hideWithoutEffect();
+                Element nextElement = nifty.getScreen("initialMenu").findElementByName("dialogMainMenu");
+                MainMenuController mainMenu = nextElement.getControl(MainMenuController.class);
+                mainMenu.updateControls();
+                nextElement.show();
+                gameEngine.getGameData().updatePlayerLog();
+            } else
+                if (id.equals("buttonStaticOptionGameSetup")){
+                    //showGAMESETUP window
+                    if (isVisibleWindowGameSetup)
+                        screen.findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).loadWindowControl(gameEngine, -1, null);
+                    else {
+                        screen.findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).loadWindowControl(gameEngine, 0, null);
+                        if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 1)
+                            Params.tutorial.nextStep();
+                        if (Params.isTutorialLevel || Params.isObjectiveLevel)
+                            screen.findElementByName("setupDefaultGame").disable();
+                        else
+                            screen.findElementByName("setupDefaultGame").enable();
+                        
+                    }
+                    isVisibleWindowGameSetup = !isVisibleWindowGameSetup;
+                }
     }
     
     @NiftyEventSubscriber(pattern="buttonOption.*")
@@ -906,55 +909,55 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
         Button dynamicButton;
         int position = 0;
         
-//        if (id.equals("buttonOptionMenu")){
-//            showHideDynamicButtons(0);
-//            pauseGame();
-//            ((MenuScreenController)nifty.getScreen("initialMenu").getScreenController()).setDefaultStart(false);
-//            nifty.gotoScreen("initialMenu");
-//            (nifty.getScreen("initialMenu").findElementByName("dialogNewGameStage1Menu")).hide();
-//            (nifty.getScreen("initialMenu").findElementByName("dialogInitialMenu")).hide();
-//            Element nextElement = nifty.getScreen("initialMenu").findElementByName("dialogMainMenu");
-//            MainMenuController mainMenu = nextElement.getControl(MainMenuController.class);
-//            mainMenu.updateControls();
-//            nextElement.show();
-//            nifty.getScreen("initialMenu").findElementByName("dialogNewGameStage1Menu").stopEffect(EffectEventId.onCustom);
-//            nifty.getScreen("initialMenu").findElementByName("dialogInitialMenu").stopEffect(EffectEventId.onCustom);
-//            nifty.getScreen("initialMenu").findElementByName("dialogMainMenu").startEffect(EffectEventId.onCustom, null, "selected");
-//            gameEngine.getGameData().updatePlayerLog();
-//        }else
+        //        if (id.equals("buttonOptionMenu")){
+        //            showHideDynamicButtons(0);
+        //            pauseGame();
+        //            ((MenuScreenController)nifty.getScreen("initialMenu").getScreenController()).setDefaultStart(false);
+        //            nifty.gotoScreen("initialMenu");
+        //            (nifty.getScreen("initialMenu").findElementByName("dialogNewGameStage1Menu")).hide();
+        //            (nifty.getScreen("initialMenu").findElementByName("dialogInitialMenu")).hide();
+        //            Element nextElement = nifty.getScreen("initialMenu").findElementByName("dialogMainMenu");
+        //            MainMenuController mainMenu = nextElement.getControl(MainMenuController.class);
+        //            mainMenu.updateControls();
+        //            nextElement.show();
+        //            nifty.getScreen("initialMenu").findElementByName("dialogNewGameStage1Menu").stopEffect(EffectEventId.onCustom);
+        //            nifty.getScreen("initialMenu").findElementByName("dialogInitialMenu").stopEffect(EffectEventId.onCustom);
+        //            nifty.getScreen("initialMenu").findElementByName("dialogMainMenu").startEffect(EffectEventId.onCustom, null, "selected");
+        //            gameEngine.getGameData().updatePlayerLog();
+        //        }else
         
-//        if (id.equals("buttonOptionInformation")){
-//           showHideDynamicButtons(3);
-//            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Overall"); position++;
-//            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Order"); position++;
-//            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Process Flow Chart"); position++;
-//        }else
+        //        if (id.equals("buttonOptionInformation")){
+        //           showHideDynamicButtons(3);
+        //            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Overall"); position++;
+        //            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Order"); position++;
+        //            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Process Flow Chart"); position++;
+        //        }else
         if (id.equals("buttonOptionControls")){
             showHideDynamicButtons(5);
             dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Allocate Storages"); position++;
-            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Assign Operators"); position++;            
+            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Assign Operators"); position++;
             dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Priority Activities"); position++;
             dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Resources"); position++;
             dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Unit Load"); position++;
         }else
-        if (id.equals("buttonOptionActivities")){
-            showHideDynamicButtons(3);
-            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText(TypeActivity.Operation.toString() + " (" + gameEngine.getGameData().getMapOperation().size() + ")"); position++;
-            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText(TypeActivity.Purchase.toString() + " (" + gameEngine.getGameData().getMapPurchase().size() + ")"); position++;
-            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText(TypeActivity.Transport.toString() + " (" + gameEngine.getGameData().getMapTransport().size() + ")"); position++;
-        }else
-        if (id.equals("buttonOptionUtilities")){
-            showHideDynamicButtons(6);
-            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Station (" + (gameEngine.getGameData().getMapUserStation().size()-2) + ")"); position++;
-            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Machine (" + gameEngine.getGameData().getMapUserMachineByOperation().size() + ")"); position++;
-            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Equipment (" + gameEngine.getGameData().getMapUserMachineByTransport().size() + ")"); position++;
-            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Operator (" + gameEngine.getGameData().getMapUserOperator().size() + ")"); position++;
-            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Part (" + gameEngine.getGameData().getMapUserPart().size() + ")"); position++;
-            dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Supplier(" + gameEngine.getGameData().getMapGameSupplier().size() + ")"); position++;
-            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 4)
-                Params.tutorial.nextStep();
-
-        }
+            if (id.equals("buttonOptionActivities")){
+                showHideDynamicButtons(3);
+                dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText(TypeActivity.Operation.toString() + " (" + gameEngine.getGameData().getMapOperation().size() + ")"); position++;
+                dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText(TypeActivity.Purchase.toString() + " (" + gameEngine.getGameData().getMapPurchase().size() + ")"); position++;
+                dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText(TypeActivity.Transport.toString() + " (" + gameEngine.getGameData().getMapTransport().size() + ")"); position++;
+            }else
+                if (id.equals("buttonOptionUtilities")){
+                    showHideDynamicButtons(6);
+                    dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Station (" + (gameEngine.getGameData().getMapUserStation().size()-2) + ")"); position++;
+                    dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Machine (" + gameEngine.getGameData().getMapUserMachineByOperation().size() + ")"); position++;
+                    dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Equipment (" + gameEngine.getGameData().getMapUserMachineByTransport().size() + ")"); position++;
+                    dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Operator (" + gameEngine.getGameData().getMapUserOperator().size() + ")"); position++;
+                    dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Part (" + gameEngine.getGameData().getMapUserPart().size() + ")"); position++;
+                    dynamicButton = screenButton.findNiftyControl("dynBut" + position, Button.class); dynamicButton.setText("Supplier(" + gameEngine.getGameData().getMapGameSupplier().size() + ")"); position++;
+                    if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 4)
+                        Params.tutorial.nextStep();
+                    
+                }
         currentOptionselected = id;
     }
     
@@ -971,7 +974,7 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
         if(!screen.findElementByName("controlVolumeMusic_MGV").isEnabled())
             gameEngine.getGameSounds().setVolumeSFX(0,gameEngine);
         else
-        gameEngine.getGameSounds().setVolumeSFX(((Slider) screen.findNiftyControl("controlVolumeSFX_MGV", Slider.class)).getValue()/100.f,gameEngine);
+            gameEngine.getGameSounds().setVolumeSFX(((Slider) screen.findNiftyControl("controlVolumeSFX_MGV", Slider.class)).getValue()/100.f,gameEngine);
     }
     }
 }

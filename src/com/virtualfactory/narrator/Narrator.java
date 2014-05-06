@@ -64,6 +64,14 @@ public class Narrator extends AbstractAppState
         talk(dialogue);
     }
     
+    public void talk(String dialogue, int secondsBeforeHiding, String narratorName)
+    {
+        textStartTime = System.currentTimeMillis();
+        secondsToWait = secondsBeforeHiding;
+        talk(dialogue);
+        
+    }
+    
     public void talk(String dialogue, String audioPathFile)
     {
         talk(dialogue);
@@ -104,7 +112,7 @@ public class Narrator extends AbstractAppState
         return narratorAudio.getStatus() == AudioSource.Status.Stopped;
     }
 
-    private boolean hasTimeExpired() 
+    public boolean hasTimeExpired() 
     {
         boolean timeExpired = false;
 
