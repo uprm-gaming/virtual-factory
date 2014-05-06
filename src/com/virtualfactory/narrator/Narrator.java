@@ -36,6 +36,7 @@ public class Narrator extends AbstractAppState
     
     public Narrator(AppStateManager stateManager, AssetManager assetManager, Node guiNode)
     {
+        super();
         this.assetManager = assetManager;
         this.guiNode = guiNode;
         narratorAudio = new AudioNode();
@@ -112,7 +113,7 @@ public class Narrator extends AbstractAppState
         return narratorAudio.getStatus() == AudioSource.Status.Stopped;
     }
 
-    public boolean hasTimeExpired() 
+    private boolean hasTimeExpired() 
     {
         boolean timeExpired = false;
 

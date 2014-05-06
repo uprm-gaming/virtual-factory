@@ -318,9 +318,9 @@ public class GameEngine extends AbstractAppState {
             }
             else if (gameData.getCurrentGame().getGameName().equalsIgnoreCase("objective")) {
                 Params.isTutorialLevel = false;
-                Params.isObjectiveLevel = true;
                 Params.objective = new Objective(gameNarrator);
                 Params.objective.update();
+                Params.isObjectiveLevel = true;
 //                getGameSounds().playSound(Sounds.TutorialLevel);
             }
             else {
