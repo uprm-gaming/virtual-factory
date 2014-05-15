@@ -48,6 +48,7 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
     private Label labelCurrentGameTime;
     private Label labelDueDateNextOrder;
     private Label labelPurchaseDueDate;
+    private Label labelAvailableCash;
     private float currentTimeFactor;
     private Label labelCurrentTimeFactor;
     //    private Label labelPeopleBusy;
@@ -120,6 +121,7 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
         this.labelDueDateNextOrder = screen.findNiftyControl("labelDueDateNextOrder", Label.class);
         this.labelPurchaseDueDate = screen.findNiftyControl("labelPurchaseDueDate", Label.class);
         this.labelCurrentTimeFactor = screen.findNiftyControl("labelSliderTime", Label.class);
+        this.labelAvailableCash = screen.findNiftyControl("availableCash", Label.class);
         //        this.labelPeopleBusy = screen.findNiftyControl("peopleBusy", Label.class);
         //        this.labelPeopleIdle = screen.findNiftyControl("peopleIdle", Label.class);
         //        this.labelCurrentMoney = screen.findNiftyControl("currentMoney", Label.class);
@@ -237,6 +239,10 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
     
     public void setCurrentGameTime(String time){
         labelCurrentGameTime.setText(time);
+    }
+    
+    public void setCurrentAvailableCash(String cash){
+        this.labelAvailableCash.setText("$" + cash);
     }
     
     public void setNextDueDate(String time){

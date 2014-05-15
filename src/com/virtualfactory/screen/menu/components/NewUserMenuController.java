@@ -296,11 +296,14 @@ public class NewUserMenuController implements Controller {
                 String result = new SendEmail().send(emailTextField.getRealText(), nameTextField.getRealText() + " " + lastNameTextField.getRealText(), Messages.newPassword
                         .replace(Messages.wildCard, nameTextField.getRealText() + lastNameTextField.getRealText()).replace(Messages.wildCard2, newGeneratedPassword));
                 gameEngine.updateCursorIcon(0);
+                
                 if (result.isEmpty()){
                     errorMessage.setText("You will receive a generated password to your email in a short time.\nWe suggest you change it to the next time.");
                     cancelButton.setText("Continue");
                 }else{
-                    errorMessage.setText(result);
+                    errorMessage.setText("Email could not be sent. Your generated password is: " + newGeneratedPassword);
+                    System.out.println(result);
+//                    errorMessage.setText(result);
                 }
             }
         }else{

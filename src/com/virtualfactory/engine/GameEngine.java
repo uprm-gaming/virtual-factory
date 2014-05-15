@@ -531,6 +531,7 @@ public class GameEngine extends AbstractAppState {
         currentTempSystemTime = System.currentTimeMillis();
         gameData.getCurrentGame().setCurrentTime(currentSystemTime);
         getLayerScreenController().setCurrentGameTime(gameData.getCurrentTimeGame());
+        getLayerScreenController().setCurrentAvailableCash(String.valueOf(gameData.getCurrentMoney()));
         SimEvent nextEvent = Sim.next_event(currentSystemTime, Sim.Mode.SYNC);
         while (nextEvent != null) {
             if (nextEvent.getId() == Params.startEvent) {
