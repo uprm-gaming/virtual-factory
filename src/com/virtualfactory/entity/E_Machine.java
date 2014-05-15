@@ -257,8 +257,10 @@ public class E_Machine{
             boxForMachine = new Box(Vector3f.ZERO, (float)Params.standardPartWidthLength*2, 0f, (float)Params.standardPartWidthLength*2);
             itemsForMachine = new Geometry(TypeElements.MACHINE + String.valueOf(getIdMachine()) + "_" + TypeElements.PART + idPart, boxForMachine);
             materialForMachine = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            if (colorPart.length() > 0) materialForMachine.setColor("Color", ColorRGBA.Brown);//.setColor("Color", Colors.getColorRGBA(colorPart));
-            if (texturePart.length() > 0) materialForMachine.setTexture("ColorMap", assetManager.loadTexture(texturePart));
+            //if (colorPart.length() > 0) materialForMachine.setColor("Color", ColorRGBA.Brown);//.setColor("Color", Colors.getColorRGBA(colorPart));
+            //if (texturePart.length() > 0) 
+               materialForMachine.setTexture("ColorMap", assetManager.loadTexture("Textures/bx05rgb(wood)2.jpg"));
+            //materialForMachine.getAdditionalRenderState().setWireframe(true);
             itemsForMachine.setMaterial(materialForMachine);
             rootNode.attachChild(itemsForMachine);
             itemsForMachine.setLocalTranslation(new Vector3f(0, -(float)Params.standardPartWidthLength*4, 0));

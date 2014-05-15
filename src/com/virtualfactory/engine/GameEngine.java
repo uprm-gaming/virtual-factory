@@ -30,6 +30,7 @@ import com.jme3.scene.debug.Grid;
 import com.jme3.scene.shape.*;
 import com.jme3.scene.shape.Line;
 import com.jme3.system.AppSettings;
+import com.jme3.texture.Texture;
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
 import com.virtualfactory.entity.*;
@@ -106,6 +107,9 @@ public class GameEngine extends AbstractAppState {
 
     private Narrator gameNarrator;
     private Node factoryNode;
+    
+    private Texture partTexture;
+    private Texture bucketTexture;
 
     @Override
     public void initialize(AppStateManager manager, Application application) {
@@ -720,7 +724,11 @@ public class GameEngine extends AbstractAppState {
         bucketBox = new Box(Vector3f.ZERO, (float) Params.standardBucketWidthLength / 2.0f, .5f, (float) Params.standardBucketWidthLength / 2.0f);
         Geometry bucketGeo = new Geometry(TypeElements.STATION + String.valueOf(bucket.getIdStation()) + "_" + TypeElements.BUCKET + String.valueOf(bucket.getIdBucket()), bucketBox);
         bucketMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        bucketMaterial.setColor("Color", ColorRGBA.Pink);
+        //bucketMaterial.setColor("Color", ColorRGBA.Yellow);
+        
+        bucketTexture = assetManager.loadTexture("Textures/met3rgb.jpg");
+        bucketMaterial.setTexture("ColorMap", bucketTexture);
+        
         bucketGeo.setMaterial(bucketMaterial);
         rootNode.attachChild(bucketGeo);
         bucketGeo.setLocalTranslation(new Vector3f((float) bucket.getCurrentLocationX(), 1.0f, (float) bucket.getCurrentLocationZ()));
@@ -733,19 +741,29 @@ public class GameEngine extends AbstractAppState {
 
     public void updatePartsInBucket(E_Bucket bucket) {
         Geometry part;
+        Vector2f vector  = new Vector2f(1, 1);;
         part = (Geometry) rootNode.getChild(TypeElements.STATION + String.valueOf(bucket.getIdStation()) + "_" + TypeElements.BUCKET + String.valueOf(bucket.getIdBucket() + "_" + TypeElements.PART + String.valueOf(bucket.getIdPart())));
         partBox = new Box(Vector3f.ZERO, (float) Params.standardPartWidthLength / 2.0f, (float) bucket.getSize() / 2.0f, (float) Params.standardPartWidthLength / 2.0f);
         if (part == null) {
             part = new Geometry(TypeElements.STATION + String.valueOf(bucket.getIdStation()) + "_" + TypeElements.BUCKET + String.valueOf(bucket.getIdBucket()) + "_" + TypeElements.PART + String.valueOf(bucket.getIdPart()), partBox);
             partMaterial = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-            partMaterial.setColor("Color", ColorRGBA.Cyan);//.setColor("Color", Colors.getColorRGBA(gameData.getMapUserPart().get(bucket.getIdPart()).getPartDesignColor()));
+            //partMaterial.setColor("Color", ColorRGBA.Blue);//.setColor("Color", Colors.getColorRGBA(gameData.getMapUserPart().get(bucket.getIdPart()).getPartDesignColor()));
+            //partMaterial.getAdditionalRenderState().setWireframe(true);
+            
+            partTexture = assetManager.loadTexture("Textures/bx05rgb(wood)2.jpg");
+            
+            partMaterial.setTexture("ColorMap", partTexture);
+            
             part.setMaterial(partMaterial);
             rootNode.attachChild(part);
             shootables.attachChild(part);
         } else {
             part.setMesh(partBox);
         }
-        part.setLocalTranslation(new Vector3f((float) bucket.getCurrentLocationX(), 1.5f + (float) bucket.getSize() / 2.0f, (float) bucket.getCurrentLocationZ()));
+        if ((float) bucket.getSize() <= 5)
+            //vector.setY(bucket.getSize());
+            partBox.scaleTextureCoordinates(new Vector2f(5, 5));
+            part.setLocalTranslation(new Vector3f((float) bucket.getCurrentLocationX(), 1.5f + (float) bucket.getSize() / 2.0f, (float) bucket.getCurrentLocationZ()));
     }
 
     public void operatorWalksTo(E_Operator operator, int posX, int posZ) {

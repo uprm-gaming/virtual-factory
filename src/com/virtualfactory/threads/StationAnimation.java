@@ -53,6 +53,7 @@ public class StationAnimation extends Thread{
                     currentHeight = (currentHeight - 1 < 0) ? 0 : (currentHeight - 1);
                 }
             }
+            if (currentHeight <= 5)
             partBox.updateGeometry(new Vector3f(partBox.getCenter().getX(), currentHeight, partBox.getCenter().getZ()), partBox.getXExtent(), currentHeight, partBox.getZExtent());
             try {
                 Thread.sleep((long)(1000*timeToFinish/quantity));//(200);
@@ -77,6 +78,7 @@ public class StationAnimation extends Thread{
                 if (partBox.getYExtent() == 0)
                     missedIterations = 0;
             }
+            if (missedIterations <= 5)
             partBox.updateGeometry(new Vector3f(partBox.getCenter().getX(), partBox.getCenter().getY() + missedIterations, partBox.getCenter().getZ()), partBox.getXExtent(), partBox.getYExtent() + missedIterations, partBox.getZExtent());
         }
         if (!addItems && isZeroItems){

@@ -386,8 +386,12 @@ public class E_Station {
         Geometry part = (Geometry)gameEngine.jmonkeyApp.getRootNode().getChild(TypeElements.STATION.toString() + idStation + "_" + TypeElements.PART.toString() + slotSelected.getFirst().getFirst() + "_" + slotSelected.getFirst().getSecond());
         if (part != null && quantity > 0){
             ColorRGBA colorRGBA = Colors.getColorRGBA(gameEngine.getGameData().getMapUserPart().get(slotSelected.getSecond().getFirst()).getPartDesignColor());
-            colorRGBA = ColorRGBA.Green;
-            part.getMaterial().setColor("Color", colorRGBA);
+            //colorRGBA = ColorRGBA.Brown;
+            //part.getMaterial().setColor("Color", colorRGBA);
+            /*partTexture = ;  */ 
+            
+            part.getMaterial().setTexture("ColorMap", gameEngine.jmonkeyApp.getAssetManager().loadTexture("Textures/bx05rgb(wood)2.jpg"));         
+            
             StationAnimation stationAnimation = new StationAnimation();
 //            System.out.println("PartSlot:" + TypeElements.PART.toString() + slotSelected.getFirst().getFirst() + "_" + slotSelected.getFirst().getSecond() + " -isAdding:" + isAdding + " -isZeroItems:" + isZeroItems + " -Part:" + slotSelected.getSecond().getFirst() + " -Quantity:" + quantity + " -availableQuantity:" + slotSelected.getSecond().getSecond() + " -Thread:" + stationAnimation.getName() + " -Strategy:" + idStrategy);
             stationAnimation.setGameEngine(gameEngine);

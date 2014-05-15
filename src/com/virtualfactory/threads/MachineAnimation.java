@@ -53,6 +53,7 @@ public class MachineAnimation extends Thread {
                     currentHeight = (currentHeight - heightFactor < 0) ? 0 : (currentHeight - heightFactor);
                 }
             }
+            if (currentHeight <= 5)
             boxForMachine.updateGeometry(new Vector3f(boxForMachine.getCenter().getX(), currentHeight, boxForMachine.getCenter().getZ()), boxForMachine.getXExtent(), currentHeight, boxForMachine.getZExtent());
             try {
                 Thread.sleep((long)(1000*Math.abs(timeToFinish/quantity)));//(200);
@@ -93,6 +94,7 @@ public class MachineAnimation extends Thread {
                     missedIterations = 0;
             }
             missedIterations = missedIterations*heightFactor;
+            if (missedIterations <= 5)
             boxForMachine.updateGeometry(new Vector3f(boxForMachine.getCenter().getX(), boxForMachine.getCenter().getY() + missedIterations, boxForMachine.getCenter().getZ()), boxForMachine.getXExtent(), boxForMachine.getYExtent() + missedIterations, boxForMachine.getZExtent());
         }
         if (!addItems && isZeroItems){
