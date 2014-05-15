@@ -48,16 +48,19 @@ public class MySqlConn {
         {
             String userName = strUser;
             String password = strPass;
+            
             String url = "jdbc:mysql://" + strServer + "/" + strDB;
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             conn = DriverManager.getConnection(url, userName, password);
-//            System.out.println("MySQL - Database connection established");
+            System.out.println("MySQL - Database connection established.");
+            
         }
         catch (Exception e)
         {
-            System.err.println("MySQL - Error: Cannot connect to database server. " + e.getMessage());
+            System.out.println("MySQL - Error: Cannot connect to database server. " + e.getMessage());
             Params.errorDatabaseMessage = "MySQL - Error: Cannot connect to database server.";
             Params.existsInternetConnection = false;
+            System.out.println("error 3");
         }
     }
 
@@ -73,6 +76,7 @@ public class MySqlConn {
             {
                 System.err.println("MySQL - Error closing connection. " + e.getMessage());
                 Params.existsInternetConnection = false;
+                System.out.println("error 4");
             }
         }
     }
@@ -94,14 +98,17 @@ public class MySqlConn {
         }
         try {
             s = conn.createStatement();
-                s.execute("call " + strDB + "." + strSP.trim());
-                System.out.println("MySQL - " + strSP.trim());
-                s.close();
-                result = true;
+            s.execute("call " + strDB + "." + strSP.trim());
+            System.out.println("MySQL2 - " + strSP.trim());
+            s.close();
+            result = true;
+            System.out.println("Wepa 2");
         } catch (SQLException e) {
             //e.printStackTrace();
             Params.existsInternetConnection = false;
             boolean ExecuteSP = this.ExecuteSP("Log_Insert('Proc: " + strSP.replace("'", "") + " - Error: " + e.getMessage().replace("'", "") + "')");//"´"
+            System.out.println("error 2");
+
         }finally{
             CloseConnection();
         }        
@@ -124,8 +131,8 @@ public class MySqlConn {
         if (conn == null) return arrArray;
         try {
                 s = conn.createStatement();
+                System.out.println("MySQL1 - " + strSP.trim());
                 s.execute("call " + strDB + "." + strSP.trim());
-                System.out.println("MySQL - " + strSP.trim());
                 ResultSet rs = s.getResultSet();
                 ArrayList<Object> arrObj;
                 while (rs.next())
@@ -138,8 +145,10 @@ public class MySqlConn {
                 }
                 rs.close();
                 s.close();
+                System.out.println("Wepa 1");
         } catch (SQLException e) {
             Params.existsInternetConnection = false;
+            System.out.println("error 1");
             this.ExecuteSP("Log_Insert('Proc: " + strSP + " - Error: " + e.getMessage().replace("'", "´") + "')");
         } finally{
             CloseConnection();    

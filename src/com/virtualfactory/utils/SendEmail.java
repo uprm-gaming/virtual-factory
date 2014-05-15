@@ -61,7 +61,7 @@ public class SendEmail {
             transport.send(message);
             return "";
         }catch (MessagingException mex) {
-            return "Error: " + mex.getMessage();
+            return "Errorrrr: " + mex.getMessage();
         }
     }
     

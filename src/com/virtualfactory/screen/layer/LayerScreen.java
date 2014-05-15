@@ -1,5 +1,6 @@
 package com.virtualfactory.screen.layer;
 
+import com.jme3.math.ColorRGBA;
 import com.virtualfactory.screen.layer.components.UnitLoadScreenController;
 import com.virtualfactory.screen.layer.components.AssignOperatorScreenController;
 import com.virtualfactory.screen.layer.components.FlowChartScreenController;
@@ -40,6 +41,7 @@ import de.lessvoid.nifty.controls.slider.builder.SliderBuilder;
 import de.lessvoid.nifty.controls.textfield.builder.TextFieldBuilder;
 import de.lessvoid.nifty.controls.window.builder.WindowBuilder;
 import de.lessvoid.nifty.screen.Screen;
+import java.awt.Color;
 
 final public class LayerScreen {
     private static boolean isScreenAlreadyBuilt = false;
@@ -663,6 +665,29 @@ final public class LayerScreen {
                                                     }
                                                 });
                                                 control(new ButtonBuilder("buttonOptionUtilities", "Utilities"));
+                                            }
+                                        });
+                                        ///////////////---------------_
+                                        panel(new PanelBuilder() {
+                                            {
+                                                childLayoutHorizontal();
+                                                image(new ImageBuilder("imageAvailableCash") {
+                                                    {
+                                                        filename("Interface/Principal/overall.png");
+                                                        width("25px");
+                                                        height("25px");
+                                                        focusable(true);
+                                                    }
+                                                });
+                                                control(new LabelBuilder("availableCash", "  Current Money: ...") {
+                                                    {
+                                                        width("100px");
+                                                        textHAlignCenter();
+                                                        this.backgroundImage("Interface/panelBack3.png");
+                                                        color("#FFA200");//de.lessvoid.nifty.tools.Color.WHITE);
+//                                                        this.backgroundColor(de.lessvoid.nifty.tools.Color.BLACK);
+                                                    }
+                                                });
                                             }
                                         });
                                     }

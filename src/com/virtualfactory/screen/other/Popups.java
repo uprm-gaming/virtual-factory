@@ -589,7 +589,7 @@ final public class Popups {
                                     {
                                         filename("Interface/Principal/youwon.png");
                                         width("200px");
-                                        height("200px");
+                                        height("161px");
                                         alignCenter();
                                     }
                                 });
