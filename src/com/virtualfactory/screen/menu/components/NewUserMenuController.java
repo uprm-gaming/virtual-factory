@@ -298,10 +298,10 @@ public class NewUserMenuController implements Controller {
                 gameEngine.updateCursorIcon(0);
                 
                 if (result.isEmpty()){
-                    errorMessage.setText("You will receive a generated password to your email in a short time.\nWe suggest you change it to the next time.");
+                    errorMessage.setText("You will receive your password (" + newGeneratedPassword + ") to your email in a short time.\nWe suggest you change it to the next time.");
                     cancelButton.setText("Continue");
                 }else{
-                    errorMessage.setText("Email could not be sent. Your generated password is: " + newGeneratedPassword);
+                    errorMessage.setText("Your generated password is: " + newGeneratedPassword + "  You can change it next time you login.");
                     System.out.println(result);
 //                    errorMessage.setText(result);
                 }

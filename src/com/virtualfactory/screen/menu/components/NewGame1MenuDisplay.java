@@ -197,7 +197,7 @@ public class NewGame1MenuDisplay {
                     childLayoutHorizontal();
                     control(new ListBoxBuilder("listBox_NG1MD") {{
                         this.style("nifty-listbox2");
-                        displayItems(5);
+                        displayItems(4);
                         selectionModeSingle();
                         optionalVerticalScrollbar();
                         hideHorizontalScrollbar();

@@ -237,10 +237,10 @@ public class GameEngine extends AbstractAppState {
                             else
                                 Params.tutorial.nextStep();
                         }
-                        else if (Params.isObjectiveLevel && Params.DEBUG_ON) {
-                            if (Params.objective.getCurrentStep() == 20)
+                        else if (Params.isObjectiveLevel) {
+                            if (Params.objective.getCurrentStep() == 10)
                                 Params.objective.setCurrentStep(0);
-                            else
+                            else if (Params.DEBUG_ON || !Params.objective.actionRequiredSteps.contains(Params.objective.getCurrentStep()))
                                 Params.objective.nextStep();
                         }
                     break;
@@ -280,19 +280,26 @@ public class GameEngine extends AbstractAppState {
         updateCursorIcon(1);
 
         if (newGame) {
+            if (gameState != null) {
+                gameState.updatePlayerPosition();
+                gameState.toggleTopView(false);
+            }
             this.getArrGameSounds().clear();
             this.gameSounds.stopSound(Sounds.Background);
             this.gameSounds.stopSound(Sounds.TutorialLevel);
             gameData.createGame(tempGame);
             flushPreviousGame();
+            
             if (gameState == null) {
                 factoryNode = new Node();
                 gameState = new GameRunningState(bulletAppState);
                 gameState.initialize(stateManager, jmonkeyApp, bulletAppState);
             }
-            else
+            else {
                 gameState.attachFactory(bulletAppState);
-           
+                gameState.showFactoryComponents();
+            }
+            
         }
         else {
             gameData.loadGame(tempGame);
@@ -313,15 +320,20 @@ public class GameEngine extends AbstractAppState {
         updateCursorIcon(0);
 
         
-        if (!isLevelStarted) {
+        if (newGame) {
             if (gameData.getCurrentGame().getGameName().equalsIgnoreCase("tutorial")) {
                 Params.isTutorialLevel = true;
+                Params.isObjectiveLevel = false;
+                Params.objective = null;
                 Params.tutorial = new Tutorial(gameNarrator);
                 Params.tutorial.update();
                 getGameSounds().playSound(Sounds.TutorialLevel);
+                
             }
             else if (gameData.getCurrentGame().getGameName().equalsIgnoreCase("objective")) {
                 Params.isTutorialLevel = false;
+                Params.isObjectiveLevel = true;
+                Params.tutorial = null;
                 Params.objective = new Objective(gameNarrator);
                 Params.objective.update();
                 Params.isObjectiveLevel = true;
@@ -330,15 +342,23 @@ public class GameEngine extends AbstractAppState {
             else {
                 Params.isObjectiveLevel = false;
                 Params.isTutorialLevel = false;
+                Params.objective = null;
+                Params.tutorial = null;
                 gameNarrator.talk("Welcome to Virtual Factory!\nPress 'T' for a top view of the factory.", 5);
             }
         }
-        else if (!gameData.getCurrentGame().getGameName().equalsIgnoreCase("tutorial")) {
+        else {
+            if (!gameData.getCurrentGame().getGameName().equalsIgnoreCase("tutorial")) 
                 Params.isTutorialLevel = false;
+            else
+                getGameSounds().playSound(Sounds.TutorialLevel);
+                
+            
+            if (!gameData.getCurrentGame().getGameName().equalsIgnoreCase("objective"))
+                Params.isObjectiveLevel = false;
+
         }
         
-        if (isLevelStarted && !gameData.getCurrentGame().getGameName().equalsIgnoreCase("objective"))
-            Params.isObjectiveLevel = false;
 
         isLevelStarted = true;
     }
@@ -364,9 +384,6 @@ public class GameEngine extends AbstractAppState {
             bulletAppState = new BulletAppState();
             bulletAppState.setThreadingType(BulletAppState.ThreadingType.PARALLEL);
             stateManager.attach(bulletAppState);
-
-//            bulletAppState.getPhysicsSpace().destroy();
-//            bulletAppState.getPhysicsSpace().create();
         }
     }
 
@@ -487,9 +504,9 @@ public class GameEngine extends AbstractAppState {
                 isTutorialFinished = true;
             }
         }
+        
         if (Params.isObjectiveLevel) {
             Params.objective.update();
-            
             if (Params.objective.isObjectiveCompleted() && !isObjectiveFinished) {
                 niftyGUI.getScreen("layerScreen").findElementByName("winOrC_Element").getControl(OrderScreenController.class).updateData();
                 isObjectiveFinished = true;
@@ -1110,5 +1127,9 @@ public class GameEngine extends AbstractAppState {
 
     public void setInitialGameId(int initialGameId) {
         this.initialGameId = initialGameId;
+    }
+    
+    public void setLevelStarted(boolean isLevelStarted) {
+        this.isLevelStarted = isLevelStarted;
     }
 }

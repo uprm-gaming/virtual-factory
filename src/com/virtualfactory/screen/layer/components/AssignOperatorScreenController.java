@@ -26,6 +26,7 @@ import com.virtualfactory.utils.CommonBuilders;
 import com.virtualfactory.utils.ObjectState;
 import com.virtualfactory.utils.OperatorCategory;
 import com.virtualfactory.utils.Pair;
+import com.virtualfactory.utils.Params;
 import com.virtualfactory.utils.TypeActivity;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -408,7 +409,9 @@ public class AssignOperatorScreenController implements Controller {
         }
         ((Label)screen.findNiftyControl("messageResult_WAsOpC", Label.class)).setText("Updated successfully");
         nifty.getScreen("layerScreen").findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).setupOperatorsDone();
-//        gameEngine.updateLastActivitySystemTime();
+        if (Params.isObjectiveLevel && Params.objective.getCurrentStep() == 2)
+            Params.objective.nextStep();
+        //        gameEngine.updateLastActivitySystemTime();
 //        
 //        int numOpeSelected = 0;
 //        for (E_Operator ope : gameEngine.getGameData().getMapUserOperator().values()){

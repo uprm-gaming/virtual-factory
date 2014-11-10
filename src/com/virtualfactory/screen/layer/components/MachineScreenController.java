@@ -338,6 +338,9 @@ public class MachineScreenController implements Controller {
         }
         updateData();
         cleanMessage = true;
+        if (Params.isObjectiveLevel && Params.objective.getCurrentStep() == 5)
+            Params.objective.nextStep();
+
     }
     
     public void updateData(){

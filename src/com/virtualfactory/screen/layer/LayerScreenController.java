@@ -695,23 +695,19 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
         //                screen.findElementByName("winFCC_Element").getControl(FlowChartScreenController.class).loadWindowControl(gameEngine, 0, null);
         //            }
         //        }else
-        if (currentOptionselected.equals("buttonOptionControls")){
-            if (currentDynamicButtonSelected.contains("Resources")){
+        if (currentOptionselected.equals("buttonOptionControls")) {
+            if (currentDynamicButtonSelected.contains("Resources")) {
                 screen.findElementByName("winChC_Element").getControl(CharactersScreenController.class).loadWindowControl(gameEngine, 0, null);
-            }else
-                if (currentDynamicButtonSelected.contains("PriorityActivities")){
-                    screen.findElementByName("winPrC_Element").getControl(PriorityScreenController.class).loadWindowControl(gameEngine, 0, null);
-                }else
-                    if (currentDynamicButtonSelected.contains("AssignOperators")){
-                        screen.findElementByName("winAsOpC_Element").getControl(AssignOperatorScreenController.class).loadWindowControl(gameEngine, 0, null);
-                    }else
-                        if (currentDynamicButtonSelected.contains("UnitLoad")){
-                            screen.findElementByName("winULC_Element").getControl(UnitLoadScreenController.class).loadWindowControl(gameEngine, 0, null);
-                        }else
-                            if (currentDynamicButtonSelected.contains("AllocateStorages")){
-                                screen.findElementByName("winASCC_Element").getControl(StorageCostScreenController.class).loadWindowControl(gameEngine, 0, null);
-                            }
-        }else
+            } else if (currentDynamicButtonSelected.contains("PriorityActivities")) {
+                screen.findElementByName("winPrC_Element").getControl(PriorityScreenController.class).loadWindowControl(gameEngine, 0, null);
+            } else if (currentDynamicButtonSelected.contains("AssignOperators")) {
+                screen.findElementByName("winAsOpC_Element").getControl(AssignOperatorScreenController.class).loadWindowControl(gameEngine, 0, null);
+            } else if (currentDynamicButtonSelected.contains("UnitLoad")) {
+                screen.findElementByName("winULC_Element").getControl(UnitLoadScreenController.class).loadWindowControl(gameEngine, 0, null);
+            } else if (currentDynamicButtonSelected.contains("AllocateStorages")) {
+                screen.findElementByName("winASCC_Element").getControl(StorageCostScreenController.class).loadWindowControl(gameEngine, 0, null);
+            }
+        } else
             if (currentOptionselected.equals("buttonOptionActivities")){
                 TypeActivity tempActivityType = TypeActivity.None;
                 Button dynamicButton;
@@ -860,8 +856,10 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
         }else
             if (id.equals("buttonStaticOptionReturnToMenu")){
                 
-                if (Params.isTutorialLevel)
+                if (Params.isTutorialLevel) {
                     Params.tutorial.hide();
+                    gameEngine.getGameSounds().pauseSound(Sounds.TutorialLevel);
+                }
                 
                 if (Params.isObjectiveLevel)
                     Params.objective.hide();
@@ -886,8 +884,10 @@ public class LayerScreenController implements ScreenController, KeyInputHandler 
                         screen.findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).loadWindowControl(gameEngine, 0, null);
                         if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 1)
                             Params.tutorial.nextStep();
+                        
                         if (Params.isTutorialLevel || Params.isObjectiveLevel)
-                            screen.findElementByName("setupDefaultGame").disable();
+                            if (!Params.DEBUG_ON)
+                                screen.findElementByName("setupDefaultGame").disable();
                         else
                             screen.findElementByName("setupDefaultGame").enable();
                         

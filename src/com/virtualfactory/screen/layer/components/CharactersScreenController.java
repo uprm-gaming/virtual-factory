@@ -571,5 +571,9 @@ public class CharactersScreenController implements Controller {
             if (numOperatorAct == 3 && numMachineAct == 2 && numEquipmentAct == 2)
                 Params.tutorial.nextStep();
         
+        if (Params.isObjectiveLevel && Params.objective.getCurrentStep() == 5)
+            if (numMachineAct > 0 && numEquipmentAct > 0)
+                Params.objective.nextStep();
+        
     }
 }

@@ -48,7 +48,6 @@ public class MySqlConn {
         {
             String userName = strUser;
             String password = strPass;
-            
             String url = "jdbc:mysql://" + strServer + "/" + strDB;
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             conn = DriverManager.getConnection(url, userName, password);
@@ -98,16 +97,17 @@ public class MySqlConn {
         }
         try {
             s = conn.createStatement();
-            s.execute("call " + strDB + "." + strSP.trim());
             System.out.println("MySQL2 - " + strSP.trim());
+            s.execute("call " + strDB + "." + strSP.trim());
+            
             s.close();
             result = true;
-            System.out.println("Wepa 2");
         } catch (SQLException e) {
             //e.printStackTrace();
             Params.existsInternetConnection = false;
-            boolean ExecuteSP = this.ExecuteSP("Log_Insert('Proc: " + strSP.replace("'", "") + " - Error: " + e.getMessage().replace("'", "") + "')");//"´"
-            System.out.println("error 2");
+            String errorString = "Log_Insert('Proc: " + strSP.replace("'", "") + " - Error: " + e.getMessage().replace("'", "") + "')";
+            boolean ExecuteSP = this.ExecuteSP(errorString);//"´"
+            System.out.println("\nError 2: " + errorString);
 
         }finally{
             CloseConnection();
@@ -145,7 +145,6 @@ public class MySqlConn {
                 }
                 rs.close();
                 s.close();
-                System.out.println("Wepa 1");
         } catch (SQLException e) {
             Params.existsInternetConnection = false;
             System.out.println("error 1");

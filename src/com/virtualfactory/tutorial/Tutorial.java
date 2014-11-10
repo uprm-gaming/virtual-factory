@@ -181,7 +181,7 @@ public class Tutorial {
                 break;
             case 21:
                 stepMessage = "You can see an object's information by clicking it. You can click on "
-                        + "workers, machines, equipment and stations."
+                        + "workers, machines, equipment and stations. "
                         + "\nPausing the game can be really helpful! Pause "
                         + "the game using the button at the top left corner. ";
                 break;
@@ -191,7 +191,7 @@ public class Tutorial {
                         + "and complete the current order. You can see more detailed information "
                         + "about the game in the user manual. You can access the "
                         + "user manual by clicking the User"
-                        + " Manual button in the main menu.\nHave fun!";
+                        + " Manual button in the main menu.\n Have fun!";
                 break;
             default:
                 stepMessage = "Step " + this.stepNumber + "'s message is missing.";

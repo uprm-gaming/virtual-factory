@@ -218,7 +218,10 @@ public class OrderScreenController implements Controller {
                 return;
             }
             else if (Params.isObjectiveLevel && !Params.objective.isObjectiveCompleted()){ //If the objective level has not been completed, do not end the game.
-                return;
+                if (Params.isObjectiveLevel && Params.objective.getCurrentStep() == 8)
+                    Params.objective.nextStep();
+                else
+                    return;
             }
             
             gameEngine.getGameSounds().stopSound(Sounds.Background);
@@ -286,13 +289,13 @@ public class OrderScreenController implements Controller {
         
 
 //        nifty.gotoScreen("initialMenu");
-//        
-//        Element nextElement = nifty.getScreen("initialMenu").findElementByName("dialogNewGameStage1Menu");
-//        NewGame1MenuController loadGameMenu = nextElement.getControl(NewGame1MenuController.class);
-//        loadGameMenu.updateControls_stage1();
-//        nextElement.show();
-//        nifty.getScreen("initialMenu").findElementByName("dialogMainMenu").stopEffect(EffectEventId.onCustom);
-//        nifty.getScreen("initialMenu").findElementByName("dialogNewGameStage1Menu").startEffect(EffectEventId.onCustom, null, "selected");
+        
+        Element nextElement = nifty.getScreen("initialMenu").findElementByName("dialogNewGameStage1Menu");
+        NewGame1MenuController loadGameMenu = nextElement.getControl(NewGame1MenuController.class);
+        loadGameMenu.updateControls_stage1();
+        nextElement.show();
+//        nifty.getScreen("initialMenu").findElementByName("dialogMainMenu").hideWithoutEffect();
+//        nifty.getScreen("initialMenu").findElementByName("dialogNewGameStage1Menu").showWithoutEffects();
     }
     
     @NiftyEventSubscriber(id="gameWonRestart")

@@ -14,6 +14,7 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.xml.xpp3.Attributes;
 import com.virtualfactory.engine.GameEngine;
 import com.virtualfactory.utils.Params;
+import com.virtualfactory.utils.Sounds;
 import com.virtualfactory.utils.Status;
 import de.lessvoid.nifty.tools.SizeValue;
 import java.awt.Desktop;
@@ -218,7 +219,7 @@ public class MainMenuController implements Controller {
         gameEngine.updateCursorIcon(1);
         Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
         if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)){
-            String path = "gamingUserManual.html";
+            String path = "Virtual Factory User Manual.htm";
             try{
                 if (Params.BUILD_FOR_MAC_APP) {
                     path = "";
@@ -227,7 +228,7 @@ public class MainMenuController implements Controller {
                     for (int i = 0; i < index; i++)
                         path += javaPath.charAt(i);
                     
-                    path += ".app/Contents/Resources/gamingUserManual.html";
+                    path += ".app/Contents/Resources/Virtual Factory User Manual.htm";
                 }
 
                 File tutorialFile = new File(path);
@@ -242,9 +243,10 @@ public class MainMenuController implements Controller {
     @NiftyEventSubscriber(id="returnToGameButton_MMD")
     public void onReturnToGameButtonClicked(final String id, final ButtonClickedEvent event) {
         
-        if (Params.isTutorialLevel)
+        if (Params.isTutorialLevel) {
             Params.tutorial.show();
-        
+            this.gameEngine.getGameSounds().playSound(Sounds.TutorialLevel);
+        }
         else if (Params.isObjectiveLevel)
             Params.objective.show();
 

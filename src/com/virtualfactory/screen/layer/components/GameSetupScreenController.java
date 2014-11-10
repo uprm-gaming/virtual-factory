@@ -375,6 +375,9 @@ public class GameSetupScreenController implements Controller {
         if (isReadyToStart){
             gameEngine.getLayerScreenController().playGame();
             loadWindowControl(gameEngine, -1, null);
+            if (Params.isObjectiveLevel && Params.objective.getCurrentStep() == 7)
+                Params.objective.nextStep();
+
 //            if (Params.isTutorialLevel && Params.tutorial.getCurrentStep() == 16)
 //                Params.tutorial.nextStep();
 

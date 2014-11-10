@@ -28,38 +28,54 @@ final public class IntroScreen {
                 layer(new LayerBuilder("layer") {
                     {
                         childLayoutCenter();
-                        onStartScreenEffect(new EffectBuilder("fade") {
+                        //                        onStartScreenEffect(new EffectBuilder("fade") {
+                        //                            {
+                        //                                length(3000);
+                        //                                effectParameter("start", "#c6c6c6");
+                        //                                effectParameter("end", "#323232");
+                        //                            }
+                        //                        });
+                        layer(new LayerBuilder() {
                             {
-                                length(3000);
-                                effectParameter("start", "#0");
-                                effectParameter("end", "#f");
+                                backgroundColor("#c6c6c6");
+                                onStartScreenEffect(new EffectBuilder("fade") {
+                                    {
+                                        length(800);
+                                        startDelay(4500);
+                                        effectParameter("start", "#323232");
+                                        effectParameter("end", "#c6c6c6");
+                                    }
+                                });
                             }
                         });
+                        
                         onStartScreenEffect(new EffectBuilder("playSound") {
                             {
                                 startDelay(1400);
                                 effectParameter("sound", "intro");
                             }
                         });
-                        onActiveEffect(new EffectBuilder("gradient") {
-                            {
-                                effectValue("offset", "0%", "color", "#c6c6c6");
-                                effectValue("offset", "85%", "color", "#c6c6c6");
-                                effectValue("offset", "100%", "color", "#c6c6c6");
-                            }
-                        });
+                        //                        this.backgroundColor("#0");
+                        //                        this.backgroundColor("#323232");
+                        //                        onActiveEffect(new EffectBuilder("gradient") {
+                        //                            {
+                        //                                effectValue("offset", "0%", "color", "#323232");
+                        //                                effectValue("offset", "85%", "color", "#323232");
+                        //                                effectValue("offset", "100%", "color", "#323232");
+                        //                            }
+                        //                        });
                         panel(new PanelBuilder() {
                             {
                                 alignCenter();
                                 valignCenter();
-                                childLayoutHorizontal();      
+                                childLayoutHorizontal();
                                 panel(new PanelBuilder() {
                                     {
                                         alignCenter();
                                         valignCenter();
                                         childLayoutOverlay();
-                                        width("800px");
-                                        height("200px");
+                                        width("700px");
+                                        height("330px");
                                         onStartScreenEffect(new EffectBuilder("shake") {
                                             {
                                                 length(250);
@@ -71,17 +87,17 @@ final public class IntroScreen {
                                         });
                                         onStartScreenEffect(new EffectBuilder("imageSize") {
                                             {
-                                                length(600);
+                                                length(800);
                                                 startDelay(4500);
                                                 effectParameter("startSize", "1.0");
-                                                effectParameter("endSize", "2.0");
+                                                effectParameter("endSize", "2.6");
                                                 inherit();
                                                 neverStopRendering(true);
                                             }
                                         });
                                         onStartScreenEffect(new EffectBuilder("fade") {
                                             {
-                                                length(600);
+                                                length(800);
                                                 startDelay(4500);
                                                 effectParameter("start", "#f");
                                                 effectParameter("end", "#0");
@@ -99,7 +115,7 @@ final public class IntroScreen {
                                                         timeType("exp");
                                                         effectParameter("factor", "1.f");
                                                         effectParameter("mode", "in");
-                                                        effectParameter("direction", "left");
+                                                        effectParameter("direction", "right");
                                                     }
                                                 });
                                             }
@@ -114,7 +130,7 @@ final public class IntroScreen {
                                                         timeType("exp");
                                                         effectParameter("factor", "1.f");
                                                         effectParameter("mode", "in");
-                                                        effectParameter("direction", "right");
+                                                        effectParameter("direction", "left");
                                                     }
                                                 });
                                             }
@@ -127,13 +143,13 @@ final public class IntroScreen {
                 });
                 layer(new LayerBuilder() {
                     {
-                        backgroundColor("#f");
+//                        backgroundColor("#f");
                         onStartScreenEffect(new EffectBuilder("fade") {
                             {
-                                length(1000);
+                                length(800);
                                 startDelay(4500);
-                                effectParameter("start", "#0");
-                                effectParameter("end", "#f");
+                                effectParameter("start", "#f");
+                                effectParameter("end", "#c6c6c6");
                             }
                         });
                     }

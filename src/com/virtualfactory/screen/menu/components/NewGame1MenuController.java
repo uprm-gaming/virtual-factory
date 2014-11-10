@@ -183,6 +183,7 @@ public class NewGame1MenuController implements Controller {
 
         nifty.gotoScreen("layerScreen");
         nifty.executeEndOfFrameElementActions();
+//        this.gameEngine.setLevelStarted(false);
         this.gameEngine.playGame(arrGames.get(listBoxGames.getFocusItemIndex()),true);
     }
 }

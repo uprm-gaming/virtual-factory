@@ -259,7 +259,7 @@ public class GameRunningState
                     
                 case "toggle top view":
                     if (!isKeyPressed && isPlayerUpstairs)
-                        toggleTopView();
+                        toggleTopView(true);
                     break;
 
                 case "debug cam":
@@ -547,7 +547,7 @@ public class GameRunningState
         sfx.play();
     }
     
-    private void toggleTopView() 
+    public void toggleTopView(boolean playSound) 
     {
         
         if (Params.fadeFilter.getValue() < 1)
@@ -558,12 +558,13 @@ public class GameRunningState
             
             if (Params.fadeFilter.getDuration() > 0.25f)
                 Params.fadeFilter.setDuration(0.25f);
-            
-            if (Params.viewNumber == 0) {
-                playSoundEffect("Sounds/enteredTopView.wav");
-            } else {
-                Params.fadeFilter.fadeOut();
-                playSoundEffect("Sounds/cameraSwitch.wav");
+            if (playSound) {
+                if (Params.viewNumber == 0) {
+                    playSoundEffect("Sounds/enteredTopView.wav");
+                } else {
+                    Params.fadeFilter.fadeOut();
+                    playSoundEffect("Sounds/cameraSwitch.wav");
+                }
             }
 
             switch(Params.viewNumber) {
@@ -628,7 +629,7 @@ public class GameRunningState
 
             Params.viewNumber = (Params.viewNumber + 1) % 6;
             flyCam.setMoveSpeed(0);
-            factory.getChild("Beams-Metal").setCullHint(Spatial.CullHint.Always);
+            hideFactoryComponents();
         }
         else if (Params.topViewAvailable && Params.isTopViewEnabled) {
             playSoundEffect("Sounds/exitTopView.wav");
@@ -637,7 +638,7 @@ public class GameRunningState
             cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
             flyCam.setMoveSpeed(100);
             flyCam.setRotationSpeed(Params.flyCamRotationSpeed);
-            factory.getChild("Beams-Metal").setCullHint(Spatial.CullHint.Never);
+            showFactoryComponents();
             Params.viewNumber = (Params.viewNumber + 1)%6;
             Params.camMaxX = Params.playerMaxX;
             Params.camMinX = Params.playerMinX;
@@ -678,6 +679,19 @@ public class GameRunningState
         Params.viewNumber = number;
     }
      public void attachFactory(BulletAppState bulletAppState) {
+         Params.isTopViewEnabled = false;
+         cam.setAxes(Params.camAxesLeft, Params.camAxesUp, Params.camAxesDir);
+         flyCam.setMoveSpeed(100);
+         flyCam.setRotationSpeed(Params.flyCamRotationSpeed);
+         showFactoryComponents();
+         Params.viewNumber = 0;
+         Params.camMaxX = Params.playerMaxX;
+         Params.camMinX = Params.playerMinX;
+         Params.camMaxY = Params.playerMaxY;
+         Params.camMinY = Params.playerMinY;
+         Params.camMaxZ = Params.playerMaxZ;
+         Params.camMinZ = Params.playerMinZ;
+         
          this.bulletAppState = bulletAppState;
          factory.addControl(rigidBody);
          rootNode.attachChild(factory);
@@ -711,4 +725,61 @@ public class GameRunningState
          }
          createSensors();
      }
+
+    private void hideFactoryComponents() {
+            factory.getChild("Beams-Metal").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp01").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp01 Base").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp01 Glass").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp01 Rod").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp02").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp02 Base").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp02 Glass").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp02 Rod").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp03").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp03 Base").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp03 Glass").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp03 Rod").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp04").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp04 Base").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp04 Glass").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp04 Rod").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp05").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp05 Base").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp05 Glass").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp05 Rod").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp06").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp06 Base").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp06 Glass").setCullHint(Spatial.CullHint.Always);
+            factory.getChild("Lamp06 Rod").setCullHint(Spatial.CullHint.Always);
+    }
+    
+    public void showFactoryComponents() {
+            factory.getChild("Beams-Metal").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp01").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp01 Base").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp01 Glass").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp01 Rod").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp02").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp02 Base").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp02 Glass").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp02 Rod").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp03").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp03 Base").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp03 Glass").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp03 Rod").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp04").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp04 Base").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp04 Glass").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp04 Rod").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp05").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp05 Base").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp05 Glass").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp05 Rod").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp06").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp06 Base").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp06 Glass").setCullHint(Spatial.CullHint.Never);
+            factory.getChild("Lamp06 Rod").setCullHint(Spatial.CullHint.Never);
+
+    }
 }

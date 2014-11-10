@@ -7,10 +7,12 @@ import com.virtualfactory.tutorial.Tutorial;
 
 public class Params {
 
-    public static final boolean DEBUG_ON = true;
-    public static final boolean SKIP_LOGIN_SCREEN = true;
-    public static final boolean BUILD_FOR_MAC_APP = false;
-    public static final boolean BUILD_FOR_TESTING_SESSION = false;
+    public static final boolean t = true;
+    public static final boolean f = false;
+    public static final boolean DEBUG_ON = f;
+    public static final boolean SKIP_LOGIN_SCREEN = f;
+    public static final boolean BUILD_FOR_MAC_APP = f;
+    public static final boolean BUILD_FOR_TESTING_SESSION = f;
 
     public static String renderer = "";
     public static final String supportedRenderer = "LWJGL-OpenGL2";
@@ -69,9 +71,6 @@ public class Params {
     public static final float cam1MinZ = -100f;//-0.92f;
     public static final float securityCamsMaxY = -0.32f;
     public static final float securityCamsMinY = -0.92f;
-
-
-
 
     //-Virtual Factory 1.0 params
     public static int maxTime = 60;

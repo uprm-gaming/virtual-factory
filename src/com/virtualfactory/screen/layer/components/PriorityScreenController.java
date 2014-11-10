@@ -20,6 +20,7 @@ import com.virtualfactory.engine.GameEngine;
 import com.virtualfactory.entity.E_Activity;
 import com.virtualfactory.utils.CommonBuilders;
 import com.virtualfactory.utils.Pair;
+import com.virtualfactory.utils.Params;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -181,5 +182,8 @@ public class PriorityScreenController implements Controller {
         ((Label)screen.findNiftyControl("messageResult_WPrC", Label.class)).setText("Updated successfully");
         updateValues();
         nifty.getScreen("layerScreen").findElementByName("winGSC_Element").getControl(GameSetupScreenController.class).setupPriorityDone();
+        if (Params.isObjectiveLevel && Params.objective.getCurrentStep() == 4)
+            Params.objective.nextStep();
+    
     }
 }
