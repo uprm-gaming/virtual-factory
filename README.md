@@ -5,7 +5,7 @@ NSF Award No. 0835990
 
 ![logos](https://f.cloud.github.com/assets/4027178/1883952/9298295c-7991-11e3-9d79-d5e7f933ac21.png)
 
-An NSF-funded serious game that helps students know what it might be like to work in a factory as an industrial engineer.
+NSF-funded serious game that helps students know what it might be like to work in a factory as an industrial engineer.
 
 Download and Play
 --------
